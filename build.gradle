@@ -1,0 +1,34 @@
+description "A Simple JSON library for Java"
+
+apply plugin: "java"
+apply plugin: "maven"
+apply plugin: "idea"
+
+group = "net-cworks"
+
+compileJava {
+    sourceCompatibility=1.7
+    targetCompatibility=1.7
+}
+
+compileTestJava {
+    sourceCompatibility=1.7
+    targetCompatibility=1.7
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    compile("commons-codec:commons-codec:1.9")
+    compile("com.fasterxml.jackson.core:jackson-core:2.3.0")
+    compile("com.fasterxml.jackson.core:jackson-annotations:2.3.0")
+    compile("com.fasterxml.jackson.core:jackson-databind:2.3.0")
+    testCompile("junit:junit:4.11")
+}
+
+task wrapper(type: Wrapper, description: 'Generates the gradle wrapper.') {
+    gradleVersion = '1.11'
+}
