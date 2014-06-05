@@ -8,13 +8,13 @@
  */
 package net.cworks.json;
 
+import org.apache.commons.codec.binary.Base64;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.commons.codec.binary.Base64;
 
 import static net.cworks.json.JsonObject.cloneMap;
 
@@ -31,7 +31,7 @@ public class JsonArray extends JsonElement implements Iterable<Object> {
     }
 
     public JsonArray() {
-        this.list = new ArrayList<>();
+        this.list = new ArrayList<Object>();
     }
 
     public JsonArray(String jsonString) {
@@ -173,7 +173,7 @@ public class JsonArray extends JsonElement implements Iterable<Object> {
     @SuppressWarnings("unchecked")
     static List<Object> cloneList(List<?> list) {
 
-        List<Object> objects = new ArrayList<>(list.size());
+        List<Object> objects = new ArrayList<Object>(list.size());
 
         for (Object obj : list) {
             if (obj instanceof Map) {

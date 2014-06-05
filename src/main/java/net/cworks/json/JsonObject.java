@@ -8,12 +8,12 @@
  */
 package net.cworks.json;
 
+import org.apache.commons.codec.binary.Base64;
+
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import org.apache.commons.codec.binary.Base64;
 
 public class JsonObject extends JsonElement {
 
@@ -35,7 +35,7 @@ public class JsonObject extends JsonElement {
      * Create an empty JSON object
      */
     public JsonObject() {
-        this.map = new LinkedHashMap<>();
+        this.map = new LinkedHashMap<String, Object>();
     }
 
     /**
@@ -47,40 +47,40 @@ public class JsonObject extends JsonElement {
         map = Json.asType(json, Map.class);
     }
 
-    public JsonObject setString(String fieldName, String value) {
-        map.put(fieldName, value);
+    public JsonObject setString(String field, String value) {
+        map.put(field, value);
         return this;
     }
 
-    public JsonObject setObject(String fieldName, JsonObject value) {
-        map.put(fieldName, value == null ? null : value.map);
+    public JsonObject setObject(String field, JsonObject value) {
+        map.put(field, value == null ? null : value.map);
         return this;
     }
 
-    public JsonObject setArray(String fieldName, JsonArray value) {
-        map.put(fieldName, value.list);
+    public JsonObject setArray(String field, JsonArray value) {
+        map.put(field, value.list);
         return this;
     }
 
-    public JsonObject setElement(String fieldName, JsonElement value) {
+    public JsonObject setElement(String field, JsonElement value) {
         if (value.isArray()) {
-            return this.setArray(fieldName, value.asArray());
+            return this.setArray(field, value.asArray());
         }
-        return this.setObject(fieldName, value.asObject());
+        return this.setObject(field, value.asObject());
     }
 
-    public JsonObject setNumber(String fieldName, Number value) {
-        map.put(fieldName, value);
+    public JsonObject setNumber(String field, Number value) {
+        map.put(field, value);
         return this;
     }
 
-    public JsonObject setBoolean(String fieldName, Boolean value) {
-        map.put(fieldName, value);
+    public JsonObject setBoolean(String field, Boolean value) {
+        map.put(field, value);
         return this;
     }
 
-    public JsonObject setBinary(String fieldName, byte[] binary) {
-        map.put(fieldName, Base64.encodeBase64String(binary));
+    public JsonObject setBinary(String field, byte[] binary) {
+        map.put(field, Base64.encodeBase64String(binary));
         return this;
     }
 
