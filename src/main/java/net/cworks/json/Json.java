@@ -9,7 +9,6 @@
 package net.cworks.json;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -66,13 +65,13 @@ public final class Json {
      * @throws JsonException
      */
     @SuppressWarnings("unchecked")
-    public static <T> T asType(String json, final Class<?> clazz)
+    public static <T> T asType(String json, final Class<T> clazz)
         throws JsonException {
 
         try {
-            JsonFactory jsonFactory = new JsonFactory();
-            com.fasterxml.jackson.core.JsonParser jp = jsonFactory.createParser(json);
-            return (T)mapper.readValue(jp, clazz);
+            //JsonFactory jsonFactory = new JsonFactory();
+            //com.fasterxml.jackson.core.JsonParser jp = jsonFactory.createParser(json);
+            return (T)mapper.readValue(json, clazz);
         } catch (Exception ex) {
             throw new JsonException(ex);
         }
@@ -161,4 +160,16 @@ public final class Json {
         return "";
     }
 
+    public static JsonArray asArray(String json) {
+        JsonArray ja = new JsonArray(json);
+        return ja;
+    }
+
+    public static JsonObject asObject(String json) {
+        return null;
+    }
+
+    public static JsonElement asElement(String json) {
+        return null;
+    }
 }

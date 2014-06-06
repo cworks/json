@@ -9,6 +9,7 @@
 package net.cworks.json;
 
 import net.cworks.json.builder.JsonArrayBuilder;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Random;
@@ -519,7 +520,7 @@ public class JsonExamples {
         "hMBiFx0oUKtL0VZIhUgsQcbR/GhQoVULP//Z";
 
     @Test
-    public void randomUse() {
+    public void randomExamples() {
 
         JsonObject jo = Json.object()
             .array("puppies", Json.array().add("Bucky").add("Nacho").build())
@@ -575,6 +576,17 @@ public class JsonExamples {
         ja = builder.build();
         System.out.println(Json.asString(ja));
         System.out.println(Json.asPrettyString(ja));
+
+        JsonArray jsonArray = Json.asArray("[true,\"Nacho\",100,{\"address\":\"1 easy street\"}]");
+        Boolean bool = jsonArray.get(0);
+        String str   = jsonArray.get(1);
+        Integer num  = jsonArray.get(2);
+        JsonObject object = jsonArray.get(3);
+
+        Assert.assertTrue(bool);
+        Assert.assertEquals("Nacho", str);
+        Assert.assertEquals(100L, num.longValue());
+        Assert.assertEquals("1 easy street", object.getString("address"));
 
     }
 }
