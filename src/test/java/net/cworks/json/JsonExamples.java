@@ -8,9 +8,14 @@
  */
 package net.cworks.json;
 
+import net.cworks.json.builder.JsonArrayBuilder;
 import org.junit.Test;
 
+import java.util.Random;
+
 public class JsonExamples {
+
+    private static final Random rand = new Random(System.currentTimeMillis());
 
     private static final String chuckNorris = "/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAUDBAQEAwUEBAQF" +
         "BQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw" +
@@ -520,34 +525,56 @@ public class JsonExamples {
             .array("puppies", Json.array().add("Bucky").add("Nacho").build())
             .build();
         System.out.println(Json.asString(jo));
-        System.out.println(Json.asMinifiedString(jo));
+        System.out.println(Json.asPrettyString(jo));
 
         JsonArray ja = Json.array().add("Red", "Green", "Blue").build();
-        System.out.println(ja.encodePrettily());
-        System.out.println(Json.asMinifiedString(ja));
+        System.out.println(Json.asString(ja));
+        System.out.println(Json.asPrettyString(ja));
 
         ja = Json.array().add(new String[]{ "One", "Two", "Three" }).build();
-        System.out.println(Json.asMinifiedString(ja));
+        System.out.println(Json.asString(ja));
+        System.out.println(Json.asPrettyString(ja));
 
         jo = Json.object().build();
         System.out.println(Json.asString(jo));
+        System.out.println(Json.asPrettyString(jo));
 
         ja = Json.array().build();
         System.out.println(Json.asString(ja));
-        System.out.println(Json.asMinifiedString(ja));
+        System.out.println(Json.asPrettyString(ja));
 
         jo = Json.object()
-                .string("name", "Chuck Norris")
-                .binary("picture", chuckNorris.getBytes())
-                .build();
+            .string("name", "Chuck Norris")
+            .binary("picture", chuckNorris.getBytes())
+            .build();
         System.out.println(Json.asString(jo));
+        System.out.println(Json.asPrettyString(jo));
 
         ja = Json.array().add(true)
-                .add("Nacho")
-                .add(100)
-                .add(Json.object().string("address", "1 easy street").build())
-                .build();
+            .add("Nacho")
+            .add(100)
+            .add(Json.object().string("address", "1 easy street").build())
+            .build();
         System.out.println(Json.asString(ja));
+        System.out.println(Json.asPrettyString(ja));
+
+        JsonElement je = Json.object().string("name", "Bucky")
+            .array("eyes", Json.array()
+                .add(Json.object().string("position", "left" ).string("color", "blue" ).build())
+                .add(Json.object().string("position", "right").string("color", "brown").build())
+                .build())
+            .build();
+
+        System.out.println(Json.asString(je));
+        System.out.println(Json.asPrettyString(je));
+
+        JsonArrayBuilder builder = Json.array();
+        for(int i = 0; i < 100; i++) {
+            builder.add(rand.nextInt());
+        }
+        ja = builder.build();
+        System.out.println(Json.asString(ja));
+        System.out.println(Json.asPrettyString(ja));
 
     }
 }

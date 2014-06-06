@@ -16,25 +16,44 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import net.cworks.json.builder.JsonArrayBuilder;
 import net.cworks.json.builder.JsonObjectBuilder;
 
-public class Json {
+public final class Json {
 
+    /**
+     * The more conservative mapper
+     */
     private final static ObjectMapper mapper = new ObjectMapper();
+
+    /**
+     * The liberal mapper
+     */
     private final static ObjectMapper prettyMapper = new ObjectMapper();
 
+    /**
+     * configure mappers
+     */
     static {
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
         mapper.configure(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES, false);
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         mapper.configure(com.fasterxml.jackson.core.JsonParser.Feature.ALLOW_COMMENTS, true);
+
         prettyMapper.configure(SerializationFeature.INDENT_OUTPUT, true);
         prettyMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        prettyMapper.configure(com.fasterxml.jackson.core.JsonParser.Feature.ALLOW_COMMENTS, true);
     }
 
+    /**
+     * Builder method for quickly creating a JsonObject
+     * @return Json Object builder
+     */
     public static JsonObjectBuilder object() {
         return new JsonObjectBuilder();
     }
 
+    /**
+     * Builder method for quickly creating a JsonArray
+     * @return
+     */
     public static JsonArrayBuilder array() {
         return new JsonArrayBuilder();
     }
@@ -101,24 +120,14 @@ public class Json {
     public static String asString(JsonElement element) {
 
         if(element.isObject()) {
-            return ((JsonObject)element).encode();
+            return ((JsonObject)element).asString();
         }
 
         if(element.isArray()) {
-            return ((JsonArray)element).encode();
+            return ((JsonArray)element).asString();
         }
 
         return "";
-    }
-
-    /**
-     * Just a convenience method that returns a minified json string
-     * @param element
-     * @return
-     */
-    public static String asMinifiedString(JsonElement element) {
-        String json = asString(element);
-        return JsonMinify.minify(json);
     }
 
     /**
@@ -136,14 +145,20 @@ public class Json {
     }
 
     /**
-     * convert Java type to Minified JSON string
-     * @param obj Java type to convert
-     * @return a JSON string that has been minified
-     * @throws JsonException
+     * convert JsonElement to a pretty JSON string
+     * @param element
+     * @return the pretty Json string
      */
-    public static String asMinifiedString(Object obj) throws JsonException {
-        String json = asString(obj);
-        return JsonMinify.minify(json);
+    public static String asPrettyString(JsonElement element) {
+        if(element.isObject()) {
+            return ((JsonObject)element).asPrettyString();
+        }
+
+        if(element.isArray()) {
+            return ((JsonArray)element).asPrettyString();
+        }
+
+        return "";
     }
 
 }

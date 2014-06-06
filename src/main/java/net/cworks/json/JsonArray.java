@@ -122,11 +122,11 @@ public class JsonArray extends JsonElement implements Iterable<Object> {
         return list.contains(value);
     }
 
-    public String encode() throws JsonException {
+    public String asString() throws JsonException {
         return Json.asString(this.list);
     }
 
-    public String encodePrettily() throws JsonException {
+    public String asPrettyString() throws JsonException {
         return Json.asPrettyString(this.list);
     }
 
@@ -140,7 +140,7 @@ public class JsonArray extends JsonElement implements Iterable<Object> {
 
     @Override
     public String toString() {
-        return encode();
+        return asString();
     }
 
     @Override

@@ -231,11 +231,11 @@ public class JsonObject extends JsonElement {
         return this;
     }
 
-    public String encode() {
+    public String asString() {
         return Json.asString(this.map);
     }
 
-    public String encodePrettily() {
+    public String asPrettyString() {
         return Json.asPrettyString(this.map);
     }
 
@@ -248,7 +248,7 @@ public class JsonObject extends JsonElement {
 
     @Override
     public String toString() {
-        return encode();
+        return asString();
     }
 
     @Override
