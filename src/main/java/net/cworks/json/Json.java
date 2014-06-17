@@ -15,6 +15,8 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import net.cworks.json.builder.JsonArrayBuilder;
 import net.cworks.json.builder.JsonObjectBuilder;
 
+import java.util.Map;
+
 public final class Json {
 
     /**
@@ -65,7 +67,7 @@ public final class Json {
      * @throws JsonException
      */
     @SuppressWarnings("unchecked")
-    public static <T> T asType(String json, final Class<T> clazz)
+    public static <T> T asType(final String json, final Class<T> clazz)
         throws JsonException {
 
         try {
@@ -82,15 +84,14 @@ public final class Json {
      * @param json JSON string
      * @return an instance of the assigned type
      */
-    @SuppressWarnings("unchecked")
-    public static <T> T asType(String json) {
+    public static Map asMap(final String json) {
         if (json == null) {
             return null;
         }
 
         try {
             // Untyped List/Map
-            return (T)mapper.readValue(json, Object.class);
+            return mapper.readValue(json, Map.class);
         } catch (Exception ex) {
             throw new JsonException(ex);
         }
@@ -102,7 +103,7 @@ public final class Json {
      * @return a JSON string that represents the obj parameter
      * @throws JsonException
      */
-    public static String asString(Object obj) throws JsonException {
+    public static String asString(final Object obj) throws JsonException {
         try {
             return mapper.writeValueAsString(obj);
         } catch (Exception ex) {
@@ -116,7 +117,7 @@ public final class Json {
      * @param element
      * @return
      */
-    public static String asString(JsonElement element) {
+    public static String asString(final JsonElement element) {
 
         if(element.isObject()) {
             return ((JsonObject)element).asString();
@@ -135,7 +136,7 @@ public final class Json {
      * @return a JSON pretty string that represents the obj parameter
      * @throws JsonException
      */
-    public static String asPrettyString(Object obj) throws JsonException {
+    public static String asPrettyString(final Object obj) throws JsonException {
         try {
             return prettyMapper.writeValueAsString(obj);
         } catch (Exception ex) {
@@ -148,7 +149,7 @@ public final class Json {
      * @param element
      * @return the pretty Json string
      */
-    public static String asPrettyString(JsonElement element) {
+    public static String asPrettyString(final JsonElement element) {
         if(element.isObject()) {
             return ((JsonObject)element).asPrettyString();
         }
@@ -160,16 +161,24 @@ public final class Json {
         return "";
     }
 
-    public static JsonArray asArray(String json) {
+    /**
+     * convert Json string into JsonArray instance
+     * @param json
+     * @return
+     */
+    public static JsonArray asArray(final String json) {
         JsonArray ja = new JsonArray(json);
         return ja;
     }
 
-    public static JsonObject asObject(String json) {
-        return null;
+    /**
+     * convert Json string into JsonObject instance
+     * @param json
+     * @return
+     */
+    public static JsonObject asObject(final String json) {
+        JsonObject jo = new JsonObject(json);
+        return jo;
     }
 
-    public static JsonElement asElement(String json) {
-        return null;
-    }
 }

@@ -8,10 +8,12 @@
  */
 package net.cworks.json;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import net.cworks.json.builder.JsonArrayBuilder;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Map;
 import java.util.Random;
 
 public class JsonExamples {
@@ -588,5 +590,80 @@ public class JsonExamples {
         Assert.assertEquals(100L, num.longValue());
         Assert.assertEquals("1 easy street", object.getString("address"));
 
+
     }
+
+    @Test
+    public void jsonToTypes() {
+        Id id = Json.asType("{\"id\":123}", Id.class);
+        Assert.assertEquals(123, id.getId());
+
+        String data = "{" +
+            "\"street\":\"1 Easy Street\"," +
+            "\"city\":\"Fort Woof\"," +
+            "\"state\":\"TX\"," +
+            "\"zip\":\"76111\"" +
+        "}";
+
+        Address address1 = Json.asType(data, Address.class);
+        Assert.assertEquals("1 Easy Street", address1.street());
+        Assert.assertEquals("Fort Woof", address1.city());
+        Assert.assertEquals("TX", address1.state());
+        Assert.assertEquals("76111", address1.zip());
+
+        Map address2 = Json.asMap(data);
+        Assert.assertEquals("1 Easy Street", address2.get("street"));
+        Assert.assertEquals("Fort Woof", address2.get("city"));
+        Assert.assertEquals("TX", address2.get("state"));
+        Assert.assertEquals("76111", address2.get("zip"));
+
+    }
+}
+
+class Id {
+    int id = 0;
+    public void setId(int id) {
+        this.id = id;
+    }
+    public int getId() {
+        return this.id;
+    }
+}
+
+class Address {
+    private String street;
+    private String city;
+    private String state;
+    private String zip;
+
+    // need annotation because not using set, get naming conventions
+    @JsonProperty
+    public void street(String street) {
+        this.street = street;
+    }
+    @JsonProperty
+    public void city(String city) {
+        this.city = city;
+    }
+    @JsonProperty
+    public void state(String state) {
+        this.state = state;
+    }
+    @JsonProperty
+    public void zip(String zip) {
+        this.zip = zip;
+    }
+    public String street() {
+        return this.street;
+    }
+    public String city() {
+        return this.city;
+    }
+    public String state() {
+        return this.state;
+    }
+    public String zip() {
+        return this.zip;
+    }
+
 }
