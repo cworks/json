@@ -181,4 +181,16 @@ public final class Json {
         return jo;
     }
 
+    /**
+     * convert Map of data into JsonObject instance
+     * @param data
+     * @return
+     */
+    public static JsonObject asObject(final Map data) {
+        if(data == null) {
+            return new JsonObject();
+        }
+        JsonObject jo = new JsonObject(data);
+        return jo;
+    }
 }

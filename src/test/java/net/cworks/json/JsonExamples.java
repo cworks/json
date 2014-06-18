@@ -16,6 +16,8 @@ import org.junit.Test;
 import java.util.Map;
 import java.util.Random;
 
+import static net.cworks.json.Json.object;
+
 public class JsonExamples {
 
     private static final Random rand = new Random(System.currentTimeMillis());
@@ -524,7 +526,7 @@ public class JsonExamples {
     @Test
     public void randomExamples() {
 
-        JsonObject jo = Json.object()
+        JsonObject jo = object()
             .array("puppies", Json.array().add("Bucky").add("Nacho").build())
             .build();
         System.out.println(Json.asString(jo));
@@ -538,7 +540,7 @@ public class JsonExamples {
         System.out.println(Json.asString(ja));
         System.out.println(Json.asPrettyString(ja));
 
-        jo = Json.object().build();
+        jo = object().build();
         System.out.println(Json.asString(jo));
         System.out.println(Json.asPrettyString(jo));
 
@@ -546,7 +548,7 @@ public class JsonExamples {
         System.out.println(Json.asString(ja));
         System.out.println(Json.asPrettyString(ja));
 
-        jo = Json.object()
+        jo = object()
             .string("name", "Chuck Norris")
             .binary("picture", chuckNorris.getBytes())
             .build();
@@ -556,15 +558,15 @@ public class JsonExamples {
         ja = Json.array().add(true)
             .add("Nacho")
             .add(100)
-            .add(Json.object().string("address", "1 easy street").build())
+            .add(object().string("address", "1 easy street").build())
             .build();
         System.out.println(Json.asString(ja));
         System.out.println(Json.asPrettyString(ja));
 
-        JsonElement je = Json.object().string("name", "Bucky")
+        JsonElement je = object().string("name", "Bucky")
             .array("eyes", Json.array()
-                .add(Json.object().string("position", "left" ).string("color", "blue" ).build())
-                .add(Json.object().string("position", "right").string("color", "brown").build())
+                .add(object().string("position", "left" ).string("color", "blue" ).build())
+                .add(object().string("position", "right").string("color", "brown").build())
                 .build())
             .build();
 
@@ -590,6 +592,16 @@ public class JsonExamples {
         Assert.assertEquals(100L, num.longValue());
         Assert.assertEquals("1 easy street", object.getString("address"));
 
+    }
+
+    @Test
+    public void jsonBuilderExamples() {
+        JsonObject jo = object().object("address",
+            object().string("street", "1 Easy Street")
+                .string("city", "Fort Woof")
+                .string("state", "TX")
+                .string("zip", "76111").build()).build();
+        System.out.println(jo.asPrettyString());
 
     }
 
@@ -616,7 +628,6 @@ public class JsonExamples {
         Assert.assertEquals("Fort Woof", address2.get("city"));
         Assert.assertEquals("TX", address2.get("state"));
         Assert.assertEquals("76111", address2.get("zip"));
-
     }
 }
 
