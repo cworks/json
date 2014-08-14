@@ -8,15 +8,17 @@
  */
 package net.cworks.json;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import net.cworks.json.builder.JsonArrayBuilder;
+import net.cworks.json.parser.JsonParser;
+import net.cworks.json.parser.JsonParserBuilder;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import static net.cworks.json.Json.object;
+import static net.cworks.json.Json.Json;
 
 public class JsonExamples {
 
@@ -526,62 +528,53 @@ public class JsonExamples {
     @Test
     public void randomExamples() {
 
-        JsonObject jo = object()
-            .array("puppies", Json.array().add("Bucky").add("Nacho").build())
+        JsonObject jo = Json().object()
+            .array("puppies", Json().array().add("Bucky").add("Nacho").build())
             .build();
-        System.out.println(Json.asString(jo));
-        System.out.println(Json.asPrettyString(jo));
+        System.out.println(Json().toJson(jo));
 
-        JsonArray ja = Json.array().add("Red", "Green", "Blue").build();
-        System.out.println(Json.asString(ja));
-        System.out.println(Json.asPrettyString(ja));
+        JsonArray ja = Json().array().add("Red", "Green", "Blue").build();
+        System.out.println(Json().toJson(ja));
 
-        ja = Json.array().add(new String[]{ "One", "Two", "Three" }).build();
-        System.out.println(Json.asString(ja));
-        System.out.println(Json.asPrettyString(ja));
+        ja = Json().array().add(new String[]{ "One", "Two", "Three" }).build();
+        System.out.println(Json().toJson(ja));
 
-        jo = object().build();
-        System.out.println(Json.asString(jo));
-        System.out.println(Json.asPrettyString(jo));
+        jo = Json().object().build();
+        System.out.println(Json().toJson(jo));
 
-        ja = Json.array().build();
-        System.out.println(Json.asString(ja));
-        System.out.println(Json.asPrettyString(ja));
+        ja = Json().array().build();
+        System.out.println(Json().toJson(ja));
 
-        jo = object()
+        jo = Json().object()
             .string("name", "Chuck Norris")
             .binary("picture", chuckNorris.getBytes())
             .build();
-        System.out.println(Json.asString(jo));
-        System.out.println(Json.asPrettyString(jo));
+        System.out.println(Json().toJson(jo));
 
-        ja = Json.array().add(true)
+        ja = Json().array().add(true)
             .add("Nacho")
             .add(100)
-            .add(object().string("address", "1 easy street").build())
+            .add(Json().object().string("address", "1 easy street").build())
             .build();
-        System.out.println(Json.asString(ja));
-        System.out.println(Json.asPrettyString(ja));
+        System.out.println(Json().toJson(ja));
 
-        JsonElement je = object().string("name", "Bucky")
-            .array("eyes", Json.array()
-                .add(object().string("position", "left" ).string("color", "blue" ).build())
-                .add(object().string("position", "right").string("color", "brown").build())
+        JsonElement je = Json().object().string("name", "Bucky")
+            .array("eyes", Json().array()
+                .add(Json().object().string("position", "left" ).string("color", "blue" ).build())
+                .add(Json().object().string("position", "right").string("color", "brown").build())
                 .build())
             .build();
 
-        System.out.println(Json.asString(je));
-        System.out.println(Json.asPrettyString(je));
+        System.out.println(Json().toJson(je));
 
-        JsonArrayBuilder builder = Json.array();
+        JsonArrayBuilder builder = Json().array();
         for(int i = 0; i < 100; i++) {
             builder.add(rand.nextInt());
         }
         ja = builder.build();
-        System.out.println(Json.asString(ja));
-        System.out.println(Json.asPrettyString(ja));
+        System.out.println(Json().toJson(ja));
 
-        JsonArray jsonArray = Json.asArray("[true,\"Nacho\",100,{\"address\":\"1 easy street\"}]");
+        JsonArray jsonArray = Json().toArray("[true,\"Nacho\",100,{\"address\":\"1 easy street\"}]");
         Boolean bool = jsonArray.get(0);
         String str   = jsonArray.get(1);
         Integer num  = jsonArray.get(2);
@@ -595,86 +588,41 @@ public class JsonExamples {
     }
 
     @Test
-    public void jsonBuilderExamples() {
-        JsonObject jo = object().object("address",
-            object().string("street", "1 Easy Street")
-                .string("city", "Fort Woof")
-                .string("state", "TX")
-                .string("zip", "76111").build()).build();
-        System.out.println(jo.asPrettyString());
+    public void simpleUse() {
+
+        Json json = Json();
+        JsonObject bucky = json.object()
+            .string("name", "Bucky Martin")
+            .number("age", 4)
+            .build();
+        System.out.println(json.toJson(bucky));
+
+        Json pretty = Json("{\"pretty\":true}");
+        JsonObject lola = pretty.object()
+            .string("name", "Lola")
+            .number("age", 6)
+            .build();
+        System.out.println(pretty.toJson(lola));
 
     }
 
     @Test
-    public void jsonToTypes() {
-        Id id = Json.asType("{\"id\":123}", Id.class);
-        Assert.assertEquals(123, id.getId());
+    public void buildParser() {
 
-        String data = "{" +
-            "\"street\":\"1 Easy Street\"," +
-            "\"city\":\"Fort Woof\"," +
-            "\"state\":\"TX\"," +
-            "\"zip\":\"76111\"" +
-        "}";
+        JsonParser parser = JsonParserBuilder.parser()
+            .dateFormat("yyyy-MM-dd'T'HH:mm:ssz")
+            .pretty(true)
+            .allowComments(true)
+            .make();
 
-        Address address1 = Json.asType(data, Address.class);
-        Assert.assertEquals("1 Easy Street", address1.street());
-        Assert.assertEquals("Fort Woof", address1.city());
-        Assert.assertEquals("TX", address1.state());
-        Assert.assertEquals("76111", address1.zip());
+        Map data = new HashMap<String, Object>();
+        data.put("name", "Nacho Libre");
+        data.put("year", 2008);
+        data.put("boxOffice", "10 million");
 
-        Map address2 = Json.asMap(data);
-        Assert.assertEquals("1 Easy Street", address2.get("street"));
-        Assert.assertEquals("Fort Woof", address2.get("city"));
-        Assert.assertEquals("TX", address2.get("state"));
-        Assert.assertEquals("76111", address2.get("zip"));
-    }
-}
-
-class Id {
-    int id = 0;
-    public void setId(int id) {
-        this.id = id;
-    }
-    public int getId() {
-        return this.id;
-    }
-}
-
-class Address {
-    private String street;
-    private String city;
-    private String state;
-    private String zip;
-
-    // need annotation because not using set, get naming conventions
-    @JsonProperty
-    public void street(String street) {
-        this.street = street;
-    }
-    @JsonProperty
-    public void city(String city) {
-        this.city = city;
-    }
-    @JsonProperty
-    public void state(String state) {
-        this.state = state;
-    }
-    @JsonProperty
-    public void zip(String zip) {
-        this.zip = zip;
-    }
-    public String street() {
-        return this.street;
-    }
-    public String city() {
-        return this.city;
-    }
-    public String state() {
-        return this.state;
-    }
-    public String zip() {
-        return this.zip;
+        System.out.println(parser.toJson(data)); // pretty
+        System.out.println(Json().toJson(data)); // not pretty
+        System.out.println(Json("{\"pretty\":true}").toJson(data)); // pretty
     }
 
 }

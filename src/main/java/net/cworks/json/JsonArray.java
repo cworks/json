@@ -16,7 +16,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import static net.cworks.json.Json.Json;
 import static net.cworks.json.JsonObject.cloneMap;
+
 
 public class JsonArray extends JsonElement implements Iterable<Object> {
 
@@ -35,7 +37,7 @@ public class JsonArray extends JsonElement implements Iterable<Object> {
     }
 
     public JsonArray(String jsonString) {
-        list = Json.asType(jsonString, List.class);
+        list = Json().toObject(jsonString, List.class);
     }
 
     public JsonArray addString(String str) {
@@ -123,11 +125,7 @@ public class JsonArray extends JsonElement implements Iterable<Object> {
     }
 
     public String asString() throws JsonException {
-        return Json.asString(this.list);
-    }
-
-    public String asPrettyString() throws JsonException {
-        return Json.asPrettyString(this.list);
+        return Json().toJson(this.list);
     }
 
     public JsonArray copy() {

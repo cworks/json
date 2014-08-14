@@ -8,189 +8,174 @@
  */
 package net.cworks.json;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import net.cworks.json.builder.JsonArrayBuilder;
 import net.cworks.json.builder.JsonObjectBuilder;
+import net.cworks.json.parser.JsonParser;
+import net.cworks.json.parser.JsonParserBuilder;
+import net.cworks.json.parser.ParserType;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public final class Json {
 
-    /**
-     * The more conservative mapper
-     */
-    private final static ObjectMapper mapper = new ObjectMapper();
+    private static final String DEFAULT_JSON_PARSER = "jackson";
+
+    private JsonParser parser = null;
+
+    private JsonObject config = null;
 
     /**
-     * The liberal mapper
+     * Hidden, use factory methods Json() and Json(:parser)
      */
-    private final static ObjectMapper prettyMapper = new ObjectMapper();
+    Json(JsonParser parser) {
+        this.parser = parser;
+    }
 
     /**
-     * configure mappers
+     * Hidden, use factory methods Json() and Json(:parser)
+     *
+     * @param parser
+     * @param config
      */
-    static {
-        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        mapper.configure(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES, false);
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        mapper.configure(com.fasterxml.jackson.core.JsonParser.Feature.ALLOW_COMMENTS, true);
+    Json(JsonParser parser, JsonObject config) {
+        this.parser = parser;
+        this.config = config;
+    }
 
-        prettyMapper.configure(SerializationFeature.INDENT_OUTPUT, true);
-        prettyMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        prettyMapper.configure(com.fasterxml.jackson.core.JsonParser.Feature.ALLOW_COMMENTS, true);
+    /**
+     * Creates Json with default parser and settings
+     *
+     * @return
+     */
+    public static Json Json() {
+        return Json("{\"pretty\":false}");
+    }
+
+    /**
+     * Creates Json with customer options
+     *
+     * @param options Json string containing options
+     * @return
+     */
+    public static Json Json(String options) {
+
+        JsonElement element = defaultParser().toObject(options);
+        JsonObject config = validateConfig(element);
+        if (config != null) {
+            return new Json(defaultParser(config), config);
+        }
+
+        return new Json(defaultParser());
+    }
+
+    private static JsonObject validateConfig(JsonElement element) {
+        if (element == null) {
+            return null;
+        }
+        if (!element.isObject()) {
+            return null;
+        }
+
+        JsonObject config = (JsonObject) element;
+        return config;
+    }
+
+    /**
+     * Creates Json with a super duper parser
+     *
+     * @param parser
+     * @return
+     */
+    public static Json Json(JsonParser parser) {
+
+        return new Json(parser);
+    }
+
+    /**
+     * Create the default JsonParser
+     *
+     * @return
+     */
+    static JsonParser defaultParser() {
+
+        Map data = new HashMap<String, Object>();
+        data.put("dateFormat", "yyyy-MM-dd'T'HH:mm:ssz");
+        data.put("pretty", false);
+        data.put("allowComments", true);
+        JsonObject config = new JsonObject(data);
+
+        return defaultParser(config);
+    }
+
+    /**
+     * Create a default JsonParser but with some config options
+     *
+     * @param config
+     * @return
+     */
+    static JsonParser defaultParser(JsonObject config) {
+
+        String name = System.getProperty("json.defaultParser", "jackson");
+
+        JsonParser parser = JsonParserBuilder.parser(ParserType.valueOf(name))
+            .dateFormat(config.getString("dateFormat", "yyyy-MM-dd'T'HH:mm:ssz"))
+            .pretty(config.getBoolean("pretty", false))
+            .allowComments(config.getBoolean("allowComments", true))
+            .make();
+
+        return parser;
     }
 
     /**
      * Builder method for quickly creating a JsonObject
+     *
      * @return Json Object builder
      */
-    public static JsonObjectBuilder object() {
+    public JsonObjectBuilder object() {
         return new JsonObjectBuilder();
     }
 
     /**
      * Builder method for quickly creating a JsonArray
+     *
      * @return
      */
-    public static JsonArrayBuilder array() {
+    public JsonArrayBuilder array() {
         return new JsonArrayBuilder();
     }
 
-    /**
-     * convert JSON string to a Java type
-     * @param json JSON string
-     * @param clazz the Java type to convert into
-     * @return an instance of the clazz type
-     * @throws JsonException
-     */
-    @SuppressWarnings("unchecked")
-    public static <T> T asType(final String json, final Class<T> clazz)
-        throws JsonException {
-
-        try {
-            //JsonFactory jsonFactory = new JsonFactory();
-            //com.fasterxml.jackson.core.JsonParser jp = jsonFactory.createParser(json);
-            return (T)mapper.readValue(json, clazz);
-        } catch (Exception ex) {
-            throw new JsonException(ex);
+    public JsonArray toArray(String json) {
+        JsonElement element = parser.toObject(json);
+        if (element.isArray()) {
+            return (JsonArray) element;
         }
+
+        return null;
     }
 
-    /**
-     * convert JSON string to assigned type
-     * @param json JSON string
-     * @return an instance of the assigned type
-     */
-    public static Map asMap(final String json) {
-        if (json == null) {
-            return null;
+    public JsonObject toObject(String json) {
+
+        JsonElement element = parser.toObject(json);
+        if (element.isObject()) {
+            return (JsonObject) element;
         }
 
-        try {
-            // Untyped List/Map
-            return mapper.readValue(json, Map.class);
-        } catch (Exception ex) {
-            throw new JsonException(ex);
-        }
+        return null;
     }
 
-    /**
-     * convert Java type to JSON string
-     * @param obj Java type to convert
-     * @return a JSON string that represents the obj parameter
-     * @throws JsonException
-     */
-    public static String asString(final Object obj) throws JsonException {
-        try {
-            return mapper.writeValueAsString(obj);
-        } catch (Exception ex) {
-            throw new JsonException(ex);
-        }
+    public <T> T toObject(String json, final Class<T> clazz) throws JsonException {
+        return parser.toObject(json, clazz);
     }
 
-    /**
-     * Just a convenience method for cases where its easier to call this static method over
-     * instance methods
-     * @param element
-     * @return
-     */
-    public static String asString(final JsonElement element) {
+    public String toJson(JsonElement element) {
 
-        if(element.isObject()) {
-            return ((JsonObject)element).asString();
-        }
-
-        if(element.isArray()) {
-            return ((JsonArray)element).asString();
-        }
-
-        return "";
+        return parser.toJson(element);
     }
 
-    /**
-     * convert Java type to JSON string
-     * @param obj Java type to convert
-     * @return a JSON pretty string that represents the obj parameter
-     * @throws JsonException
-     */
-    public static String asPrettyString(final Object obj) throws JsonException {
-        try {
-            return prettyMapper.writeValueAsString(obj);
-        } catch (Exception ex) {
-            throw new JsonException(ex);
-        }
+    public String toJson(Object obj) throws JsonException {
+        return parser.toJson(obj);
     }
 
-    /**
-     * convert JsonElement to a pretty JSON string
-     * @param element
-     * @return the pretty Json string
-     */
-    public static String asPrettyString(final JsonElement element) {
-        if(element.isObject()) {
-            return ((JsonObject)element).asPrettyString();
-        }
 
-        if(element.isArray()) {
-            return ((JsonArray)element).asPrettyString();
-        }
-
-        return "";
-    }
-
-    /**
-     * convert Json string into JsonArray instance
-     * @param json
-     * @return
-     */
-    public static JsonArray asArray(final String json) {
-        JsonArray ja = new JsonArray(json);
-        return ja;
-    }
-
-    /**
-     * convert Json string into JsonObject instance
-     * @param json
-     * @return
-     */
-    public static JsonObject asObject(final String json) {
-        JsonObject jo = new JsonObject(json);
-        return jo;
-    }
-
-    /**
-     * convert Map of data into JsonObject instance
-     * @param data
-     * @return
-     */
-    public static JsonObject asObject(final Map data) {
-        if(data == null) {
-            return new JsonObject();
-        }
-        JsonObject jo = new JsonObject(data);
-        return jo;
-    }
 }
