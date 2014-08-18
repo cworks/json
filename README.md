@@ -58,3 +58,5 @@ Converts a user specific type into a json String using the superDuperParser
 Address address = new Address("42 Wallaby Way", "Sydney", "AU");
 String json = Json(superDuperParser).toString(address);
 
+Think: Say what is True, Helpful, Important , Necessary, Kind
+
