@@ -14,6 +14,12 @@ import net.cworks.json.parser.JsonParser;
 import net.cworks.json.parser.JsonParserBuilder;
 import net.cworks.json.parser.ParserType;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -164,6 +170,33 @@ public final class Json {
         return null;
     }
 
+    public JsonObject toObject(File file) {
+
+        InputStream in = null;
+        try {
+            in = new BufferedInputStream(new FileInputStream(file));
+        } catch (FileNotFoundException ex) {
+            throw new JsonException("File " + file.getPath() + " not found.", ex);
+        } finally {
+            closeQuietly(in);
+        }
+
+        StringBuffer buffer = new StringBuffer();
+        try {
+            byte[] b = new byte[4096];
+            for (int n; (n = in.read(b)) != -1; ) {
+                buffer.append(new String(b, 0, n));
+            }
+        } catch(IOException ex) {
+            throw new JsonException("I/O error while reading from File "
+                + file.getPath(), ex);
+        } finally {
+            closeQuietly(in);
+        }
+
+        return toObject(buffer.toString());
+    }
+
     public <T> T toObject(String json, final Class<T> clazz) throws JsonException {
         return parser.toObject(json, clazz);
     }
@@ -176,6 +209,14 @@ public final class Json {
     public String toJson(Object obj) throws JsonException {
         return parser.toJson(obj);
     }
+
+    public static void closeQuietly(InputStream in) {
+        if(in != null) {
+            try { in.close(); } catch (IOException ignore) { }
+        }
+    }
+
+
 
 
 }
