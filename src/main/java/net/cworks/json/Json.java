@@ -173,20 +173,16 @@ public final class Json {
     public JsonObject toObject(File file) {
 
         InputStream in = null;
-        try {
-            in = new BufferedInputStream(new FileInputStream(file));
-        } catch (FileNotFoundException ex) {
-            throw new JsonException("File " + file.getPath() + " not found.", ex);
-        } finally {
-            closeQuietly(in);
-        }
-
         StringBuffer buffer = new StringBuffer();
         try {
+            in = new BufferedInputStream(new FileInputStream(file));
             byte[] b = new byte[4096];
             for (int n; (n = in.read(b)) != -1; ) {
                 buffer.append(new String(b, 0, n));
             }
+        } catch (FileNotFoundException ex) {
+            throw new JsonException("File "
+                + file.getPath() + " not found.", ex);
         } catch(IOException ex) {
             throw new JsonException("I/O error while reading from File "
                 + file.getPath(), ex);
