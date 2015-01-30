@@ -23,87 +23,21 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * This class is a simple JSON string to Java Object and vice-versa
+ * conversion utility.
+ *
+ * @author corbett
+ */
 public final class Json {
 
-    private static final String DEFAULT_JSON_PARSER = "jackson";
-
-    private JsonParser parser = null;
-
-    private JsonObject config = null;
-
     /**
-     * Hidden, use factory methods Json() and Json(:parser)
-     */
-    Json(JsonParser parser) {
-        this.parser = parser;
-    }
-
-    /**
-     * Hidden, use factory methods Json() and Json(:parser)
+     * Create the default JsonParser which does not pretty print but allows
+     * comments in JSON and has yyyy-MM-dd'T'HH:mm:ssz formatted date strings.
      *
-     * @param parser
-     * @param config
+     * @return JsonParser
      */
-    Json(JsonParser parser, JsonObject config) {
-        this.parser = parser;
-        this.config = config;
-    }
-
-    /**
-     * Creates Json with default parser and settings
-     *
-     * @return
-     */
-    public static Json Json() {
-        return Json("{\"pretty\":false}");
-    }
-
-    /**
-     * Creates Json with customer options
-     *
-     * @param options Json string containing options
-     * @return
-     */
-    public static Json Json(String options) {
-
-        JsonElement element = defaultParser().toObject(options);
-        JsonObject config = validateConfig(element);
-        if (config != null) {
-            return new Json(defaultParser(config), config);
-        }
-
-        return new Json(defaultParser());
-    }
-
-    private static JsonObject validateConfig(JsonElement element) {
-        if (element == null) {
-            return null;
-        }
-        if (!element.isObject()) {
-            return null;
-        }
-
-        JsonObject config = (JsonObject) element;
-        return config;
-    }
-
-    /**
-     * Creates Json with a super duper parser
-     *
-     * @param parser
-     * @return
-     */
-    public static Json Json(JsonParser parser) {
-
-        return new Json(parser);
-    }
-
-    /**
-     * Create the default JsonParser
-     *
-     * @return
-     */
-    static JsonParser defaultParser() {
+    static JsonParser parser() {
 
         Map data = new HashMap<String, Object>();
         data.put("dateFormat", "yyyy-MM-dd'T'HH:mm:ssz");
@@ -111,18 +45,35 @@ public final class Json {
         data.put("allowComments", true);
         JsonObject config = new JsonObject(data);
 
-        return defaultParser(config);
+        return parser(config);
     }
 
     /**
-     * Create a default JsonParser but with some config options
+     * Create a pretty print JsonParser which is same as default parser
+     * except that it pretty prints Json text.
+     *
+     * @return JsonParser
+     */
+    static JsonParser prettyParser() {
+        Map data = new HashMap<String, Object>();
+        data.put("dateFormat", "yyyy-MM-dd'T'HH:mm:ssz");
+        data.put("pretty", true);
+        data.put("allowComments", true);
+        JsonObject config = new JsonObject(data);
+
+        return parser(config);
+    }
+
+    /**
+     * Create a default JsonParser but with some extra config options.  By
+     * default Jackson parser suite is used.
      *
      * @param config
-     * @return
+     * @return JsonParser
      */
-    static JsonParser defaultParser(JsonObject config) {
+    static JsonParser parser(JsonObject config) {
 
-        String name = System.getProperty("json.defaultParser", "jackson");
+        String name = System.getProperty("json.parser", "jackson");
 
         JsonParser parser = JsonParserBuilder.parser(ParserType.valueOf(name))
             .dateFormat(config.getString("dateFormat", "yyyy-MM-dd'T'HH:mm:ssz"))
@@ -136,23 +87,31 @@ public final class Json {
     /**
      * Builder method for quickly creating a JsonObject
      *
-     * @return Json Object builder
+     * @return JsonObjectBuilder
      */
-    public JsonObjectBuilder object() {
+    public static JsonObjectBuilder object() {
         return new JsonObjectBuilder();
     }
 
     /**
      * Builder method for quickly creating a JsonArray
      *
-     * @return
+     * @return JsonArrayBuilder
      */
-    public JsonArrayBuilder array() {
+    public static JsonArrayBuilder array() {
         return new JsonArrayBuilder();
     }
 
-    public JsonArray toArray(String json) {
-        JsonElement element = parser.toObject(json);
+    /**
+     * Convert the json text to a JsonArray
+     * @param json text
+     * @return JsonArray
+     */
+    public static JsonArray asArray(String json) {
+
+        throwIfBad(json);
+
+        JsonElement element = parser().toObject(json.trim());
         if (element.isArray()) {
             return (JsonArray) element;
         }
@@ -160,9 +119,16 @@ public final class Json {
         return null;
     }
 
-    public JsonObject toObject(String json) {
+    /**
+     * Convert the json text to a JsonObject
+     * @param json text
+     * @return JsonObject
+     */
+    public static JsonObject asObject(String json) {
 
-        JsonElement element = parser.toObject(json);
+        throwIfBad(json);
+
+        JsonElement element = parser().toObject(json.trim());
         if (element.isObject()) {
             return (JsonObject) element;
         }
@@ -170,7 +136,12 @@ public final class Json {
         return null;
     }
 
-    public JsonObject toObject(File file) {
+    /**
+     * Convert the json text file to a JsonObject
+     * @param file containing json text
+     * @return JsonObject
+     */
+    public static JsonObject asObject(File file) {
 
         InputStream in = null;
         StringBuffer buffer = new StringBuffer();
@@ -190,29 +161,85 @@ public final class Json {
             closeQuietly(in);
         }
 
-        return toObject(buffer.toString());
+        return asObject(buffer.toString());
     }
 
-    public <T> T toObject(String json, final Class<T> clazz) throws JsonException {
-        return parser.toObject(json, clazz);
+    /**
+     * Convert the json text to a specific Java type
+     * @param json
+     * @param clazz
+     * @param <T>
+     * @return instance of T
+     * @throws JsonException
+     */
+    public static <T> T asObject(String json, final Class<T> clazz) throws JsonException {
+
+        throwIfBad(json);
+
+        return parser().toObject(json.trim(), clazz);
     }
 
-    public String toJson(JsonElement element) {
+    /**
+     * Convert the JsonElement to json text
+     * @param element
+     * @return json text
+     */
+    public static String asString(JsonElement element) {
 
-        return parser.toJson(element);
+        return parser().toJson(element);
     }
 
-    public String toJson(Object obj) throws JsonException {
-        return parser.toJson(obj);
+    /**
+     * Convert the JsonElement to pretty json text
+     * @param element
+     * @return
+     */
+    public static String asPrettyString(JsonElement element) {
+        return prettyParser().toJson(element);
     }
 
-    public static void closeQuietly(InputStream in) {
+    /**
+     * Convert the Object to json text
+     * @param obj
+     * @return json text
+     * @throws JsonException
+     */
+    public static String asString(Object obj) throws JsonException {
+        return parser().toJson(obj);
+    }
+
+    /**
+     * Convert the Object to pretty json text
+     * @param obj
+     * @return
+     * @throws JsonException
+     */
+    public static String asPrettyString(Object obj) throws JsonException {
+        return prettyParser().toJson(obj);
+    }
+
+    /**
+     * Internal class method to close a stream without a lot of drama
+     * @param in
+     */
+    private static void closeQuietly(InputStream in) {
         if(in != null) {
             try { in.close(); } catch (IOException ignore) { }
         }
     }
 
+    /**
+     * Internal class method that will throw an IllegalArgumentException if json is jacked up
+     * @param json
+     */
+    private static void throwIfBad(String json) {
+        if(json == null) {
+            throw new IllegalArgumentException("Json argument cannot be null.");
+        }
 
-
+        if(json.trim().length() == 0) {
+            throw new IllegalArgumentException("Json argument cannot be an empty-string.");
+        }
+    }
 
 }

@@ -15,8 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static net.cworks.json.Json.Json;
-
 public class JsonObject extends JsonElement {
 
     /**
@@ -46,7 +44,7 @@ public class JsonObject extends JsonElement {
      * @param json string form of a JSON object
      */
     public JsonObject(String json) {
-        map = Json.defaultParser().toObject(json, Map.class);
+        map = Json.parser().toObject(json, Map.class);
     }
 
     public JsonObject setString(String field, String value) {
@@ -234,7 +232,7 @@ public class JsonObject extends JsonElement {
     }
 
     public String asString() {
-        return Json().toJson(this.map);
+        return Json.asString(this.map);
     }
 
     public JsonObject copy() {
