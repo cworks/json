@@ -21,7 +21,7 @@ public class JsonExamples {
     private static final Random rand = new Random(System.currentTimeMillis());
 
     @Test
-    public void test_asArray() {
+    public void testAsArray() {
 
         JsonArray users = Json.asArray(JsonTestData.USERS_ARRAY);
 
@@ -37,7 +37,7 @@ public class JsonExamples {
     }
 
     @Test
-    public void test_asObject() {
+    public void testAsObject() {
 
         JsonObject user = Json.asObject(JsonTestData.USER);
 
@@ -50,8 +50,25 @@ public class JsonExamples {
 
     }
 
+    /**
+     * This tests the ability of Json to deal with inconsistent field names
+     * @see net.cworks.json.JsonTestData
+     */
     @Test
-    public void test_asObjectToType() {
+    public void testJackedUserAsObject() {
+
+        JsonObject user = Json.asObject(JsonTestData.JACKED_USER);
+
+        Assert.assertEquals(Integer.valueOf(1), user.getInteger("id"));
+        Assert.assertEquals("Justin", user.getString("firstName"));
+        Assert.assertEquals("Harrison", user.getString("lastName"));
+        Assert.assertEquals("jharrison0@diigo.com", user.getString("email"));
+        Assert.assertEquals("China", user.getString("country"));
+        Assert.assertEquals("205.174.198.42", user.getString("ipAddress"));
+    }
+
+    @Test
+    public void testAsObjectToJavaInstance() {
 
         TestUser user = Json.asObject(JsonTestData.USER, TestUser.class);
 
@@ -61,6 +78,18 @@ public class JsonExamples {
         Assert.assertEquals("China", user.getCountry());
         Assert.assertEquals("205.174.198.42", user.getIpAddress());
 
+    }
+
+    @Test
+    public void testJackedAsObjectToJavaInstance() {
+
+        TestUser user = Json.asObject(JsonTestData.JACKED_USER, TestUser.class);
+
+        Assert.assertEquals("Justin", user.getFirstName());
+        Assert.assertEquals("Harrison", user.getLastName());
+        Assert.assertEquals("jharrison0@diigo.com", user.getEmail());
+        Assert.assertEquals("China", user.getCountry());
+        Assert.assertEquals("205.174.198.42", user.getIpAddress());
     }
 
     @Test
@@ -155,8 +184,6 @@ public class JsonExamples {
         System.out.println(Json.asPrettyString(data));
 
     }
-
-
 
 }
 

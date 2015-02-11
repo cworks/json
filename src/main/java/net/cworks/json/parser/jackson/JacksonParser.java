@@ -7,44 +7,31 @@
  * Created: 8/1/14 3:40 PM
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
-package net.cworks.json.parser;
+package net.cworks.json.parser.jackson;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.util.JsonParserDelegate;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import net.cworks.json.JsonArray;
-import net.cworks.json.JsonElement;
-import net.cworks.json.JsonException;
-import net.cworks.json.JsonObject;
+import net.cworks.json.*;
+import net.cworks.json.parser.JsonParser;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
 public class JacksonParser extends JsonParser {
 
-    /**
-     * The more conservative mapper
-     */
-    private final static ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper mapper;
 
-    /**
-     * The liberal mapper
-     */
-    private final static ObjectMapper prettyMapper = new ObjectMapper();
-
-    /**
-     * configure mappers
-     */
-    static {
+    public JacksonParser() {
+        mapper = new ObjectMapper();
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         mapper.configure(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES, false);
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         mapper.configure(com.fasterxml.jackson.core.JsonParser.Feature.ALLOW_COMMENTS, true);
-
-        prettyMapper.configure(SerializationFeature.INDENT_OUTPUT, true);
-        prettyMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        prettyMapper.configure(com.fasterxml.jackson.core.JsonParser.Feature.ALLOW_COMMENTS, true);
     }
 
     @Override
@@ -74,13 +61,16 @@ public class JacksonParser extends JsonParser {
     @Override
     public <T> T toObject(String json, Class<T> clazz) throws JsonException {
 
-        T object = null;
+        T object;
         try {
-            if(pretty) {
-                object = prettyMapper.readValue(json, clazz);
-            } else {
-                object = mapper.readValue(json, clazz);
-            }
+            JsonFactory factory = mapper.getFactory();
+            com.fasterxml.jackson.core.JsonParser parser = factory.createParser(json);
+            com.fasterxml.jackson.core.JsonParser wrapper = new JsonParserDelegate(parser) {
+                public String getCurrentName() throws IOException {
+                    return JsonJavaUtils.toMethodName(delegate.getCurrentName());
+                }
+            };
+            object = mapper.readValue(wrapper, clazz);
         } catch (Exception ex) {
             throw new JsonException(ex);
         }
@@ -104,11 +94,13 @@ public class JacksonParser extends JsonParser {
     @Override
     public String toJson(Object obj) throws JsonException {
 
-        String json = null;
+        String json;
         try {
             if(pretty) {
-                json = prettyMapper.writeValueAsString(obj);
+                mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
+                json = mapper.writeValueAsString(obj);
             } else {
+                mapper.configure(SerializationFeature.INDENT_OUTPUT, false);
                 json = mapper.writeValueAsString(obj);
             }
         } catch (Exception ex) {
@@ -117,5 +109,6 @@ public class JacksonParser extends JsonParser {
 
         return json;
     }
+
 
 }

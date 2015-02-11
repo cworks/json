@@ -1,4 +1,4 @@
-description "A Simple JSON library for Java"
+description 'A simple JSON utilty library for Java'
 
 apply plugin: "java"
 apply plugin: "maven"
@@ -7,18 +7,25 @@ apply plugin: "idea"
 group = "net-cworks"
 
 compileJava {
-    sourceCompatibility=1.7
-    targetCompatibility=1.7
+    sourceCompatibility=1.8
+    targetCompatibility=1.8
 }
 
 compileTestJava {
-    sourceCompatibility=1.7
-    targetCompatibility=1.7
+    sourceCompatibility=1.8
+    targetCompatibility=1.8
+}
+
+configurations {
+    providedRuntime
 }
 
 repositories {
     mavenLocal()
     mavenCentral()
+    maven {
+        url "http://dl.bintray.com/cworks/maven"
+    }
 }
 
 dependencies {

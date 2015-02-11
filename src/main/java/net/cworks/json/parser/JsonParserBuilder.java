@@ -8,6 +8,8 @@
  */
 package net.cworks.json.parser;
 
+import net.cworks.json.parser.jackson.JacksonParser;
+
 public class JsonParserBuilder {
 
     private JsonParser parser = null;

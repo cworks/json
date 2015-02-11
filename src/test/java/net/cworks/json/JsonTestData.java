@@ -1,5 +1,20 @@
 package net.cworks.json;
 
+/**
+ * Want a liberal deserializer that will map JSON field names to Java method names
+ * in a liberal manner.
+ *
+ * Field names in JSON could be
+ * firstName
+ * FirstName
+ * FIRSTNAME
+ * first_name
+ * first-name
+ *
+ * Method in Java would be
+ * setFirstName
+ *
+ */
 public final class JsonTestData {
 
     public static final String USER = "  {\n" +
@@ -9,6 +24,20 @@ public final class JsonTestData {
             "    \"email\": \"jharrison0@diigo.com\",\n" +
             "    \"country\": \"China\",\n" +
             "    \"ipAddress\": \"205.174.198.42\"\n" +
+            "  }";
+
+    /**
+     * This JSON string reflects some of the different ways field names
+     * can come to us.  We try to translate them to standard java method names
+     * so POJO mapping can take place.
+     */
+    public static final String JACKED_USER = "  {\n" +
+            "    \"id\": 1,\n" +
+            "    \"First_Name\": \"Justin\",\n" +
+            "    \"LAST_NAME\": \"Harrison\",\n" +
+            "    \"_email\": \"jharrison0@diigo.com\",\n" +
+            "    \"Country\": \"China\",\n" +
+            "    \"Ip_ADDRESS\": \"205.174.198.42\"\n" +
             "  }";
 
     public static final String USERS_ARRAY = "[\n" +
