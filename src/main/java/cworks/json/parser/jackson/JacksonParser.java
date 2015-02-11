@@ -7,7 +7,7 @@
  * Created: 8/1/14 3:40 PM
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
-package net.cworks.json.parser.jackson;
+package cworks.json.parser.jackson;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonFactory;
@@ -15,8 +15,8 @@ import com.fasterxml.jackson.core.util.JsonParserDelegate;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import net.cworks.json.*;
-import net.cworks.json.parser.JsonParser;
+import cworks.json.*;
+import cworks.json.parser.JsonParser;
 
 import java.io.IOException;
 import java.util.List;

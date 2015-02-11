@@ -6,7 +6,7 @@
  * Created: 8/13/2014 11:41 AM
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
-package net.cworks.json.parser;
+package cworks.json.parser;
 
 public enum ParserType {
     jackson,

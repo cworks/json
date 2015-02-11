@@ -6,7 +6,7 @@
  * Created: 8/11/2014 12:42 PM
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
-package net.cworks.json.builder;
+package cworks.json.builder;
 
 public interface JsonStep {
 

@@ -6,13 +6,13 @@
  * Created: 8/11/2014 11:20 AM
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
-package net.cworks.json.builder;
+package cworks.json.builder;
 
-import net.cworks.json.JsonDeserializer;
-import net.cworks.json.JsonErrorHandler;
-import net.cworks.json.JsonObject;
-import net.cworks.json.JsonSerializer;
-import net.cworks.json.parser.JsonParser;
+import cworks.json.JsonDeserializer;
+import cworks.json.JsonErrorHandler;
+import cworks.json.JsonObject;
+import cworks.json.JsonSerializer;
+import cworks.json.parser.JsonParser;
 
 public abstract class JsonBuilder {
 

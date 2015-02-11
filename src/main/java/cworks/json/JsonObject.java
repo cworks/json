@@ -6,7 +6,7 @@
  * Created: 09/10/2013 13:30
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
-package net.cworks.json;
+package cworks.json;
 
 import org.apache.commons.codec.binary.Base64;
 

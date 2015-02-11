@@ -6,9 +6,9 @@
  * Created: 8/13/2014 10:14 AM
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
-package net.cworks.json.parser;
+package cworks.json.parser;
 
-import net.cworks.json.parser.jackson.JacksonParser;
+import cworks.json.parser.jackson.JacksonParser;
 
 public class JsonParserBuilder {
 

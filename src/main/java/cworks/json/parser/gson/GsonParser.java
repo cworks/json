@@ -7,10 +7,11 @@
  * Created: 8/1/14 3:40 PM
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
-package net.cworks.json.parser;
+package cworks.json.parser.gson;
 
-import net.cworks.json.JsonElement;
-import net.cworks.json.JsonException;
+import cworks.json.parser.JsonParser;
+import cworks.json.JsonElement;
+import cworks.json.JsonException;
 
 public class GsonParser extends JsonParser {
 

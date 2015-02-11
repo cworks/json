@@ -1,5 +1,6 @@
-package net.cworks.json;
+package cworks.json;
 
+import cworks.json.JsonJavaUtils;
 import org.junit.Test;
 import org.junit.Assert;
 

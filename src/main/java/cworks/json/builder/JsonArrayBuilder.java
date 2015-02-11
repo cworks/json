@@ -6,11 +6,11 @@
  * Created: 09/10/2013 13:30
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
-package net.cworks.json.builder;
+package cworks.json.builder;
 
-import net.cworks.json.JsonArray;
-import net.cworks.json.JsonElement;
-import net.cworks.json.JsonObject;
+import cworks.json.JsonArray;
+import cworks.json.JsonElement;
+import cworks.json.JsonObject;
 
 public class JsonArrayBuilder {
 

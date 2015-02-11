@@ -1,4 +1,4 @@
-package net.cworks.json;
+package cworks.json;
 
 /**
  * Want a liberal deserializer that will map JSON field names to Java method names

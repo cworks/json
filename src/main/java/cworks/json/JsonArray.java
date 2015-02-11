@@ -6,7 +6,7 @@
  * Created: 09/10/2013 13:30
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
-package net.cworks.json;
+package cworks.json;
 
 import org.apache.commons.codec.binary.Base64;
 
@@ -15,8 +15,6 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import static net.cworks.json.JsonObject.cloneMap;
 
 
 public class JsonArray extends JsonElement implements Iterable<Object> {
@@ -174,7 +172,7 @@ public class JsonArray extends JsonElement implements Iterable<Object> {
 
         for (Object obj : list) {
             if (obj instanceof Map) {
-                objects.add(cloneMap((Map<String, Object>) obj));
+                objects.add(JsonObject.cloneMap((Map<String, Object>) obj));
             } else if (obj instanceof JsonObject) {
                 objects.add(((JsonObject) obj).toMap());
             } else if (obj instanceof List) {

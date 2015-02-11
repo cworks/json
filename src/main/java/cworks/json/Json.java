@@ -6,13 +6,13 @@
  * Created: 09/10/2013 13:30
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
-package net.cworks.json;
+package cworks.json;
 
-import net.cworks.json.builder.JsonArrayBuilder;
-import net.cworks.json.builder.JsonObjectBuilder;
-import net.cworks.json.parser.JsonParser;
-import net.cworks.json.parser.JsonParserBuilder;
-import net.cworks.json.parser.ParserType;
+import cworks.json.builder.JsonArrayBuilder;
+import cworks.json.builder.JsonObjectBuilder;
+import cworks.json.parser.JsonParser;
+import cworks.json.parser.JsonParserBuilder;
+import cworks.json.parser.ParserType;
 
 import java.io.BufferedInputStream;
 import java.io.File;

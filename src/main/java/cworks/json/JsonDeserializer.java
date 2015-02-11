@@ -1,12 +1,14 @@
 /**
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
  * Baked with love by comartin
- * Package: net.cworks.json.builder
+ * Package: net.cworks.json
  * User: comartin
- * Created: 8/11/2014 12:48 PM
+ * Created: 8/11/2014 1:05 PM
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
-package net.cworks.json.builder;
 
-public interface JsonConfigurationStep {
+
+package cworks.json;
+
+public interface JsonDeserializer {
 }

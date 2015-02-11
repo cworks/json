@@ -6,7 +6,7 @@
  * Created: 8/11/2014 4:16 PM
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
-package net.cworks.json;
+package cworks.json;
 
 public interface JsonErrorHandler {
 }

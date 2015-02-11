@@ -6,9 +6,9 @@
  * Created: 09/10/2013 13:30
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
-package net.cworks.json;
+package cworks.json;
 
-import net.cworks.json.builder.JsonArrayBuilder;
+import cworks.json.builder.JsonArrayBuilder;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -52,7 +52,7 @@ public class JsonExamples {
 
     /**
      * This tests the ability of Json to deal with inconsistent field names
-     * @see net.cworks.json.JsonTestData
+     * @see JsonTestData
      */
     @Test
     public void testJackedUserAsObject() {

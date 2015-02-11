@@ -1,4 +1,4 @@
-package net.cworks.json;
+package cworks.json;
 
 public class TestUser {
 

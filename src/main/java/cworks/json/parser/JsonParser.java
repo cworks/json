@@ -6,10 +6,10 @@
  * Created: 8/13/2014 10:26 AM
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
-package net.cworks.json.parser;
+package cworks.json.parser;
 
-import net.cworks.json.JsonElement;
-import net.cworks.json.JsonException;
+import cworks.json.JsonElement;
+import cworks.json.JsonException;
 
 public abstract class JsonParser {
 
