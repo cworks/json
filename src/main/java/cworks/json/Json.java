@@ -21,6 +21,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -109,7 +110,7 @@ public final class Json {
      */
     public static JsonArray asArray(String json) {
 
-        throwIfBad(json);
+        throwIfNotArray(json);
 
         JsonElement element = parser().toObject(json.trim());
         if (element.isArray()) {
@@ -120,13 +121,75 @@ public final class Json {
     }
 
     /**
+     * Convert the json text into an array of Java clazz instances.
+     * @param json
+     * @param clazz
+     * @param <T>
+     * @return
+     * @throws JsonException
+     */
+    public static <T> T[] asArray(String json, final Class<T> clazz) throws JsonException {
+
+        throwIfNotArray(json);
+        
+        return parser().toArray(json, clazz);
+    }
+
+    /**
+     * Convert the json text file to a JsonArray
+     * @param file containing json text
+     * @return JsonArray
+     */
+    public static JsonArray asArray(File file) {
+        
+        if(file == null) {
+            throw new IllegalArgumentException("File argument cannot be null.");
+        }
+        
+        String buffer = bufferFile(file).toString();
+
+        return asArray(buffer);
+    }
+
+    /**
+     * Convert the json text file to a typed java array
+     * @param file containing json text
+     * @param clazz type of array elements
+     * @param <T>
+     * @return
+     * @throws JsonException
+     */
+    public static <T> T[] asArray(File file, final Class<T> clazz) throws JsonException {
+        
+        if(file == null) {
+            throw new IllegalArgumentException("File argument cannot be null.");
+        }
+        
+        String buffer = bufferFile(file).toString();
+        
+        return asArray(buffer, clazz);
+    }
+    
+    
+    public static List<JsonObject> asList(File file) throws JsonException {
+        
+        if(file == null) {
+            throw new IllegalArgumentException("File argument cannot be null.");
+        }
+        
+        String buffer = bufferFile(file).toString();
+        //return parser().toList(buffer);
+        return null;
+    }
+
+    /**
      * Convert the json text to a JsonObject
      * @param json text
      * @return JsonObject
      */
     public static JsonObject asObject(String json) {
 
-        throwIfBad(json);
+        throwIfNotObject(json);
 
         JsonElement element = parser().toObject(json.trim());
         if (element.isObject()) {
@@ -143,25 +206,13 @@ public final class Json {
      */
     public static JsonObject asObject(File file) {
 
-        InputStream in = null;
-        StringBuffer buffer = new StringBuffer();
-        try {
-            in = new BufferedInputStream(new FileInputStream(file));
-            byte[] b = new byte[4096];
-            for (int n; (n = in.read(b)) != -1; ) {
-                buffer.append(new String(b, 0, n));
-            }
-        } catch (FileNotFoundException ex) {
-            throw new JsonException("File "
-                + file.getPath() + " not found.", ex);
-        } catch(IOException ex) {
-            throw new JsonException("I/O error while reading from File "
-                + file.getPath(), ex);
-        } finally {
-            closeQuietly(in);
+        if(file == null) {
+            throw new IllegalArgumentException("File argument cannot be null.");
         }
+        
+        String buffer = bufferFile(file).toString();
 
-        return asObject(buffer.toString());
+        return asObject(buffer);
     }
 
     /**
@@ -174,7 +225,7 @@ public final class Json {
      */
     public static <T> T asObject(String json, final Class<T> clazz) throws JsonException {
 
-        throwIfBad(json);
+        throwIfNotObject(json);
 
         return parser().toObject(json.trim(), clazz);
     }
@@ -240,6 +291,58 @@ public final class Json {
         if(json.trim().length() == 0) {
             throw new IllegalArgumentException("Json argument cannot be an empty-string.");
         }
+    }
+
+    /**
+     * Internal class method that will throw an IllegalArgumentException if json is not an array 
+     * @param json a Json array
+     */
+    private static void throwIfNotArray(String json) {
+        throwIfBad(json);
+        if(json.trim().charAt(0) != '[') {
+            throw new IllegalArgumentException("Json argument is not an array.");
+        }
+    }
+
+    /**
+     * Internal class method that will throw an IllegalArgumentException if json is not an object 
+     * @param json a Json object
+     */
+    private static void throwIfNotObject(String json) {
+        throwIfBad(json);
+        if(json.trim().charAt(0) != '{') {
+            throw new IllegalArgumentException("Json argument is not an object.");
+        }
+    }
+
+    /**
+     * This class method will buffer the whole file before being used to convert
+     * the content to JsonObject, JsonArray or a Java Type.
+     * 
+     * TODO consider placing an upper limit on the buffer to protect against OoM
+     * @param file
+     */
+    private static StringBuffer bufferFile(File file) {
+
+        InputStream in = null;
+        StringBuffer buffer = new StringBuffer();
+        try {
+            in = new BufferedInputStream(new FileInputStream(file));
+            byte[] b = new byte[4096];
+            for (int n; (n = in.read(b)) != -1; ) {
+                buffer.append(new String(b, 0, n));
+            }
+        } catch (FileNotFoundException ex) {
+            throw new JsonException("File "
+                    + file.getPath() + " not found.", ex);
+        } catch(IOException ex) {
+            throw new JsonException("I/O error while reading from File "
+                    + file.getPath(), ex);
+        } finally {
+            closeQuietly(in);
+        }
+        
+        return buffer;
     }
 
 }

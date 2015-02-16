@@ -21,22 +21,6 @@ public class JsonExamples {
     private static final Random rand = new Random(System.currentTimeMillis());
 
     @Test
-    public void testAsArray() {
-
-        JsonArray users = Json.asArray(JsonTestData.USERS_ARRAY);
-
-        JsonObject user1  = users.get(0);
-        JsonObject user2  = users.get(1);
-        JsonObject user10 = users.get(9);
-
-        Assert.assertEquals("Alice",   user1.getString("first_name"));
-        Assert.assertEquals("Timothy", user2.getString("first_name"));
-        Assert.assertEquals("Tina",    user10.getString("first_name"));
-
-        Assert.assertEquals(10, users.size());
-    }
-
-    @Test
     public void testAsObject() {
 
         JsonObject user = Json.asObject(JsonTestData.USER);
@@ -152,7 +136,6 @@ public class JsonExamples {
         Assert.assertEquals("Nacho", str);
         Assert.assertEquals(100L, num.longValue());
         Assert.assertEquals("1 easy street", object.getString("address"));
-
     }
 
     @Test
@@ -184,6 +167,59 @@ public class JsonExamples {
         System.out.println(Json.asPrettyString(data));
 
     }
+    
+    @Test
+    public void testIsNotObject() {
+        // user is missing beginning {
+        String user = " \"id\": 1,\n" +
+                "    \"firstName\": \"Justin\",\n" +
+                "    \"lastName\": \"Harrison\",\n" +
+                "    \"email\": \"jharrison0@diigo.com\",\n" +
+                "    \"country\": \"China\",\n" +
+                "    \"ipAddress\": \"205.174.198.42\"\n" +
+                "  }";
+        
+        try {
+            Json.asObject(user);
+            Assert.fail("User was an invalid Json object and asObject(json) should of raised exception.");
+        } catch(IllegalArgumentException ex) {
+            Assert.assertNotNull(ex);
+        }
 
+        try {
+            Json.asObject(user, TestUser.class);
+            Assert.fail("User was an invalid Json object and asObject(json, clazz) should of raised exception.");
+        } catch(IllegalArgumentException ex) {
+            Assert.assertNotNull(ex);
+        }
+    }
+    
+    @Test
+    public void testIsNotArray() {
+
+        // users is missing beginning [
+        String users = " \"id\": 1,\n" +
+                "    \"firstName\": \"Justin\",\n" +
+                "    \"lastName\": \"Harrison\",\n" +
+                "    \"email\": \"jharrison0@diigo.com\",\n" +
+                "    \"country\": \"China\",\n" +
+                "    \"ipAddress\": \"205.174.198.42\"\n" +
+                "  }";
+
+        try {
+            Json.asArray(users);
+            Assert.fail("Users was an invalid Json array and asArray(json) should of raised exception.");
+        } catch(IllegalArgumentException ex) {
+            Assert.assertNotNull(ex);
+        }
+
+        try {
+            Json.asArray(users, TestUser.class);
+            Assert.fail("Users was an invalid Json array and asArray(json, clazz) should of raised exception.");
+        } catch(IllegalArgumentException ex) {
+            Assert.assertNotNull(ex);
+        }
+        
+    }
 }
 

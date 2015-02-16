@@ -13,6 +13,8 @@ import cworks.json.parser.JsonParser;
 import cworks.json.JsonElement;
 import cworks.json.JsonException;
 
+import java.util.List;
+
 public class GsonParser extends JsonParser {
 
     @Override
@@ -22,6 +24,21 @@ public class GsonParser extends JsonParser {
 
     @Override
     public <T> T toObject(String json, Class<T> clazz) throws JsonException {
+        return null;
+    }
+
+    @Override
+    public <T> T[] toArray(String json, Class<T> clazz) throws JsonException {
+        return null;
+    }
+
+    @Override
+    public List<JsonElement> toList(String json) throws JsonException {
+        return null;
+    }
+
+    @Override
+    public <T> List<T> toList(String json, Class<T> clazz) throws JsonException {
         return null;
     }
 

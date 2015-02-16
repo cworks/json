@@ -2,7 +2,7 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Baked with love by corbett
  * Project: json
- * Package: net.cworks.json.parser
+ * Package: cworks.json.parser
  * Class: JacksonParser
  * Created: 8/1/14 3:40 PM
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -15,6 +15,8 @@ import com.fasterxml.jackson.core.util.JsonParserDelegate;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.type.ArrayType;
+import com.fasterxml.jackson.databind.type.CollectionType;
 import cworks.json.*;
 import cworks.json.parser.JsonParser;
 
@@ -63,19 +65,73 @@ public class JacksonParser extends JsonParser {
 
         T object;
         try {
-            JsonFactory factory = mapper.getFactory();
-            com.fasterxml.jackson.core.JsonParser parser = factory.createParser(json);
-            com.fasterxml.jackson.core.JsonParser wrapper = new JsonParserDelegate(parser) {
-                public String getCurrentName() throws IOException {
-                    return JsonJavaUtils.toMethodName(delegate.getCurrentName());
-                }
-            };
-            object = mapper.readValue(wrapper, clazz);
+            object = mapper.readValue(toWrapper(json), clazz);
         } catch (Exception ex) {
             throw new JsonException(ex);
         }
 
         return object;
+    }
+
+    @Override
+    public <T> T[] toArray(String json, Class<T> clazz) throws JsonException {
+        
+        T[] array;
+        
+        try {
+            ArrayType arrayType = mapper.getTypeFactory().constructArrayType(clazz);
+            array = mapper.readValue(toWrapper(json), arrayType);
+        } catch (Exception ex) {
+            throw new JsonException(ex);
+        }
+        
+        return array;
+    }
+    
+    @Override
+    public List<JsonElement> toList(String json) throws JsonException {
+        
+        List<JsonElement> list;
+        
+        try {
+            Map map = toObject(json, Map.class);
+            //element = new JsonObject(map);
+
+            JsonFactory factory = mapper.getFactory();
+
+            com.fasterxml.jackson.core.JsonParser parser = factory.createParser(json);
+            com.fasterxml.jackson.core.JsonParser wrapper = new JsonParserDelegate(parser) {
+                public String getCurrentName() throws IOException {
+                    return JsonJavaUtils.toMethodName(delegate.getCurrentName());
+                }
+                
+                
+                
+
+            };
+            
+            
+            
+        } catch (Exception ex) {
+            throw new JsonException(ex);
+        }
+        
+        return null;
+    }
+    
+    @Override
+    public <T> List<T> toList(String json, Class<T> clazz) throws JsonException {
+
+        List<T> list;
+
+        try {
+            CollectionType collectionType = mapper.getTypeFactory().constructCollectionType(List.class, clazz);
+            list = mapper.readValue(toWrapper(json), collectionType);
+        } catch (Exception ex) {
+            throw new JsonException(ex);
+        }
+
+        return list;
     }
 
     @Override
@@ -108,6 +164,30 @@ public class JacksonParser extends JsonParser {
         }
 
         return json;
+    }
+
+    /**
+     * Create a wrapper around the Jackson parser so that we can tweak some features
+     * to our liking
+     * *
+     * @param json json text
+     * @return jackson parser
+     * @throws IOException
+     */
+    private com.fasterxml.jackson.core.JsonParser toWrapper(String json) throws IOException {
+        JsonFactory factory = mapper.getFactory();
+        com.fasterxml.jackson.core.JsonParser parser = factory.createParser(json);
+
+        return new JsonParserDelegate(parser) {
+            public String getCurrentName() throws IOException {
+                //
+                // implements flex field name mapping (i.e. some_property == someProperty)
+                //
+                return JsonJavaUtils.toMethodName(delegate.getCurrentName());
+            }
+            
+
+        };
     }
 
 
