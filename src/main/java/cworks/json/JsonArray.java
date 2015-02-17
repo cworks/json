@@ -93,6 +93,16 @@ public class JsonArray extends JsonElement implements Iterable<Object> {
     public <T> T get(final int index) {
         return toObject(list.get(index));
     }
+    
+    public JsonObject objectAt(final int index) {
+        
+        JsonElement element = toObject(list.get(index));
+        if(element.isObject()) {
+            return element.asObject();
+        }
+        
+        return element.asArray().asObject();
+    }
 
     @Override
     public Iterator<Object> iterator() {

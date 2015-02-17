@@ -122,6 +122,319 @@ public final class JsonTestData {
             "    \"ip_address\": \"132.15.18.84\"\n" +
             "  }\n" +
             "]";
+        
+    public static final String PEOPLE_WITH_ADDRESSES = "[\n" +
+            "  {\n" +
+            "    \"id\": 1,\n" +
+            "    \"first_name\": \"Sandra\",\n" +
+            "    \"last_name\": \"Russell\",\n" +
+            "    \"email\": \"srussell0@ycombinator.com\",\n" +
+            "    \"country\": \"China\",\n" +
+            "    \"ip_address\": \"182.144.153.254\",\n" +
+            "    \"prior_addresses\": [\n" +
+            "      {\n" +
+            "        \"street\": \"26494 Carioca Circle\",\n" +
+            "        \"city\": \"Tampa\",\n" +
+            "        \"state\": \"Florida\",\n" +
+            "        \"zip\": \"33605\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"street\": \"0257 Burning Wood Circle\",\n" +
+            "        \"city\": \"Fort Myers\",\n" +
+            "        \"state\": \"Florida\",\n" +
+            "        \"zip\": \"33906\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"street\": \"8 Schmedeman Alley\",\n" +
+            "        \"city\": \"Albuquerque\",\n" +
+            "        \"state\": \"New Mexico\",\n" +
+            "        \"zip\": \"87115\"\n" +
+            "      }\n" +
+            "    ]\n" +
+            "  },\n" +
+            "  {\n" +
+            "    \"id\": 2,\n" +
+            "    \"first_name\": \"James\",\n" +
+            "    \"last_name\": \"Ward\",\n" +
+            "    \"email\": \"jward1@cmu.edu\",\n" +
+            "    \"country\": \"Uganda\",\n" +
+            "    \"ip_address\": \"79.50.94.34\",\n" +
+            "    \"prior_addresses\": [\n" +
+            "      {\n" +
+            "        \"street\": \"6172 Buena Vista Park\",\n" +
+            "        \"city\": \"Asheville\",\n" +
+            "        \"state\": \"North Carolina\",\n" +
+            "        \"zip\": \"28805\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"street\": \"4 Ludington Crossing\",\n" +
+            "        \"city\": \"Tacoma\",\n" +
+            "        \"state\": \"Washington\",\n" +
+            "        \"zip\": \"98447\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"street\": \"19631 Sutherland Plaza\",\n" +
+            "        \"city\": \"Washington\",\n" +
+            "        \"state\": \"District of Columbia\",\n" +
+            "        \"zip\": \"20551\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"street\": \"549 Eagan Hill\",\n" +
+            "        \"city\": \"Houston\",\n" +
+            "        \"state\": \"Texas\",\n" +
+            "        \"zip\": \"77250\"\n" +
+            "      }\n" +
+            "    ]\n" +
+            "  },\n" +
+            "  {\n" +
+            "    \"id\": 3,\n" +
+            "    \"first_name\": \"Lori\",\n" +
+            "    \"last_name\": \"Allen\",\n" +
+            "    \"email\": \"lallen2@hhs.gov\",\n" +
+            "    \"country\": \"Sweden\",\n" +
+            "    \"ip_address\": \"248.98.126.44\",\n" +
+            "    \"prior_addresses\": [\n" +
+            "      {\n" +
+            "        \"street\": \"74439 Rusk Park\",\n" +
+            "        \"city\": \"San Mateo\",\n" +
+            "        \"state\": \"California\",\n" +
+            "        \"zip\": \"94405\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"street\": \"135 Anderson Crossing\",\n" +
+            "        \"city\": \"Levittown\",\n" +
+            "        \"state\": \"Pennsylvania\",\n" +
+            "        \"zip\": \"19058\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"street\": \"0061 Harper Drive\",\n" +
+            "        \"city\": \"New York City\",\n" +
+            "        \"state\": \"New York\",\n" +
+            "        \"zip\": \"10260\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"street\": \"5077 Fulton Park\",\n" +
+            "        \"city\": \"Richmond\",\n" +
+            "        \"state\": \"Virginia\",\n" +
+            "        \"zip\": \"23225\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"street\": \"4 Arkansas Junction\",\n" +
+            "        \"city\": \"Harrisburg\",\n" +
+            "        \"state\": \"Pennsylvania\",\n" +
+            "        \"zip\": \"17140\"\n" +
+            "      }\n" +
+            "    ]\n" +
+            "  },\n" +
+            "  {\n" +
+            "    \"id\": 4,\n" +
+            "    \"first_name\": \"Robin\",\n" +
+            "    \"last_name\": \"Gonzales\",\n" +
+            "    \"email\": \"rgonzales3@seattletimes.com\",\n" +
+            "    \"country\": \"Madagascar\",\n" +
+            "    \"ip_address\": \"73.3.13.236\",\n" +
+            "    \"prior_addresses\": [\n" +
+            "      {\n" +
+            "        \"street\": \"612 Gale Terrace\",\n" +
+            "        \"city\": \"Lawrenceville\",\n" +
+            "        \"state\": \"Georgia\",\n" +
+            "        \"zip\": \"30245\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"street\": \"29927 Northridge Parkway\",\n" +
+            "        \"city\": \"Tampa\",\n" +
+            "        \"state\": \"Florida\",\n" +
+            "        \"zip\": \"33661\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"street\": \"846 Elgar Crossing\",\n" +
+            "        \"city\": \"Paterson\",\n" +
+            "        \"state\": \"New Jersey\",\n" +
+            "        \"zip\": \"07544\"\n" +
+            "      }\n" +
+            "    ]\n" +
+            "  },\n" +
+            "  {\n" +
+            "    \"id\": 5,\n" +
+            "    \"first_name\": \"Anna\",\n" +
+            "    \"last_name\": \"Gordon\",\n" +
+            "    \"email\": \"agordon4@tinypic.com\",\n" +
+            "    \"country\": \"Russia\",\n" +
+            "    \"ip_address\": \"139.29.240.59\",\n" +
+            "    \"prior_addresses\": [\n" +
+            "      {\n" +
+            "        \"street\": \"8401 Riverside Terrace\",\n" +
+            "        \"city\": \"Buffalo\",\n" +
+            "        \"state\": \"New York\",\n" +
+            "        \"zip\": \"14210\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"street\": \"64 Summit Place\",\n" +
+            "        \"city\": \"Fort Wayne\",\n" +
+            "        \"state\": \"Indiana\",\n" +
+            "        \"zip\": \"46825\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"street\": \"2888 La Follette Terrace\",\n" +
+            "        \"city\": \"Memphis\",\n" +
+            "        \"state\": \"Tennessee\",\n" +
+            "        \"zip\": \"38114\"\n" +
+            "      }\n" +
+            "    ]\n" +
+            "  },\n" +
+            "  {\n" +
+            "    \"id\": 6,\n" +
+            "    \"first_name\": \"Carol\",\n" +
+            "    \"last_name\": \"Hawkins\",\n" +
+            "    \"email\": \"chawkins5@phoca.cz\",\n" +
+            "    \"country\": \"China\",\n" +
+            "    \"ip_address\": \"44.238.208.217\",\n" +
+            "    \"prior_addresses\": [\n" +
+            "      {\n" +
+            "        \"street\": \"9 Oriole Terrace\",\n" +
+            "        \"city\": \"Houston\",\n" +
+            "        \"state\": \"Texas\",\n" +
+            "        \"zip\": \"77276\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"street\": \"18954 Springview Parkway\",\n" +
+            "        \"city\": \"Abilene\",\n" +
+            "        \"state\": \"Texas\",\n" +
+            "        \"zip\": \"79605\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"street\": \"98924 Lillian Park\",\n" +
+            "        \"city\": \"Vero Beach\",\n" +
+            "        \"state\": \"Florida\",\n" +
+            "        \"zip\": \"32969\"\n" +
+            "      }\n" +
+            "    ]\n" +
+            "  },\n" +
+            "  {\n" +
+            "    \"id\": 7,\n" +
+            "    \"first_name\": \"Janet\",\n" +
+            "    \"last_name\": \"Montgomery\",\n" +
+            "    \"email\": \"jmontgomery6@ask.com\",\n" +
+            "    \"country\": \"Colombia\",\n" +
+            "    \"ip_address\": \"112.162.167.233\",\n" +
+            "    \"prior_addresses\": [\n" +
+            "      {\n" +
+            "        \"street\": \"324 Gerald Avenue\",\n" +
+            "        \"city\": \"Miami\",\n" +
+            "        \"state\": \"Florida\",\n" +
+            "        \"zip\": \"33196\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"street\": \"4 Jenna Alley\",\n" +
+            "        \"city\": \"Los Angeles\",\n" +
+            "        \"state\": \"California\",\n" +
+            "        \"zip\": \"90010\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"street\": \"99 Londonderry Point\",\n" +
+            "        \"city\": \"Alexandria\",\n" +
+            "        \"state\": \"Virginia\",\n" +
+            "        \"zip\": \"22301\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"street\": \"34317 Pearson Plaza\",\n" +
+            "        \"city\": \"Galveston\",\n" +
+            "        \"state\": \"Texas\",\n" +
+            "        \"zip\": \"77554\"\n" +
+            "      }\n" +
+            "    ]\n" +
+            "  },\n" +
+            "  {\n" +
+            "    \"id\": 8,\n" +
+            "    \"first_name\": \"Wayne\",\n" +
+            "    \"last_name\": \"Nelson\",\n" +
+            "    \"email\": \"wnelson7@webs.com\",\n" +
+            "    \"country\": \"China\",\n" +
+            "    \"ip_address\": \"149.57.142.11\",\n" +
+            "    \"prior_addresses\": [\n" +
+            "      {\n" +
+            "        \"street\": \"83282 Delaware Plaza\",\n" +
+            "        \"city\": \"Huntington\",\n" +
+            "        \"state\": \"West Virginia\",\n" +
+            "        \"zip\": \"25726\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"street\": \"494 Veith Street\",\n" +
+            "        \"city\": \"Greenville\",\n" +
+            "        \"state\": \"South Carolina\",\n" +
+            "        \"zip\": \"29615\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"street\": \"8557 Pond Court\",\n" +
+            "        \"city\": \"Long Beach\",\n" +
+            "        \"state\": \"California\",\n" +
+            "        \"zip\": \"90810\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"street\": \"82 Stoughton Court\",\n" +
+            "        \"city\": \"Fort Wayne\",\n" +
+            "        \"state\": \"Indiana\",\n" +
+            "        \"zip\": \"46862\"\n" +
+            "      }\n" +
+            "    ]\n" +
+            "  },\n" +
+            "  {\n" +
+            "    \"id\": 9,\n" +
+            "    \"first_name\": \"Raymond\",\n" +
+            "    \"last_name\": \"Ford\",\n" +
+            "    \"email\": \"rford8@cargocollective.com\",\n" +
+            "    \"country\": \"Philippines\",\n" +
+            "    \"ip_address\": \"89.45.190.80\",\n" +
+            "    \"prior_addresses\": [\n" +
+            "      {\n" +
+            "        \"street\": \"34671 Veith Drive\",\n" +
+            "        \"city\": \"New York City\",\n" +
+            "        \"state\": \"New York\",\n" +
+            "        \"zip\": \"10019\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"street\": \"950 Mosinee Junction\",\n" +
+            "        \"city\": \"Glendale\",\n" +
+            "        \"state\": \"Arizona\",\n" +
+            "        \"zip\": \"85311\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"street\": \"5 Stuart Place\",\n" +
+            "        \"city\": \"Jersey City\",\n" +
+            "        \"state\": \"New Jersey\",\n" +
+            "        \"zip\": \"07310\"\n" +
+            "      }\n" +
+            "    ]\n" +
+            "  },\n" +
+            "  {\n" +
+            "    \"id\": 10,\n" +
+            "    \"first_name\": \"Albert\",\n" +
+            "    \"last_name\": \"Clark\",\n" +
+            "    \"email\": \"aclark9@illinois.edu\",\n" +
+            "    \"country\": \"Brazil\",\n" +
+            "    \"ip_address\": \"123.44.86.56\",\n" +
+            "    \"prior_addresses\": [\n" +
+            "      {\n" +
+            "        \"street\": \"04 Bultman Hill\",\n" +
+            "        \"city\": \"Fairbanks\",\n" +
+            "        \"state\": \"Alaska\",\n" +
+            "        \"zip\": \"99709\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"street\": \"4924 Russell Plaza\",\n" +
+            "        \"city\": \"Jacksonville\",\n" +
+            "        \"state\": \"Florida\",\n" +
+            "        \"zip\": \"32244\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"street\": \"219 Scott Park\",\n" +
+            "        \"city\": \"Milwaukee\",\n" +
+            "        \"state\": \"Wisconsin\",\n" +
+            "        \"zip\": \"53277\"\n" +
+            "      }\n" +
+            "    ]\n" +
+            "  }\n" +
+            "]";
 
     public static final String CHUCK_NORRIS_IMAGE = "/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAUDBAQEAwUEBAQF" +
             "BQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw" +

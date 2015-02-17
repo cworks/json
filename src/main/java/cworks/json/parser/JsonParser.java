@@ -10,6 +10,7 @@ package cworks.json.parser;
 
 import cworks.json.JsonElement;
 import cworks.json.JsonException;
+import cworks.json.JsonObject;
 
 import java.util.List;
 
@@ -48,7 +49,7 @@ public abstract class JsonParser {
     public abstract <T> T[] toArray(String json, final Class<T> clazz) throws JsonException;
 
     // String to List
-    public abstract List<JsonElement> toList(String json) throws JsonException;
+    public abstract List<JsonObject> toList(String json) throws JsonException;
     public abstract <T> List<T> toList(String json, Class<T> clazz) throws JsonException;
 
 

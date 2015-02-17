@@ -1,24 +1,21 @@
 package cworks.json.parser.jackson;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import com.fasterxml.jackson.databind.deser.std.StdDelegatingDeserializer;
+import com.fasterxml.jackson.databind.util.Converter;
+import cworks.json.Json;
 import cworks.json.JsonElement;
 
-import java.io.IOException;
+import java.util.Map;
 
-public class JsonElementDeserializer extends StdDeserializer<JsonElement> {
+public class JsonElementDeserializer extends StdDelegatingDeserializer<JsonElement> {
 
-
-    protected JsonElementDeserializer(Class<?> vc) {
-        super(vc);
+    public JsonElementDeserializer(Converter<Map, JsonElement> converter) {
+        super(converter);
     }
+    
+    protected JsonElement convert(Object object) {
 
-    @Override
-    public JsonElement deserialize(JsonParser parser, DeserializationContext context)
-        throws IOException, JsonProcessingException {
-
-        return null;
+        System.out.println(object.toString());
+        return Json.object().build();
     }
 }

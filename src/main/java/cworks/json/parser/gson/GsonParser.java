@@ -9,6 +9,7 @@
  */
 package cworks.json.parser.gson;
 
+import cworks.json.JsonObject;
 import cworks.json.parser.JsonParser;
 import cworks.json.JsonElement;
 import cworks.json.JsonException;
@@ -33,7 +34,7 @@ public class GsonParser extends JsonParser {
     }
 
     @Override
-    public List<JsonElement> toList(String json) throws JsonException {
+    public List<JsonObject> toList(String json) throws JsonException {
         return null;
     }
 

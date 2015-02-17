@@ -171,12 +171,39 @@ public final class Json {
     }
 
     /**
+     * Convert the json text into a list of JsonElements 
+     * @param json
+     * @return
+     */
+    public static List<JsonObject> asList(String json) {
+        
+        throwIfNotArray(json);
+        
+        return parser().toList(json);
+    }
+
+    /**
+     * Convert the json text into a typed java array
+     * @param json
+     * @param clazz
+     * @param <T>
+     * @return
+     * @throws JsonException
+     */
+    public static <T> List<T> asList(String json, final Class<T> clazz) throws JsonException {
+        
+        throwIfNotArray(json);
+        
+        return parser().toList(json, clazz);
+    }
+
+    /**
      * Convert the json text file to a list of JsonElements
      * @param file
      * @return
      * @throws JsonException
      */
-    public static List<JsonElement> asList(File file) throws JsonException {
+    public static List<JsonObject> asList(File file) throws JsonException {
         
         if(file == null) {
             throw new IllegalArgumentException("File argument cannot be null.");
@@ -348,5 +375,7 @@ public final class Json {
         
         return buffer;
     }
+
+
 
 }

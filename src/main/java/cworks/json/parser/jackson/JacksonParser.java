@@ -15,9 +15,16 @@ import com.fasterxml.jackson.core.util.JsonParserDelegate;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.deser.std.StdDelegatingDeserializer;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.type.ArrayType;
 import com.fasterxml.jackson.databind.type.CollectionType;
-import cworks.json.*;
+import com.fasterxml.jackson.databind.util.StdConverter;
+import cworks.json.JsonArray;
+import cworks.json.JsonElement;
+import cworks.json.JsonException;
+import cworks.json.JsonJavaUtils;
+import cworks.json.JsonObject;
 import cworks.json.parser.JsonParser;
 
 import java.io.IOException;
@@ -34,6 +41,20 @@ public class JacksonParser extends JsonParser {
         mapper.configure(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES, false);
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         mapper.configure(com.fasterxml.jackson.core.JsonParser.Feature.ALLOW_COMMENTS, true);
+
+        
+        SimpleModule module = new SimpleModule("cworksJacksonModule");
+        module.addDeserializer(JsonObject.class,
+            new StdDelegatingDeserializer<>(
+                new StdConverter<Map, JsonObject>() {
+                    @Override
+                    public JsonObject convert(Map map) {
+                        return new JsonObject(map);
+                    }
+                }
+            ));
+
+        mapper.registerModule(module);
     }
 
     @Override
@@ -65,7 +86,7 @@ public class JacksonParser extends JsonParser {
 
         T object;
         try {
-            object = mapper.readValue(toWrapper(json), clazz);
+            object = mapper.readValue(wrapper(json), clazz);
         } catch (Exception ex) {
             throw new JsonException(ex);
         }
@@ -80,7 +101,7 @@ public class JacksonParser extends JsonParser {
         
         try {
             ArrayType arrayType = mapper.getTypeFactory().constructArrayType(clazz);
-            array = mapper.readValue(toWrapper(json), arrayType);
+            array = mapper.readValue(wrapper(json), arrayType);
         } catch (Exception ex) {
             throw new JsonException(ex);
         }
@@ -89,34 +110,19 @@ public class JacksonParser extends JsonParser {
     }
     
     @Override
-    public List<JsonElement> toList(String json) throws JsonException {
+    public List<JsonObject> toList(String json) throws JsonException {
         
-        List<JsonElement> list;
+        List<JsonObject> list;
         
         try {
-            Map map = toObject(json, Map.class);
-            //element = new JsonObject(map);
-
-            JsonFactory factory = mapper.getFactory();
-
-            com.fasterxml.jackson.core.JsonParser parser = factory.createParser(json);
-            com.fasterxml.jackson.core.JsonParser wrapper = new JsonParserDelegate(parser) {
-                public String getCurrentName() throws IOException {
-                    return JsonJavaUtils.toMethodName(delegate.getCurrentName());
-                }
-                
-                
-                
-
-            };
-            
-            
-            
+            CollectionType collectionType = mapper.getTypeFactory()
+                .constructCollectionType(List.class, JsonObject.class);
+            list = mapper.readValue(wrapper(json), collectionType);
         } catch (Exception ex) {
             throw new JsonException(ex);
         }
         
-        return null;
+        return list;
     }
     
     @Override
@@ -125,8 +131,9 @@ public class JacksonParser extends JsonParser {
         List<T> list;
 
         try {
-            CollectionType collectionType = mapper.getTypeFactory().constructCollectionType(List.class, clazz);
-            list = mapper.readValue(toWrapper(json), collectionType);
+            CollectionType collectionType = mapper.getTypeFactory()
+                .constructCollectionType(List.class, clazz);
+            list = mapper.readValue(wrapper(json), collectionType);
         } catch (Exception ex) {
             throw new JsonException(ex);
         }
@@ -174,7 +181,7 @@ public class JacksonParser extends JsonParser {
      * @return jackson parser
      * @throws IOException
      */
-    private com.fasterxml.jackson.core.JsonParser toWrapper(String json) throws IOException {
+    private com.fasterxml.jackson.core.JsonParser wrapper(String json) throws IOException {
         JsonFactory factory = mapper.getFactory();
         com.fasterxml.jackson.core.JsonParser parser = factory.createParser(json);
 
