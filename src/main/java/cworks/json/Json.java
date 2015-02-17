@@ -169,17 +169,21 @@ public final class Json {
         
         return asArray(buffer, clazz);
     }
-    
-    
-    public static List<JsonObject> asList(File file) throws JsonException {
+
+    /**
+     * Convert the json text file to a list of JsonElements
+     * @param file
+     * @return
+     * @throws JsonException
+     */
+    public static List<JsonElement> asList(File file) throws JsonException {
         
         if(file == null) {
             throw new IllegalArgumentException("File argument cannot be null.");
         }
         
         String buffer = bufferFile(file).toString();
-        //return parser().toList(buffer);
-        return null;
+        return parser().toList(buffer);
     }
 
     /**

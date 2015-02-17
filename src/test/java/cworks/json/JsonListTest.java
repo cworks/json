@@ -8,12 +8,9 @@ import java.util.List;
 
 public class JsonListTest {
     
-    //@Test
+    @Test
     public void testToListBasic() {
-        List list = Json.asObject(JsonTestData.USERS_ARRAY, List.class);
-        Assert.assertEquals(10, list.size());
-        
-        List<JsonObject> users = Json.asList(new File("src/test/resources/small_users.json"));
+        List<JsonElement> users = Json.asList(new File("src/test/resources/small_users.json"));
         Assert.assertEquals(1000, users.size());
     }
 }
