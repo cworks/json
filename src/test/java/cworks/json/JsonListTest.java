@@ -13,7 +13,7 @@ public class JsonListTest {
         List<JsonObject> users = Json.asList(new File("src/test/resources/small_users.json"));
         Assert.assertEquals(1000, users.size());
     }
-    
+
     @Test
     public void testToListWithSubLists() {
         
@@ -56,7 +56,7 @@ public class JsonListTest {
                 people.get(0).getArray("priorAddresses").objectAt(2).getString("zip"));
                 
     }
-    
+
     @Test
     public void testToTypedList() {
         
@@ -74,4 +74,5 @@ public class JsonListTest {
         Assert.assertEquals("Dennis", users.get(8).getFirstName());
         Assert.assertEquals("Tina", users.get(9).getFirstName());
     }
+
 }

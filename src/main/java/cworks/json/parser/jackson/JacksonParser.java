@@ -124,7 +124,7 @@ public class JacksonParser extends JsonParser {
         
         return list;
     }
-    
+
     @Override
     public <T> List<T> toList(String json, Class<T> clazz) throws JsonException {
 

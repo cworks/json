@@ -9,10 +9,10 @@
  */
 package cworks.json.parser.gson;
 
-import cworks.json.JsonObject;
-import cworks.json.parser.JsonParser;
 import cworks.json.JsonElement;
 import cworks.json.JsonException;
+import cworks.json.JsonObject;
+import cworks.json.parser.JsonParser;
 
 import java.util.List;
 
