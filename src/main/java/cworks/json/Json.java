@@ -214,6 +214,24 @@ public final class Json {
     }
 
     /**
+     * Convert the json text file to a list of java instances 
+     * @param file
+     * @param clazz
+     * @param <T>
+     * @return
+     * @throws JsonException
+     */
+    public static <T> List<T> asList(File file, final Class<T> clazz) throws JsonException {
+        
+        if(file == null) {
+            throw new IllegalArgumentException("File argument cannot be null.");
+        }
+        
+        String buffer = bufferFile(file).toString();
+        return parser().toList(buffer, clazz);
+    }
+
+    /**
      * Convert the json text to a JsonObject
      * @param json text
      * @return JsonObject
@@ -242,8 +260,25 @@ public final class Json {
         }
         
         String buffer = bufferFile(file).toString();
-
         return asObject(buffer);
+    }
+
+    /**
+     * Convert the json text file to a java instance 
+     * @param file
+     * @param clazz
+     * @param <T>
+     * @return
+     * @throws JsonException
+     */
+    public static <T> T asObject(File file, final Class<T> clazz) throws JsonException {
+        
+        if(file == null) {
+            throw new IllegalArgumentException("File argument cannot be null.");
+        }
+        
+        String buffer = bufferFile(file).toString();
+        return asObject(buffer, clazz);
     }
 
     /**
