@@ -83,32 +83,32 @@ public class JsonExamples {
             .array("puppies", Json.array().add("Bucky").add("Nacho").build())
             .build();
 
-        System.out.println(Json.asString(jo));
+        System.out.println(Json.toString(jo));
 
         JsonArray ja = Json.array().add("Red", "Green", "Blue").build();
-        System.out.println(Json.asString(ja));
+        System.out.println(Json.toString(ja));
 
         ja = Json.array().add(new String[]{ "One", "Two", "Three" }).build();
-        System.out.println(Json.asString(ja));
+        System.out.println(Json.toString(ja));
 
         jo = Json.object().build();
-        System.out.println(Json.asString(jo));
+        System.out.println(Json.toString(jo));
 
         ja = Json.array().build();
-        System.out.println(Json.asString(ja));
+        System.out.println(Json.toString(ja));
 
         jo = Json.object()
             .string("name", "Chuck Norris")
             .binary("picture", JsonTestData.CHUCK_NORRIS_IMAGE.getBytes())
             .build();
-        System.out.println(Json.asString(jo));
+        System.out.println(Json.toString(jo));
 
         ja = Json.array().add(true)
             .add("Nacho")
             .add(100)
             .add(Json.object().string("address", "1 easy street").build())
             .build();
-        System.out.println(Json.asString(ja));
+        System.out.println(Json.toString(ja));
 
         JsonElement je = Json.object().string("name", "Bucky")
             .array("eyes", Json.array()
@@ -117,14 +117,14 @@ public class JsonExamples {
                 .build())
             .build();
 
-        System.out.println(Json.asString(je));
+        System.out.println(Json.toString(je));
 
         JsonArrayBuilder builder = Json.array();
         for(int i = 0; i < 100; i++) {
             builder.add(rand.nextInt());
         }
         ja = builder.build();
-        System.out.println(Json.asString(ja));
+        System.out.println(Json.toString(ja));
 
         JsonArray jsonArray = Json.asArray("[true,\"Nacho\",100,{\"address\":\"1 easy street\"}]");
         Boolean bool = jsonArray.get(0);
@@ -145,16 +145,13 @@ public class JsonExamples {
             .string("name", "Bucky Martin")
             .number("age", 4)
             .build();
-        System.out.println(Json.asString(bucky));
+        System.out.println(Json.toString(bucky));
 
         JsonObject lola = Json.object()
             .string("name", "Lola")
             .number("age", 6)
             .build();
         System.out.println(lola.asString());
-        
-        
-
     }
 
     @Test
@@ -165,8 +162,8 @@ public class JsonExamples {
         data.put("year", 2008);
         data.put("boxOffice", "10 million");
 
-        System.out.println(Json.asString(data));
-        System.out.println(Json.asPrettyString(data));
+        System.out.println(Json.toString(data));
+        System.out.println(Json.toPrettyString(data));
 
     }
     

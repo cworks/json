@@ -11,23 +11,22 @@ package cworks.json.parser.jackson;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.core.util.JsonParserDelegate;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.deser.std.StdDelegatingDeserializer;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.type.ArrayType;
 import com.fasterxml.jackson.databind.type.CollectionType;
+import com.fasterxml.jackson.databind.type.MapType;
 import com.fasterxml.jackson.databind.util.StdConverter;
-import cworks.json.JsonArray;
-import cworks.json.JsonElement;
-import cworks.json.JsonException;
-import cworks.json.JsonJavaUtils;
-import cworks.json.JsonObject;
+import cworks.json.*;
 import cworks.json.parser.JsonParser;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -124,6 +123,28 @@ public class JacksonParser extends JsonParser {
         
         return list;
     }
+    
+    public void read(final InputStream json, final JsonHandler handler) throws JsonException {
+
+        try {
+
+            //MapType mapType = mapper.getTypeFactory().constructMapType(LinkedHashMap.class, String.class, Object.class);
+            //CollectionType collectionType = mapper.getTypeFactory().constructCollectionType(List.class, mapType);
+            
+            MappingIterator<Map> it = mapper.reader(HashMap.class).readValues(json);
+            
+            while(it.hasNextValue()) {
+                Map value = it.nextValue();
+                if(value == null) {
+                    //handler.complete(new JsonContext() {});
+                }
+                //handler.handle(value, new JsonContext() {});
+            }
+            handler.complete(new JsonContext() {});
+        } catch (IOException ex) {
+            throw new JsonException(ex);
+        }
+    }
 
     @Override
     public <T> List<T> toList(String json, Class<T> clazz) throws JsonException {
@@ -192,7 +213,21 @@ public class JacksonParser extends JsonParser {
                 //
                 return JsonJavaUtils.toMethodName(delegate.getCurrentName());
             }
-            
+
+        };
+    }
+
+    private com.fasterxml.jackson.core.JsonParser wrapper(InputStream json) throws IOException {
+        JsonFactory factory = mapper.getFactory();
+        com.fasterxml.jackson.core.JsonParser parser = factory.createParser(json);
+
+        return new JsonParserDelegate(parser) {
+            public String getCurrentName() throws IOException {
+                //
+                // implements flex field name mapping (i.e. some_property == someProperty)
+                //
+                return JsonJavaUtils.toMethodName(delegate.getCurrentName());
+            }
 
         };
     }

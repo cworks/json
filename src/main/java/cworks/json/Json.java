@@ -301,7 +301,7 @@ public final class Json {
      * @param element
      * @return json text
      */
-    public static String asString(JsonElement element) {
+    public static String toString(JsonElement element) {
 
         return parser().toJson(element);
     }
@@ -311,7 +311,7 @@ public final class Json {
      * @param element
      * @return
      */
-    public static String asPrettyString(JsonElement element) {
+    public static String toPrettyString(JsonElement element) {
         return prettyParser().toJson(element);
     }
 
@@ -321,7 +321,7 @@ public final class Json {
      * @return json text
      * @throws JsonException
      */
-    public static String asString(Object obj) throws JsonException {
+    public static String toString(Object obj) throws JsonException {
         return parser().toJson(obj);
     }
 
@@ -331,7 +331,7 @@ public final class Json {
      * @return
      * @throws JsonException
      */
-    public static String asPrettyString(Object obj) throws JsonException {
+    public static String toPrettyString(Object obj) throws JsonException {
         return prettyParser().toJson(obj);
     }
 

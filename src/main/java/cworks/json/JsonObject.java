@@ -232,7 +232,7 @@ public class JsonObject extends JsonElement {
     }
 
     public String asString() {
-        return Json.asString(this.map);
+        return Json.toString(this.map);
     }
 
     public JsonObject copy() {

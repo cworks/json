@@ -132,7 +132,7 @@ public class JsonArray extends JsonElement implements Iterable<Object> {
     }
 
     public String asString() throws JsonException {
-        return Json.asString(this.list);
+        return Json.toString(this.list);
     }
 
     public JsonArray copy() {
