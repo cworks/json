@@ -3,6 +3,7 @@ package cworks.json.parser.jackson;
 import cworks.json.JsonContext;
 import cworks.json.JsonHandler;
 import cworks.json.JsonObject;
+import cworks.json.JsonTestData;
 import org.junit.Test;
 
 import java.io.FileInputStream;
@@ -22,7 +23,7 @@ public class JacksonParserTest {
         JacksonParser parser = new JacksonParser();
         InputStream in = new FileInputStream("src/test/resources/small_users.json");
         
-        parser.read(in, new JsonHandler<JsonObject>() {
+        parser.read(JsonTestData.PEOPLE_WITH_ADDRESSES, new JsonHandler<JsonObject>() {
             @Override
             public void complete(JsonContext context) {
                 System.out.println("read complete!");

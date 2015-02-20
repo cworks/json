@@ -11,22 +11,26 @@ package cworks.json.parser.jackson;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.core.util.JsonParserDelegate;
-import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.MappingIterator;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.deser.std.StdDelegatingDeserializer;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.type.ArrayType;
 import com.fasterxml.jackson.databind.type.CollectionType;
-import com.fasterxml.jackson.databind.type.MapType;
 import com.fasterxml.jackson.databind.util.StdConverter;
-import cworks.json.*;
+import cworks.json.JsonArray;
+import cworks.json.JsonContext;
+import cworks.json.JsonElement;
+import cworks.json.JsonException;
+import cworks.json.JsonHandler;
+import cworks.json.JsonObject;
 import cworks.json.parser.JsonParser;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -131,16 +135,36 @@ public class JacksonParser extends JsonParser {
             //MapType mapType = mapper.getTypeFactory().constructMapType(LinkedHashMap.class, String.class, Object.class);
             //CollectionType collectionType = mapper.getTypeFactory().constructCollectionType(List.class, mapType);
             
-            MappingIterator<Map> it = mapper.reader(HashMap.class).readValues(json);
+            MappingIterator<JsonObject> it = mapper.reader(JsonObject.class).readValues(wrapper(json));
             
             while(it.hasNextValue()) {
-                Map value = it.nextValue();
+                JsonObject value = it.nextValue();
                 if(value == null) {
                     //handler.complete(new JsonContext() {});
                 }
                 //handler.handle(value, new JsonContext() {});
             }
             handler.complete(new JsonContext() {});
+        } catch (IOException ex) {
+            throw new JsonException(ex);
+        }
+    }
+
+    public void read(final String json, final JsonHandler handler) throws JsonException {
+
+        try {
+            com.fasterxml.jackson.core.JsonParser jp = wrapper(json);
+
+            jp.nextToken();
+
+            while(jp.nextToken() == JsonToken.START_OBJECT) {
+                final JsonObject thing = mapper.readValue(jp, JsonObject.class);
+                if(thing == null) {
+                    handler.complete(new JsonContext() { });
+                    break;
+                }
+                handler.handle(thing, new JsonContext() {});
+            }
         } catch (IOException ex) {
             throw new JsonException(ex);
         }
@@ -206,31 +230,14 @@ public class JacksonParser extends JsonParser {
         JsonFactory factory = mapper.getFactory();
         com.fasterxml.jackson.core.JsonParser parser = factory.createParser(json);
 
-        return new JsonParserDelegate(parser) {
-            public String getCurrentName() throws IOException {
-                //
-                // implements flex field name mapping (i.e. some_property == someProperty)
-                //
-                return JsonJavaUtils.toMethodName(delegate.getCurrentName());
-            }
-
-        };
+        return new CWorksParserDelegate(parser);
     }
 
     private com.fasterxml.jackson.core.JsonParser wrapper(InputStream json) throws IOException {
         JsonFactory factory = mapper.getFactory();
         com.fasterxml.jackson.core.JsonParser parser = factory.createParser(json);
 
-        return new JsonParserDelegate(parser) {
-            public String getCurrentName() throws IOException {
-                //
-                // implements flex field name mapping (i.e. some_property == someProperty)
-                //
-                return JsonJavaUtils.toMethodName(delegate.getCurrentName());
-            }
-
-        };
+        return new CWorksParserDelegate(parser);
     }
-
 
 }
