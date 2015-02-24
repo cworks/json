@@ -308,18 +308,20 @@ public final class Json {
     @SuppressWarnings("unchecked")
     public static <T> void asStream(InputStream in, final StreamHandler<T> handler) throws JsonException {
 
-        Class<T> genericType = getGenericType(handler);
-        if(genericType == null) {
-            throw new JsonException("Cannot determine Generic Type information for StreamHandler implementation.");
-        }
-        
-        if(genericType == Object.class) {
-            parser().read(in, (StreamHandler<Object>)handler);
-        } else {
-            parser().read(in, genericType, handler);
-        }
+        try {
+            Class<T> genericType = getGenericType(handler);
+            if (genericType == null) {
+                throw new JsonException("Cannot determine Generic Type information for StreamHandler implementation.");
+            }
 
-        closeQuietly(in);
+            if (genericType == Object.class) {
+                parser().read(in, (StreamHandler<Object>) handler);
+            } else {
+                parser().read(in, genericType, handler);
+            }
+        } finally {
+            closeQuietly(in);
+        }
     }
     
     @SuppressWarnings("unchecked")

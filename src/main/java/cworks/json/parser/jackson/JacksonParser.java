@@ -20,20 +20,16 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.type.ArrayType;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.util.StdConverter;
-import cworks.json.JsonArray;
-import cworks.json.JsonContext;
-import cworks.json.JsonElement;
-import cworks.json.JsonException;
-import cworks.json.JsonHandler;
-import cworks.json.JsonNull;
-import cworks.json.JsonObject;
+import cworks.json.*;
 import cworks.json.parser.JsonParser;
 import cworks.json.streaming.StreamHandler;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 
 public class JacksonParser extends JsonParser {
 
@@ -153,12 +149,15 @@ public class JacksonParser extends JsonParser {
         
         try {
             com.fasterxml.jackson.core.JsonParser jp = wrapper(in);
-            JsonToken firstToken = jp.nextToken();
-            if(firstToken == JsonToken.START_ARRAY) {
-                readArray(jp, clazz, handler);
-            } else if(firstToken == JsonToken.START_OBJECT) {
-                readObject(jp, clazz, handler);
-            }
+            //simulate(jp);
+            emit(jp, handler);
+            
+//            JsonToken firstToken = jp.nextToken();
+//            if(firstToken == JsonToken.START_ARRAY) {
+//                readArray(jp, clazz, handler);
+//            } else if(firstToken == JsonToken.START_OBJECT) {
+//                readObject(jp, clazz, handler);
+//            }
         } catch(IOException ex) {
             throw new JsonException(ex);
         }
@@ -168,12 +167,22 @@ public class JacksonParser extends JsonParser {
 
         try {
             com.fasterxml.jackson.core.JsonParser jp = wrapper(in);
-            JsonToken firstToken = jp.getCurrentToken();
-            if(firstToken == JsonToken.START_ARRAY) {
-                readArray(jp, handler);
-            } else if(firstToken == JsonToken.START_OBJECT) {
-                readObject(jp, handler);
-            }
+            //simulate(jp);
+            emit(jp, handler);
+            
+            
+            
+//            JsonToken firstToken = jp.getCurrentToken();
+//            // Doing this because something is wacky with jackson.  In some cases the
+//            // parser's pointer is set to the first token and sometimes its set before.
+//            if(firstToken == null) {
+//                firstToken = jp.nextToken();
+//            }
+//            if(firstToken == JsonToken.START_ARRAY) {
+//                readArray(jp, handler);
+//            } else if(firstToken == JsonToken.START_OBJECT) {
+//                readObject(jp, handler);
+//            }
         } catch(IOException ex) {
             throw new JsonException(ex);
         }
@@ -237,37 +246,27 @@ public class JacksonParser extends JsonParser {
             if(token == JsonToken.VALUE_FALSE || token == JsonToken.VALUE_TRUE) {
                 Boolean value = mapper.readValue(jp, Boolean.class);
                 handler.handle(value);
-                continue;
-            }
-            
-            if(token == JsonToken.VALUE_NUMBER_INT) {
+                //continue;
+            } else if(token == JsonToken.VALUE_NUMBER_INT) {
                 Integer value = mapper.readValue(jp, Integer.class);
                 handler.handle(value);
-                continue;
-            }
-            
-            if(token == JsonToken.VALUE_NUMBER_FLOAT) {
+                //continue;
+            } else if(token == JsonToken.VALUE_NUMBER_FLOAT) {
                 Double value = mapper.readValue(jp, Double.class);
                 handler.handle(value);
-                continue;
-            }
-            
-            if(token == JsonToken.VALUE_STRING) {
+                //continue;
+            } else if(token == JsonToken.VALUE_STRING) {
                 String value = mapper.readValue(jp, String.class);
                 handler.handle(value);
-                continue;
-            }
-            
-            if(token == JsonToken.VALUE_NULL) {
+                //continue;
+            } else if(token == JsonToken.VALUE_NULL) {
                 jp.nextToken(); // skip over null value
                 handler.handle(new JsonNull());
-                continue;
-            }
-            
-            if(token == JsonToken.START_OBJECT) {
+                //continue;
+            } else if(token == JsonToken.START_OBJECT) {
                 JsonObject object = mapper.readValue(jp, JsonObject.class);
                 handler.handle(object);
-                continue;
+                //continue;
             }
             
             // move to next token
@@ -346,6 +345,274 @@ public class JacksonParser extends JsonParser {
         com.fasterxml.jackson.core.JsonParser parser = factory.createParser(json);
 
         return new ParserDelegate(parser);
+    }
+    
+    private void simulate(com.fasterxml.jackson.core.JsonParser parser) throws IOException {
+        
+        
+        while(parser.nextToken() != null) {
+            
+            StringBuilder sb = new StringBuilder();
+            sb.append(parser.getCurrentName()).append(",").append(parser.getCurrentToken().toString());
+            System.out.println(sb.toString());
+        }
+        
+    }
+    
+    private <T> void emit(com.fasterxml.jackson.core.JsonParser parser, StreamHandler<T> handler) throws IOException {
+        
+        Stack<Node> stack = new Stack<>();
+        Stack<String> nameStack = new Stack<>();
+        while(parser.nextToken() != null) {
+            
+            JsonToken currentToken = parser.getCurrentToken();
+            String currentName = parser.getCurrentName();
+            
+            if(currentToken == JsonToken.START_OBJECT) {
+                if(stack.isEmpty()) {
+                    stack.push(new ObjectNode("root"));
+                } else {
+                    // anonymous object
+                    if(isNullOrEmpty(currentName)) {
+                        stack.push(new ObjectNode(stack.peek()));
+                    } else {
+                    // named object
+                        stack.push(new ObjectNode(currentName, stack.peek()));
+                    }
+                }
+            } else if(currentToken == JsonToken.END_OBJECT) {
+                
+                stack.pop();
+                
+            } else if(currentToken == JsonToken.START_ARRAY) {
+
+                if(stack.isEmpty()) {
+                    stack.push(new ArrayNode("root"));
+                } else {
+                    // anonymous array
+                    if(isNullOrEmpty(currentName)) {
+                        stack.push(new ArrayNode(stack.peek()));
+                    } else {
+                    // named object
+                        stack.push(new ArrayNode(currentName, stack.peek()));
+                    }
+                }
+                
+            } else if(currentToken == JsonToken.END_ARRAY) {
+                
+                stack.pop();
+                
+            } else if(currentToken == JsonToken.FIELD_NAME) {
+                
+                JsonToken valueToken = parser.nextToken();
+                
+                if(valueToken == JsonToken.START_OBJECT) {
+
+                    stack.push(new ObjectNode(parser.getCurrentName(), stack.peek()));
+                    
+                } else if(valueToken == JsonToken.START_ARRAY) {
+                    
+                    stack.push(new ArrayNode(parser.getCurrentName(), stack.peek()));
+                    
+                } else if(valueToken == JsonToken.VALUE_FALSE || valueToken == JsonToken.VALUE_TRUE) {
+                    
+                    // emit(name, booleanValue)
+                    Node parent = stack.peek();
+                    if(parent.isArray()) {
+                        ArrayNode arrayNode = (ArrayNode)parent;
+                        
+                        System.out.printf("emit(%s[%d].%s, %s)\n", 
+                            arrayNode.id,
+                            arrayNode.nextIndex(),
+                            parser.getCurrentName(),
+                            parser.getBooleanValue());
+                    } else if(parent.isObject()) {
+
+                        ObjectNode objectNode = (ObjectNode)parent;
+
+                        System.out.printf("emit(%s.%s, %s)\n",
+                                objectNode.id,
+                                parser.getCurrentName(),
+                                parser.getBooleanValue());
+                    }
+                    
+                    //System.out.printf("emit(%s, %s)\n", parser.getCurrentName(), parser.getBooleanValue());
+                    
+                } else if(valueToken == JsonToken.VALUE_STRING) {
+
+                    // emit(name, string)
+
+                    Node parent = stack.peek();
+                    if(parent.isArray()) {
+                        ArrayNode arrayNode = (ArrayNode)parent;
+
+                        System.out.printf("emit(%s[%d].%s, %s)\n",
+                                arrayNode.id,
+                                arrayNode.nextIndex(),
+                                parser.getCurrentName(),
+                                parser.getValueAsString());
+                    } else if(parent.isObject()) {
+
+                        ObjectNode objectNode = (ObjectNode)parent;
+
+                        System.out.printf("emit(%s.%s, %s)\n",
+                                objectNode.id,
+                                parser.getCurrentName(),
+                                parser.getValueAsString());
+                    }
+                    
+                    //System.out.printf("emit(%s, %s)\n", parser.getCurrentName(), parser.getValueAsString());
+
+                } else if(valueToken == JsonToken.VALUE_NUMBER_INT) {
+                    
+                    // emit(name, int)
+
+                    Node parent = stack.peek();
+                    if(parent.isArray()) {
+                        ArrayNode arrayNode = (ArrayNode)parent;
+
+                        System.out.printf("emit(%s[%d].%s, %d)\n",
+                                arrayNode.id,
+                                arrayNode.nextIndex(),
+                                parser.getCurrentName(),
+                                parser.getIntValue());
+                    } else if(parent.isObject()) {
+
+                        ObjectNode objectNode = (ObjectNode)parent;
+
+                        System.out.printf("emit(%s.%s, %d)\n",
+                                objectNode.id,
+                                parser.getCurrentName(),
+                                parser.getIntValue());
+                    }
+
+                    //System.out.printf("emit(%s, %s)\n", parser.getCurrentName(), parser.getIntValue());
+
+                } else if(valueToken == JsonToken.VALUE_NUMBER_FLOAT) {
+                    
+                    // emit(name, float)
+
+                    Node parent = stack.peek();
+                    if(parent.isArray()) {
+                        ArrayNode arrayNode = (ArrayNode)parent;
+
+                        System.out.printf("emit(%s[%d].%s, %f)\n",
+                                arrayNode.id,
+                                arrayNode.nextIndex(),
+                                parser.getCurrentName(),
+                                parser.getDoubleValue());
+                    } else if(parent.isObject()) {
+
+                        ObjectNode objectNode = (ObjectNode)parent;
+
+                        System.out.printf("emit(%s.%s, %f)\n",
+                                objectNode.id,
+                                parser.getCurrentName(),
+                                parser.getDoubleValue());
+                    }
+                    
+                    // System.out.printf("emit(%s, %s)\n", parser.getCurrentName(), parser.getDoubleValue());
+
+                } else if(valueToken == JsonToken.VALUE_NULL) {
+                    
+                    // emit(name, null)
+                    
+                    
+                    
+                    System.out.printf("emit(%s, null)\n", parser.getCurrentName());
+
+                }
+            }
+        }
+        
+        assert stack.isEmpty();
+        
+    }
+
+    private boolean isNullOrEmpty(String text) {
+        return text == null || text.trim().length() == 0;
+    }
+    
+    private static class Node {
+        protected String id;
+        protected Object value;
+        protected boolean isArray = false;
+        protected boolean isObject = false;
+        protected Node parent = null;
+        
+        public Node(String id) {
+            this.id = id;
+            
+        }
+        public Node(String id, Object value) {
+            this.id = id;
+            this.value = value;
+        }
+        public Node(Node parent) {
+            this.parent = parent;
+        }
+        
+        public String toString() {
+            return "(" + id + ", " + value.toString() + ")";
+        }
+        
+        public boolean isArray() {
+            return this.isArray;
+        }
+        
+        public boolean isObject() {
+            return this.isObject;
+        }
+    }
+    
+    private static class ObjectNode extends Node {
+        
+        public ObjectNode(String id) {
+            super(id);
+            isArray = false;
+            isObject = true;
+        }
+        
+        public ObjectNode(Node parent) {
+            super(parent);
+            isArray = false;
+            isObject = true;
+        }
+
+
+        public ObjectNode(String id, Node parent) {
+            super(id);
+            this.parent = parent;
+            this.isArray = false;
+            this.isObject = true;
+        }
+    }
+    
+    private static class ArrayNode extends Node {
+
+        private int i = 0;
+        public ArrayNode(String id) {
+            super(id);
+            isArray = true;
+            isObject = false;
+        }
+        
+        public ArrayNode(Node parent) {
+            super(parent);
+            isArray = true;
+            isObject = false;
+        }
+
+        public ArrayNode(String id, Node parent) {
+            super(id);
+            this.parent = parent;
+            this.isArray = true;
+            this.isObject = false;
+        }
+
+        public int nextIndex() {
+            return i++;
+        }
     }
 
 }

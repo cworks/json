@@ -11,6 +11,7 @@ import java.io.InputStream;
 
 public class JsonStreamingTest {
 
+    
     @Test
     public void testLargeObject() throws IOException {
         
@@ -83,13 +84,13 @@ public class JsonStreamingTest {
         });
     }
     
-    //@Test
+    @Test
     public void testBasicMixedArray() throws IOException {
         
         InputStream in = new FileInputStream("src/test/resources/basic_mixed_array.json");
-        Json.asStream(in, new StreamHandler<JsonObject>() {
+        Json.asStream(in, new StreamHandler<Object>() {
             @Override
-            public void handle(JsonObject value) {
+            public void handle(Object value) {
                 System.out.println(value.toString() + " ");
             }
         });

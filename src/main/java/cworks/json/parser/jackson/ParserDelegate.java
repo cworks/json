@@ -14,10 +14,10 @@ public class ParserDelegate extends JsonParserDelegate {
     }
 
     public String getCurrentName() throws IOException {
-        if(this.getCurrentToken() == JsonToken.FIELD_NAME) {
+        //if(this.getCurrentToken() == JsonToken.FIELD_NAME) {
             return JsonJavaUtils.toMethodName(delegate.getCurrentName());
-        }
+        //}
 
-        return delegate.getCurrentName();
+        //return delegate.getCurrentName();
     }
 }
