@@ -13,7 +13,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.deser.std.StdDelegatingDeserializer;
@@ -26,8 +25,10 @@ import cworks.json.JsonContext;
 import cworks.json.JsonElement;
 import cworks.json.JsonException;
 import cworks.json.JsonHandler;
+import cworks.json.JsonNull;
 import cworks.json.JsonObject;
 import cworks.json.parser.JsonParser;
+import cworks.json.streaming.StreamHandler;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -127,28 +128,6 @@ public class JacksonParser extends JsonParser {
         
         return list;
     }
-    
-    public void read(final InputStream json, final JsonHandler handler) throws JsonException {
-
-        try {
-
-            //MapType mapType = mapper.getTypeFactory().constructMapType(LinkedHashMap.class, String.class, Object.class);
-            //CollectionType collectionType = mapper.getTypeFactory().constructCollectionType(List.class, mapType);
-            
-            MappingIterator<JsonObject> it = mapper.reader(JsonObject.class).readValues(wrapper(json));
-            
-            while(it.hasNextValue()) {
-                JsonObject value = it.nextValue();
-                if(value == null) {
-                    //handler.complete(new JsonContext() {});
-                }
-                //handler.handle(value, new JsonContext() {});
-            }
-            handler.complete(new JsonContext() {});
-        } catch (IOException ex) {
-            throw new JsonException(ex);
-        }
-    }
 
     public void read(final String json, final JsonHandler handler) throws JsonException {
 
@@ -169,6 +148,37 @@ public class JacksonParser extends JsonParser {
             throw new JsonException(ex);
         }
     }
+
+    public <T> void read(InputStream in, Class<T> clazz, StreamHandler<T> handler) throws JsonException {
+        
+        try {
+            com.fasterxml.jackson.core.JsonParser jp = wrapper(in);
+            JsonToken firstToken = jp.nextToken();
+            if(firstToken == JsonToken.START_ARRAY) {
+                readArray(jp, clazz, handler);
+            } else if(firstToken == JsonToken.START_OBJECT) {
+                readObject(jp, clazz, handler);
+            }
+        } catch(IOException ex) {
+            throw new JsonException(ex);
+        }
+    }
+    
+    public void read(InputStream in, StreamHandler<Object> handler) throws JsonException {
+
+        try {
+            com.fasterxml.jackson.core.JsonParser jp = wrapper(in);
+            JsonToken firstToken = jp.getCurrentToken();
+            if(firstToken == JsonToken.START_ARRAY) {
+                readArray(jp, handler);
+            } else if(firstToken == JsonToken.START_OBJECT) {
+                readObject(jp, handler);
+            }
+        } catch(IOException ex) {
+            throw new JsonException(ex);
+        }
+    }
+
 
     @Override
     public <T> List<T> toList(String json, Class<T> clazz) throws JsonException {
@@ -218,6 +228,104 @@ public class JacksonParser extends JsonParser {
         return json;
     }
 
+    private void readArray(com.fasterxml.jackson.core.JsonParser jp, StreamHandler<Object> handler)
+        throws IOException {
+        
+        JsonToken token = jp.nextToken();
+        while(token != null) {
+
+            if(token == JsonToken.VALUE_FALSE || token == JsonToken.VALUE_TRUE) {
+                Boolean value = mapper.readValue(jp, Boolean.class);
+                handler.handle(value);
+                continue;
+            }
+            
+            if(token == JsonToken.VALUE_NUMBER_INT) {
+                Integer value = mapper.readValue(jp, Integer.class);
+                handler.handle(value);
+                continue;
+            }
+            
+            if(token == JsonToken.VALUE_NUMBER_FLOAT) {
+                Double value = mapper.readValue(jp, Double.class);
+                handler.handle(value);
+                continue;
+            }
+            
+            if(token == JsonToken.VALUE_STRING) {
+                String value = mapper.readValue(jp, String.class);
+                handler.handle(value);
+                continue;
+            }
+            
+            if(token == JsonToken.VALUE_NULL) {
+                jp.nextToken(); // skip over null value
+                handler.handle(new JsonNull());
+                continue;
+            }
+            
+            if(token == JsonToken.START_OBJECT) {
+                JsonObject object = mapper.readValue(jp, JsonObject.class);
+                handler.handle(object);
+                continue;
+            }
+            
+            // move to next token
+            token = jp.nextToken();
+        }
+    }
+    
+    private <T> void readArray(com.fasterxml.jackson.core.JsonParser jp, Class<T> clazz, StreamHandler<T> handler) throws IOException {
+        
+        JsonToken token = jp.nextToken();
+        while(token != null) {
+
+            if (token == JsonToken.START_OBJECT ||
+                token == JsonToken.VALUE_FALSE ||
+                token == JsonToken.VALUE_TRUE ||
+                token == JsonToken.VALUE_NUMBER_FLOAT ||
+                token == JsonToken.VALUE_NUMBER_INT ||
+                token == JsonToken.VALUE_STRING ||
+                token == JsonToken.VALUE_NULL) {
+                
+                final T thing = mapper.readValue(jp, clazz);
+                if(thing == null) {
+                    //handler.handle(null);
+                    break;
+                }
+                handler.handle(thing);
+            } else {
+                token = jp.nextToken();
+            }
+        }
+        
+//        while(jp.nextToken() == JsonToken.START_OBJECT) {
+//            final T thing = mapper.readValue(jp, clazz);
+//            if(thing == null) {
+//                handler.handle(null);
+//                break;
+//            }
+//            handler.handle(thing);
+//        }
+        
+        
+    }
+    
+    private <T> void readObject(com.fasterxml.jackson.core.JsonParser jp, Class<T> clazz, StreamHandler<T> handler) throws IOException {
+        
+        if(jp.getCurrentToken() == JsonToken.START_OBJECT) {
+            final T thing = mapper.readValue(jp, clazz);
+            handler.handle(thing);
+        }
+    }
+    
+    private void readObject(com.fasterxml.jackson.core.JsonParser jp, StreamHandler<Object> handler) throws IOException {
+        //if(jp.getCurrentToken() == JsonToken.START_OBJECT) {
+            final JsonObject thing = mapper.readValue(jp, JsonObject.class);
+            handler.handle(thing);
+        //}
+    }
+
     /**
      * Create a wrapper around the Jackson parser so that we can tweak some features
      * to our liking
@@ -230,14 +338,14 @@ public class JacksonParser extends JsonParser {
         JsonFactory factory = mapper.getFactory();
         com.fasterxml.jackson.core.JsonParser parser = factory.createParser(json);
 
-        return new CWorksParserDelegate(parser);
+        return new ParserDelegate(parser);
     }
 
     private com.fasterxml.jackson.core.JsonParser wrapper(InputStream json) throws IOException {
         JsonFactory factory = mapper.getFactory();
         com.fasterxml.jackson.core.JsonParser parser = factory.createParser(json);
 
-        return new CWorksParserDelegate(parser);
+        return new ParserDelegate(parser);
     }
 
 }

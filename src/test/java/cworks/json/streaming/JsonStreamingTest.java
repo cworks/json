@@ -1,46 +1,98 @@
 package cworks.json.streaming;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.MappingIterator;
-import com.fasterxml.jackson.databind.MappingJsonFactory;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import cworks.json.Json;
 import cworks.json.JsonObject;
+import cworks.json.TestUser;
 import org.junit.Test;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class JsonStreamingTest {
-    
-    private static final String JSON_DATA = "[\n" +
-        "  {\"id\":1,\"first_name\":\"Roy\",\"last_name\":\"Watkins\",\"email\":\"rwatkins0@studiopress.com\",\"country\":\"China\",\"ip_address\":\"10.242.205.116\"},\n" +
-        "  {\"id\":2,\"first_name\":\"Terry\",\"last_name\":\"Kim\",\"email\":\"tkim1@nydailynews.com\",\"country\":\"China\",\"ip_address\":\"59.208.196.189\"},\n" +
-        "  {\"id\":3,\"first_name\":\"Justin\",\"last_name\":\"Ward\",\"email\":\"jward2@phpbb.com\",\"country\":\"Indonesia\",\"ip_address\":\"185.116.168.195\"}]";
-    
-    static class Message {
-        public String message;
-        public String toString() {
-            return "message: " + message;
-        }
+
+    @Test
+    public void testLargeObject() throws IOException {
+        
+        InputStream in = new FileInputStream("src/test/resources/large_object.json");
+        Json.asStream(in, new StreamHandler<JsonObject>() {
+            @Override
+            public void handle(JsonObject item) {
+                System.out.println(item.asString());
+            }
+        });
     }
     
     @Test
-    public void testMappingIterator() throws IOException {
-        
-        ObjectMapper mapper = new ObjectMapper();
-        
-        MappingIterator<Map> it = mapper.reader(HashMap.class)
-            .readValues(JSON_DATA);
-        
-        while(it.hasNextValue()) {
+    public void testSmallGenericObject() throws IOException {
 
-            System.out.println(it.nextValue());
-        }
-        
+        InputStream in = new FileInputStream("src/test/resources/user.json");
+        Json.asStream(in, new StreamHandler<JsonObject>() {
+            @Override
+            public void handle(JsonObject item) {
+                System.out.println(item.toString());
+            }
+        });
     }
+    
+    @Test
+    public void testSmallObject() throws IOException {
+
+        InputStream in = new FileInputStream("src/test/resources/small_users.json");
+        Json.asStream(in, new StreamHandler<JsonObject>() {
+            @Override
+            public void handle(JsonObject item) {
+                System.out.println(item.asString());
+            }
+        });
+    }
+        
+    @Test
+    public void testSmallTypedObject() throws IOException {
+        
+        InputStream in = new FileInputStream("src/test/resources/small_users.json");
+        Json.asStream(in, new StreamHandler<TestUser>() {
+            @Override
+            public void handle(TestUser item) {
+                System.out.println(item.toString());
+            }
+        });
+    }
+    
+    @Test
+    public void testSimpleNumberStreaming() throws IOException {
+        
+        InputStream in = new FileInputStream("src/test/resources/numbers.json");
+        Json.asStream(in, new StreamHandler<Integer>() {
+            @Override
+            public void handle(Integer number) {
+                System.out.println(number.toString() + " ");
+            }
+        });
+    }
+    
+    @Test
+    public void testBasicObject() throws IOException {
+
+        InputStream in = new FileInputStream("src/test/resources/user.json");
+        Json.asStream(in, new StreamHandler<Object>() {
+            @Override
+            public void handle(Object value) {
+                System.out.println(value.toString() + " ");
+            }
+        });
+    }
+    
+    //@Test
+    public void testBasicMixedArray() throws IOException {
+        
+        InputStream in = new FileInputStream("src/test/resources/basic_mixed_array.json");
+        Json.asStream(in, new StreamHandler<JsonObject>() {
+            @Override
+            public void handle(JsonObject value) {
+                System.out.println(value.toString() + " ");
+            }
+        });
+    }
+
 }

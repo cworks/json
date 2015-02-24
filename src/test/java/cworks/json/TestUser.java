@@ -61,4 +61,7 @@ public class TestUser {
         this.ipAddress = ipAddress;
     }
 
+    public String toString() {
+        return this.id + " " + this.firstName + " " + this.lastName;
+    }
 }

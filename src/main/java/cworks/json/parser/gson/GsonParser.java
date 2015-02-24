@@ -13,7 +13,9 @@ import cworks.json.JsonElement;
 import cworks.json.JsonException;
 import cworks.json.JsonObject;
 import cworks.json.parser.JsonParser;
+import cworks.json.streaming.StreamHandler;
 
+import java.io.InputStream;
 import java.util.List;
 
 public class GsonParser extends JsonParser {
@@ -51,5 +53,15 @@ public class GsonParser extends JsonParser {
     @Override
     public String toJson(Object obj) throws JsonException {
         return null;
+    }
+
+    @Override
+    public void read(InputStream in, StreamHandler<Object> handler) throws JsonException {
+
+    }
+
+    @Override
+    public <T> void read(InputStream in, Class<T> clazz, StreamHandler<T> handler) throws JsonException {
+
     }
 }

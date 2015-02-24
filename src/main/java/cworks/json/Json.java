@@ -13,6 +13,7 @@ import cworks.json.builder.JsonObjectBuilder;
 import cworks.json.parser.JsonParser;
 import cworks.json.parser.JsonParserBuilder;
 import cworks.json.parser.ParserType;
+import cworks.json.streaming.StreamHandler;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -20,6 +21,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -294,6 +296,45 @@ public final class Json {
         throwIfNotObject(json);
 
         return parser().toObject(json.trim(), clazz);
+    }
+
+    /**
+     * Stream the rendered content from InputStream to the handler.
+     * @param in
+     * @param handler
+     * @param <T>
+     * @throws JsonException
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> void asStream(InputStream in, final StreamHandler<T> handler) throws JsonException {
+
+        Class<T> genericType = getGenericType(handler);
+        if(genericType == null) {
+            throw new JsonException("Cannot determine Generic Type information for StreamHandler implementation.");
+        }
+        
+        if(genericType == Object.class) {
+            parser().read(in, (StreamHandler<Object>)handler);
+        } else {
+            parser().read(in, genericType, handler);
+        }
+
+        closeQuietly(in);
+    }
+    
+    @SuppressWarnings("unchecked")
+    private static <T> Class<T> getGenericType(final StreamHandler<T> handler) {
+        Class<T> genericType = null;
+        Method[] methods = handler.getClass().getDeclaredMethods();
+        
+        for(Method m : methods) {
+            if("handle".equals(m.getName())) {
+                genericType = (Class<T>) m.getParameterTypes()[0];
+                break;
+            }
+        }
+
+        return genericType;
     }
 
     /**
