@@ -21,7 +21,7 @@ public class JacksonParserTest {
     public void testLargeRead() throws IOException {
         
         JacksonParser parser = new JacksonParser();
-        InputStream in = new FileInputStream("src/test/resources/small_users.json");
+        InputStream in = new FileInputStream("src/test/resources/small_object_array.json");
         
         parser.read(JsonTestData.PEOPLE_WITH_ADDRESSES, new JsonHandler<JsonObject>() {
             @Override

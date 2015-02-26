@@ -10,7 +10,7 @@ public class JsonListTest {
     
     @Test
     public void testToListBasic() {
-        List<JsonObject> users = Json.asList(new File("src/test/resources/small_users.json"));
+        List<JsonObject> users = Json.asList(new File("src/test/resources/small_object_array.json"));
         Assert.assertEquals(1000, users.size());
     }
 

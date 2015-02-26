@@ -13,7 +13,9 @@ import cworks.json.builder.JsonObjectBuilder;
 import cworks.json.parser.JsonParser;
 import cworks.json.parser.JsonParserBuilder;
 import cworks.json.parser.ParserType;
+import cworks.json.streaming.JsonStreamHandler;
 import cworks.json.streaming.StreamHandler;
+import cworks.json.streaming.Token;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -315,7 +317,7 @@ public final class Json {
             }
 
             if (genericType == Object.class) {
-                parser().read(in, (StreamHandler<Object>) handler);
+                parser().read(in, (StreamHandler<Token>) handler);
             } else {
                 parser().read(in, genericType, handler);
             }
@@ -323,7 +325,16 @@ public final class Json {
             closeQuietly(in);
         }
     }
-    
+
+    public static <T> void asStream(InputStream in, final JsonStreamHandler handler) throws JsonException {
+
+        try {
+            parser().read(in, handler);
+        } finally {
+            closeQuietly(in);
+        }
+    }
+
     @SuppressWarnings("unchecked")
     private static <T> Class<T> getGenericType(final StreamHandler<T> handler) {
         Class<T> genericType = null;

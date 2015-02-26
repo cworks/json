@@ -12,6 +12,7 @@ import cworks.json.JsonElement;
 import cworks.json.JsonException;
 import cworks.json.JsonObject;
 import cworks.json.streaming.StreamHandler;
+import cworks.json.streaming.Token;
 
 import java.io.InputStream;
 import java.util.List;
@@ -61,7 +62,7 @@ public abstract class JsonParser {
     public abstract String toJson(Object obj) throws JsonException;
 
     // Read methods
-    public abstract void read(InputStream in, StreamHandler<Object> handler) throws JsonException;
+    public abstract void read(InputStream in, StreamHandler<Token> handler) throws JsonException;
     public abstract <T> void read(InputStream in, Class<T> clazz, StreamHandler<T> handler) throws JsonException;
     
     

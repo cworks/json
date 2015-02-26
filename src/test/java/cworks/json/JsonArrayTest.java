@@ -24,14 +24,14 @@ public class JsonArrayTest {
     @Test
     public void testToArrayBasicFromFile() {
         
-        JsonArray array = Json.asArray(new File("src/test/resources/small_users.json"));
+        JsonArray array = Json.asArray(new File("src/test/resources/small_object_array.json"));
         Assert.assertEquals(1000, array.size());
     }
     
     @Test
     public void testToTypedArrayFromFile() {
         
-        TestUser[] array = Json.asArray(new File("src/test/resources/small_users.json"), TestUser.class);
+        TestUser[] array = Json.asArray(new File("src/test/resources/small_object_array.json"), TestUser.class);
         Assert.assertEquals(1000, array.length);
     }
     
