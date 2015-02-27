@@ -28,8 +28,12 @@ import cworks.json.JsonHandler;
 import cworks.json.JsonNull;
 import cworks.json.JsonObject;
 import cworks.json.parser.JsonParser;
+import cworks.json.streaming.ArrayNode;
+import cworks.json.streaming.Node;
+import cworks.json.streaming.ObjectNode;
 import cworks.json.streaming.StreamHandler;
 import cworks.json.streaming.Token;
+import cworks.json.streaming.TokenFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -389,19 +393,19 @@ public class JacksonParser extends JsonParser {
                 stack.remove();
             } else if (currentToken == JsonToken.VALUE_STRING) {
                 Node parent = stack.peek();
-                handler.handle(createToken(parent, parser.getValueAsString()));
+                handler.handle(TokenFactory.createToken(parent, parser.getValueAsString()));
             } else if (currentToken == JsonToken.VALUE_NUMBER_INT) {
                 Node parent = stack.peek();
-                handler.handle(createToken(parent, parser.getIntValue()));
+                handler.handle(TokenFactory.createToken(parent, parser.getIntValue()));
             } else if (currentToken == JsonToken.VALUE_NUMBER_FLOAT) {
                 Node parent = stack.peek();
-                handler.handle(createToken(parent, parser.getDoubleValue()));
+                handler.handle(TokenFactory.createToken(parent, parser.getDoubleValue()));
             } else if (currentToken == JsonToken.VALUE_FALSE || currentToken == JsonToken.VALUE_TRUE) {
                 Node parent = stack.peek();
-                handler.handle(createToken(parent, parser.getBooleanValue()));
+                handler.handle(TokenFactory.createToken(parent, parser.getBooleanValue()));
             } else if(currentToken == JsonToken.VALUE_NULL) {
                 Node parent = stack.peek();
-                handler.handle(createToken(parent));
+                handler.handle(TokenFactory.createToken(parent));
             } else if(currentToken == JsonToken.FIELD_NAME) {
                 // push on to the value token
                 JsonToken valueToken = parser.nextToken();
@@ -411,19 +415,19 @@ public class JacksonParser extends JsonParser {
                     stack.add(new ArrayNode(parser.getCurrentName(), stack.peek()));
                 } else if(valueToken == JsonToken.VALUE_FALSE || valueToken == JsonToken.VALUE_TRUE) {
                     Node parent = stack.peek();
-                    handler.handle(createToken(parent, parser.getCurrentName(), parser.getBooleanValue()));
+                    handler.handle(TokenFactory.createToken(parent, parser.getCurrentName(), parser.getBooleanValue()));
                 } else if(valueToken == JsonToken.VALUE_STRING) {
                     Node parent = stack.peek();
-                    handler.handle(createToken(parent, parser.getCurrentName(), parser.getValueAsString()));
+                    handler.handle(TokenFactory.createToken(parent, parser.getCurrentName(), parser.getValueAsString()));
                 } else if(valueToken == JsonToken.VALUE_NUMBER_INT) {
                     Node parent = stack.peek();
-                    handler.handle(createToken(parent, parser.getCurrentName(), parser.getIntValue()));
+                    handler.handle(TokenFactory.createToken(parent, parser.getCurrentName(), parser.getIntValue()));
                 } else if(valueToken == JsonToken.VALUE_NUMBER_FLOAT) {
                     Node parent = stack.peek();
-                    handler.handle(createToken(parent, parser.getCurrentName(), parser.getIntValue()));
+                    handler.handle(TokenFactory.createToken(parent, parser.getCurrentName(), parser.getIntValue()));
                 } else if(valueToken == JsonToken.VALUE_NULL) {
                     Node parent = stack.peek();
-                    handler.handle(createToken(parent, parser.getCurrentName(), null));
+                    handler.handle(TokenFactory.createToken(parent, parser.getCurrentName(), null));
                 }
             }
         }
@@ -433,211 +437,7 @@ public class JacksonParser extends JsonParser {
     }
 
     
-    private Token createToken(Node node) {
-        Token token = null;
-        if (node.isArray()) {
-            ArrayNode arrayNode = (ArrayNode)node;
-            token = createToken(arrayNode);
-        } else if (node.isObject()) {
-            ObjectNode objectNode = (ObjectNode)node;
-            token = createToken(objectNode);
-        }
-        return token;
-    }
 
-    private Token createToken(Node node, String value) {
-        Token token = null;
-        if (node.isArray()) {
-            ArrayNode arrayNode = (ArrayNode)node;
-            token = createToken(arrayNode, value);
-        } else if (node.isObject()) {
-            ObjectNode objectNode = (ObjectNode)node;
-            token = createToken(objectNode, value);
-        }
-        return token;
-    }
-
-    private Token createToken(Node node, String name, String value) {
-        Token token = null;
-        if (node.isArray()) {
-            ArrayNode arrayNode = (ArrayNode)node;
-            token = createToken(arrayNode, name, value);
-        } else if (node.isObject()) {
-            ObjectNode objectNode = (ObjectNode)node;
-            token = createToken(objectNode, name, value);
-        }
-        return token;    }
-    
-    private Token createToken(Node node, int value) {
-        Token token = null;
-        if (node.isArray()) {
-            ArrayNode arrayNode = (ArrayNode)node;
-            token = createToken(arrayNode, value);
-        } else if (node.isObject()) {
-            ObjectNode objectNode = (ObjectNode)node;
-            token = createToken(objectNode, value);
-        }
-        return token;
-    }
-
-    private Token createToken(Node node, String name, int value) {
-        Token token = null;
-        if (node.isArray()) {
-            ArrayNode arrayNode = (ArrayNode)node;
-            token = createToken(arrayNode, name, value);
-        } else if (node.isObject()) {
-            ObjectNode objectNode = (ObjectNode)node;
-            token = createToken(objectNode, name, value);
-        }
-        return token;
-    }
-
-    private Token createToken(Node node, double value) {
-        Token token = null;
-        if (node.isArray()) {
-            ArrayNode arrayNode = (ArrayNode)node;
-            token = createToken(arrayNode, value);
-        } else if (node.isObject()) {
-            ObjectNode objectNode = (ObjectNode)node;
-            token = createToken(objectNode, value);
-        }
-        return token;
-    }
-
-    private Token createToken(Node node, String name, double value) {
-        Token token = null;
-        if (node.isArray()) {
-            ArrayNode arrayNode = (ArrayNode)node;
-            token = createToken(arrayNode, name, value);
-        } else if (node.isObject()) {
-            ObjectNode objectNode = (ObjectNode)node;
-            token = createToken(objectNode, name, value);
-        }
-        return token;
-    }
-
-    private Token createToken(Node node, boolean value) {
-        Token token = null;
-        if (node.isArray()) {
-            ArrayNode arrayNode = (ArrayNode)node;
-            token = createToken(arrayNode, value);
-        } else if (node.isObject()) {
-            ObjectNode objectNode = (ObjectNode)node;
-            token = createToken(objectNode, value);
-        }
-        return token;
-    }
-
-    private Token createToken(Node node, String name, boolean value) {
-        Token token = null;
-        if (node.isArray()) {
-            ArrayNode arrayNode = (ArrayNode)node;
-            token = createToken(arrayNode, name, value);
-        } else if (node.isObject()) {
-            ObjectNode objectNode = (ObjectNode)node;
-            token = createToken(objectNode, name, value);
-        }
-        return token;
-    }    
-    
-    private Token createToken(ArrayNode node, String value) {
-
-        String id = String.format("%s[%d]", node.id, node.nextIndex());
-        return new StreamToken(id, value);
-    }
-
-    private Token createToken(ArrayNode node, String name, String value) {
-
-        String id = String.format("%s[%d].%s", node.id, node.nextIndex(), name);
-        return new StreamToken(id, value);
-    }    
-
-    private Token createToken(ArrayNode node, int value) {
-
-        String id = String.format("%s[%d]", node.id, node.nextIndex());
-        return new StreamToken(id, value);
-    }
-
-    private Token createToken(ArrayNode node, String name, int value) {
-
-        String id = String.format("%s[%d].%s", node.id, node.nextIndex(), name);
-        return new StreamToken(id, value);
-    }
-
-    private Token createToken(ArrayNode node, double value) {
-
-        String id = String.format("%s[%d]", node.id, node.nextIndex());
-        return new StreamToken(id, value);
-    }
-
-    private Token createToken(ArrayNode node, String name, double value) {
-
-        String id = String.format("%s[%d].%s", node.id, node.nextIndex(), name);
-        return new StreamToken(id, value);
-    }
-    
-    private Token createToken(ArrayNode node, boolean value) {
-
-        String id = String.format("%s[%d]", node.id, node.nextIndex());
-        return new StreamToken(id, value);
-    }
-
-    private Token createToken(ArrayNode node, String name, boolean value) {
-        
-        String id = String.format("%s[%d].%s", node.id, node.nextIndex(), name);
-        return new StreamToken(id, value);
-    }
-    
-    private Token createToken(ArrayNode node) {
-
-        String id = String.format("%s[%d]", node.id, node.nextIndex());
-        return new StreamToken(id);
-    }
-    
-    private Token createToken(ObjectNode node) {
-        
-        return new StreamToken(node.id);
-    }
-
-    private Token createToken(ObjectNode node, String value) {
-
-        return new StreamToken(node.id, value);
-    }
-
-    private Token createToken(ObjectNode node, String name, String value) {
-        String id = String.format("%s.%s", node.id, name);
-        return new StreamToken(id, value);
-    }    
-    
-    private Token createToken(ObjectNode node, int value) {
-        
-        return new StreamToken(node.id, value);
-    }
-
-    private Token createToken(ObjectNode node, String name, int value) {
-        String id = String.format("%s.%s", node.id, name);
-        return new StreamToken(id, value);
-    }
-    
-    private Token createToken(ObjectNode node, double value) {
-        
-        return new StreamToken(node.id, value);
-    }
-
-    private Token createToken(ObjectNode node, String name, double value) {
-        String id = String.format("%s.%s", node.id, name);
-        return new StreamToken(id, value);
-    }
-    
-    private Token createToken(ObjectNode node, boolean value) {
-        
-        return new StreamToken(node.id, value);
-    }
-
-    private Token createToken(ObjectNode node, String name, boolean value) {
-        String id = String.format("%s.%s", node.id, name);
-        return new StreamToken(id, value);
-    }
 
     private static boolean isValueToken(final JsonToken token) {
         
@@ -653,185 +453,6 @@ public class JacksonParser extends JsonParser {
 
     private boolean isNullOrEmpty(String text) {
         return text == null || text.trim().length() == 0;
-    }
-    
-    private static class Node {
-        protected Node parent = null;
-        protected String id;
-        protected Object value = new JsonNull();
-        protected boolean isArray = false;
-        protected boolean isObject = false;
-        protected boolean isRoot = false;
-        
-        public Node(String id) {
-            this.id = id;
-            
-        }
-        public Node(String id, Object value) {
-            this.id = id;
-            this.value = value;
-        }
-        public Node(Node parent) {
-            this.parent = parent;
-        }
-        
-        public String toString() {
-            return "(" + id + ", " + value.toString() + ")";
-        }
-        
-        public boolean isArray() {
-            return this.isArray;
-        }
-        
-        public boolean isObject() {
-            return this.isObject;
-        }
-        
-        public boolean isRoot() {
-            return this.isRoot;
-        }
-    }
-    
-    private static class ObjectNode extends Node {
-        
-        public ObjectNode(String id) {
-            super(id);
-            isArray = false;
-            isObject = true;
-            isRoot = true;
-        }
-
-        /**
-         * Anonymous object (i.e. null field name)
-         * @param parent
-         */
-        public ObjectNode(Node parent) {
-            super(parent);
-            if(parent.isArray()) {
-                ArrayNode parentArray = (ArrayNode)parent;
-                this.id = parent.id + "[" + parentArray.nextIndex() + "]";
-            } else if(parent.isObject()) {
-                ObjectNode parentObject = (ObjectNode)parent;
-                this.id = parentObject.id;
-            }
-            isArray = false;
-            isObject = true;
-        }
-
-        /**
-         * Named object (i.e. has a real field name) 
-         * @param id
-         * @param parent
-         */
-        public ObjectNode(String id, Node parent) {
-            super(parent);
-            this.id = parent.id + "." + id;
-            this.isArray = false;
-            this.isObject = true;
-        }
-    }
-    
-    private static class ArrayNode extends Node {
-
-        private int i = 0;
-        public ArrayNode(String id) {
-            super(id);
-            isArray = true;
-            isObject = false;
-            isRoot = true;
-        }
-        
-        public ArrayNode(Node parent) {
-            super(parent);
-            this.id = parent.id + "." + id;
-            isArray = true;
-            isObject = false;
-        }
-
-        public ArrayNode(String id, Node parent) {
-            super(parent);
-            this.id = parent.id + "." + id;
-            this.isArray = true;
-            this.isObject = false;
-        }
-
-        public int nextIndex() {
-            return i++;
-        }
-    }
-    
-    private static class StreamToken implements Token {
-        private String id;
-        private String stringValue;
-        private Integer intValue;
-        private Double doubleValue;
-        private Boolean booleanValue;
-        
-        public StreamToken(String id) {
-            this.id = id;
-        }
-        
-        public StreamToken(String id, String value) {
-            this.id = id;
-            this.stringValue = value;
-        }
-        
-        public StreamToken(String id, int value) {
-            this.id = id;
-            this.intValue = value;
-        }
-        
-        public StreamToken(String id, double value) {
-            this.id = id;
-            this.doubleValue = value;
-        }
-        
-        public StreamToken(String id, boolean value) {
-            this.id = id;
-            this.booleanValue = value;
-        }
-        
-        @Override
-        public String asString() {
-            return this.stringValue;
-        }
-        
-        public int asInteger() {
-            return this.intValue;
-        }
-        
-        public double asDouble() {
-            return this.doubleValue;
-        }
-        
-        public boolean asBoolean() {
-            return this.booleanValue;
-        }
-
-        @Override
-        public String id() {
-            return this.id;
-        }
-        
-        private String valueToString() {
-            if(this.stringValue != null) {
-                return this.stringValue;
-            } else if(this.intValue != null) {
-                return String.valueOf(this.intValue);
-            } else if(this.doubleValue != null) {
-                return String.valueOf(this.doubleValue);
-            } else if(this.booleanValue != null) {
-                return String.valueOf(this.booleanValue);
-            } else {
-                return "(null)";
-            }
-        }
-        
-        @Override
-        public String toString() {
-            
-            return this.id + "," + valueToString();
-        }
     }
 
 }
