@@ -13,20 +13,27 @@ import cworks.json.builder.JsonObjectBuilder;
 import cworks.json.parser.JsonParser;
 import cworks.json.parser.JsonParserBuilder;
 import cworks.json.parser.ParserType;
+import cworks.json.parser.jackson.JacksonParser;
 import cworks.json.streaming.JsonStreamHandler;
 import cworks.json.streaming.StreamHandler;
 import cworks.json.streaming.Token;
 
 import java.io.BufferedInputStream;
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 /**
  * This class is a simple JSON string to Java Object and vice-versa
@@ -326,6 +333,13 @@ public final class Json {
         }
     }
 
+    /**
+     * Stream the rendered content from InputStream to the handler
+     * @param in
+     * @param handler
+     * @param <T>
+     * @throws JsonException
+     */
     public static <T> void asStream(InputStream in, final JsonStreamHandler handler) throws JsonException {
 
         try {
@@ -334,6 +348,42 @@ public final class Json {
             closeQuietly(in);
         }
     }
+    
+    
+    public static <T> Stream<T> asStream(InputStream inputStream, Function<Token, T> tokenFunction) {
+        return null;
+    }
+    
+    public static <T> Stream<T> asStream(InputStream inputStream, Function<Token, T> tokenFunction, Consumer<? super JsonException> exceptionConsumer) {
+        
+       return null; 
+    }
+    
+    public static <T> Stream<T> asStream(Token token, Function<Token, T> tokenFunction) {
+        
+        return null;
+    }
+    
+    public static <T> Stream<T> asStream(Token token, Function<Token, T> tokenFunction, Consumer<? super JsonException> exceptionConsumer) {
+        
+        return null;
+    }
+    
+    public static <T> Stream<T> asStream(Supplier<? extends Token> supplier, Function<Token, T> tokenFunction) {
+
+        return null;
+    }
+    
+    public static <T> Stream<T> asStream(Supplier<? extends Token> supplier, Function<Token, T> tokenFunction, Consumer<? super JsonException> exceptionConsumer) {
+        
+        return null;
+    }
+
+    public static Stream<Token> asStream(InputStream in) throws IOException {
+        JacksonParser parser = new JacksonParser();
+        return parser.read(in);
+    }
+
 
     @SuppressWarnings("unchecked")
     private static <T> Class<T> getGenericType(final StreamHandler<T> handler) {
@@ -465,6 +515,17 @@ public final class Json {
         return buffer;
     }
 
-
-
+    /**
+     * Convert a Closeable to a Runnable by converting checked IOException
+     * to UncheckedIOException
+     */
+    private static Runnable asUncheckedRunnable(Closeable c) {
+        return () -> {
+            try {
+                c.close();
+            } catch (IOException e) {
+                throw new UncheckedIOException(e);
+            }
+        };
+    }
 }

@@ -17,7 +17,7 @@ public class JacksonParserTest {
             "  {\"id\":2,\"first_name\":\"Terry\",\"last_name\":\"Kim\",\"email\":\"tkim1@nydailynews.com\",\"country\":\"China\",\"ip_address\":\"59.208.196.189\"},\n" +
             "  {\"id\":3,\"first_name\":\"Justin\",\"last_name\":\"Ward\",\"email\":\"jward2@phpbb.com\",\"country\":\"Indonesia\",\"ip_address\":\"185.116.168.195\"}]";
 
-    @Test
+    //@Test
     public void testLargeRead() throws IOException {
         
         JacksonParser parser = new JacksonParser();
@@ -36,6 +36,16 @@ public class JacksonParserTest {
         });
         
         in.close();
+    }
+    
+    @Test
+    public void testJacksonStreaming() throws IOException {
+
+        InputStream in = new FileInputStream("src/test/resources/small_object_array.json");
+        JacksonParser parser = new JacksonParser();
+        parser.read(in).forEach(token -> {
+            System.out.println(token.toString());
+        });
         
     }
 }

@@ -55,5 +55,17 @@ public class JsonStreamingTest {
             System.out.println(token.toString());
         });
     }
+    
+    @Test
+    public void testInStream() throws IOException {
+
+        InputStream in = new FileInputStream("src/test/resources/small_object.json");
+
+        /*
+        Json.asStream(Paths.get(""))
+            .filter(token -> token.id().contains("foo"))
+            .forEach(token -> System.out.println(token.toString()));
+        */
+    }
 
 }

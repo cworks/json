@@ -52,9 +52,11 @@ class StreamToken implements Token {
     public String id() {
         
         if(this.id.startsWith("root.")) {
+            return this.id.substring(5);
+        } else if(this.id.startsWith("root")) {
             return this.id.substring(4);
         }
-        // TODO here
+
         return this.id;
     }
 
