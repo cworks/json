@@ -13,7 +13,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 
-public interface AsJava {
+public interface JsonReader {
     public JsonElement asElement(String input) throws JsonException;
     public JsonObject asObject(String input) throws JsonException;
     public JsonArray asArray(String input) throws JsonException;

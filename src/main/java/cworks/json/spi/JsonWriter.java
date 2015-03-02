@@ -13,7 +13,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 
-public interface AsJson {
+public interface JsonWriter {
     public String asJson(Object object) throws JsonException;
     public String asJson(Object object, Type objectType) throws JsonException;
     public String asJson(Object[] objects) throws JsonException;
