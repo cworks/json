@@ -153,6 +153,25 @@ public class JsonExamples {
             .build();
         System.out.println(lola.asString());
     }
+    
+    @Test
+    public void simpleArray() {
+        JsonArray arr = Json.array().add(
+            Json.object().string("street", "18318 Namekagon Street")
+                .string("city", "Flint")
+                .string("state", "Michigan")
+                .string("zipcode", "48550").build()).add(
+            Json.object().string("street", "8038 Cherokee Point")
+                .string("city", "Baltimore")
+                .string("state", "Maryland")
+                .string("zipcode", "21281").build()).add(
+            Json.object().string("street", "1070 Randy Terrace")
+                .string("city", "Lynchburg")
+                .string("state", "Virginia")
+                .string("zipcode", "24503").build()).build();
+
+        System.out.println(Json.toPrettyString(arr));
+    }
 
     @Test
     public void buildParser() {

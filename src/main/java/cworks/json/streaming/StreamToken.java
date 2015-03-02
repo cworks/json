@@ -1,5 +1,7 @@
 package cworks.json.streaming;
 
+import cworks.json.JsonObject;
+
 class StreamToken implements Token {
     private String id;
     private String stringValue;
@@ -47,7 +49,23 @@ class StreamToken implements Token {
     public boolean asBoolean() {
         return this.booleanValue;
     }
-
+    
+    public String asJson() {
+        
+        JsonObject object = new JsonObject();
+        if(this.stringValue != null) {
+            return object.setString(id(), this.stringValue).asString();
+        } else if(this.intValue != null) {
+            return object.setNumber(id(), this.intValue).asString();
+        } else if(this.doubleValue != null) {
+            return object.setNumber(id(), this.doubleValue).asString();
+        } else if(this.booleanValue != null) {
+            return object.setBoolean(id(), this.booleanValue).asString();
+        } else {
+            return object.setString(id(), null).asString();
+        }
+    }
+    
     @Override
     public String id() {
         

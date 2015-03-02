@@ -1,5 +1,7 @@
-package cworks.json;
+package cworks.json.java8;
 
+import cworks.json.Json;
+import cworks.json.JsonObject;
 import cworks.json.streaming.Token;
 import org.junit.Test;
 
@@ -131,6 +133,11 @@ public class Java8Streams {
                 public String id() {
                     return String.valueOf(n);
                 }
+            
+                @Override
+                public String asJson() {
+                    return "";
+                }
             });
         }
 
@@ -138,7 +145,19 @@ public class Java8Streams {
                 .forEach(token -> {
                     System.out.println(token.toString());
                 });
-        
+    }
+
+    @Test
+    public void testStreamCreation() {
+        // produces an infinite stream
+        Stream<String> echo = Stream.generate(() -> "echo");
+        //echo.forEach(System.out::println);
+
+
+        Stream<JsonObject> json = Stream.generate(() -> Json.object().string("name", "Bucky").build());
+        json.forEach(j -> {
+            System.out.println(j.asString());
+        });
     }
     
 

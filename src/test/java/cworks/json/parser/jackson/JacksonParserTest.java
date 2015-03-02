@@ -41,11 +41,19 @@ public class JacksonParserTest {
     @Test
     public void testJacksonStreaming() throws IOException {
 
-        InputStream in = new FileInputStream("src/test/resources/small_object_array.json");
+        InputStream in = new FileInputStream("src/test/resources/number_array.json");
         JacksonParser parser = new JacksonParser();
-        parser.read(in).forEach(token -> {
-            System.out.println(token.toString());
+        
+        //parser.read(in).forEach(token -> {
+        //    System.out.println(token.asJson());
+        //});
+
+        parser.read(in).filter(token -> {
+            return token.asInteger() >= 15000 && token.asInteger() < 16000;
+        }).forEach(odd -> {
+            System.out.println(odd.asJson());
         });
         
+
     }
 }

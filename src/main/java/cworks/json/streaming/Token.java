@@ -5,5 +5,6 @@ public interface Token {
     public int asInteger();
     public double asDouble();
     public boolean asBoolean();
+    public String asJson();
     public String id();
 }
