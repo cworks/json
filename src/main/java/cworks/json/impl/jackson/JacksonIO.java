@@ -44,7 +44,7 @@ public class JacksonIO extends JsonIO {
     
     @Override
     public JsonReader getReader() {
-        return null;
+        return new JacksonReader(mapper);
     }
 
     @Override

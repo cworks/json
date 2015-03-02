@@ -115,27 +115,42 @@ public class JacksonReader implements JsonReader {
 
     @Override
     public JsonElement asElement(StringBuffer input) throws JsonException {
-        return null;
+        
+        JsonElement element = asElement(input.toString());
+        
+        return element;
     }
 
     @Override
     public JsonObject asObject(StringBuffer input) throws JsonException {
-        return null;
+        
+        JsonObject object = asObject(input.toString());
+        
+        return object;
     }
 
     @Override
     public JsonArray asArray(StringBuffer input) throws JsonException {
-        return null;
+        
+        JsonArray array = asArray(input.toString());
+        
+        return array;
     }
 
     @Override
     public <T> T asObject(StringBuffer input, Type objectType) throws JsonException {
+        
+        
+        
         return null;
     }
 
     @Override
     public <T> T asObject(StringBuffer input, Class<T> objectType) throws JsonException {
-        return null;
+        
+        T object = asObject(input.toString(), objectType);
+        
+        return object;
     }
 
     @Override
@@ -145,32 +160,50 @@ public class JacksonReader implements JsonReader {
 
     @Override
     public <T> T[] asArray(StringBuffer input, Class<T> arrayType) throws JsonException {
-        return null;
+        
+        T[] array = asArray(input.toString(), arrayType);
+        
+        return array;
     }
 
     @Override
     public JsonElement asElement(StringBuilder input) throws JsonException {
-        return null;
+        
+        JsonElement element = asElement(input.toString());
+        
+        return element;
     }
 
     @Override
     public JsonObject asObject(StringBuilder input) throws JsonException {
-        return null;
+        
+        JsonObject object = asObject(input.toString());
+        
+        return object;
     }
 
     @Override
     public JsonArray asArray(StringBuilder input) throws JsonException {
-        return null;
+        
+        JsonArray array = asArray(input.toString());
+        
+        return array;
     }
 
     @Override
     public <T> T asObject(StringBuilder input, Type objectType) throws JsonException {
+        
+        
+        
         return null;
     }
 
     @Override
     public <T> T asObject(StringBuilder input, Class<T> objectType) throws JsonException {
-        return null;
+        
+        T object = asObject(input.toString(), objectType);
+        
+        return object;
     }
 
     @Override
@@ -180,11 +213,17 @@ public class JacksonReader implements JsonReader {
 
     @Override
     public <T> T[] asArray(StringBuilder input, Class<T> arrayType) throws JsonException {
-        return null;
+        
+        T[] array = asArray(input.toString(), arrayType);
+        
+        return array;
     }
 
     @Override
     public JsonElement asElement(Reader input) throws JsonException {
+        
+        
+        
         return null;
     }
 
