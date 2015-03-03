@@ -40,22 +40,12 @@ public class GsonIO extends JsonIO {
     public JsonArray asArray(String input) throws JsonException {
         return null;
     }
-
-    @Override
-    public <T> T asObject(String input, Type objectType) throws JsonException {
-        return null;
-    }
-
+    
     @Override
     public <T> T asObject(String input, Class<T> objectType) throws JsonException {
         return null;
     }
-
-    @Override
-    public <T> T[] asArray(String input, Type arrayType) throws JsonException {
-        return null;
-    }
-
+    
     @Override
     public <T> T[] asArray(String input, Class<T> arrayType) throws JsonException {
         return null;
@@ -75,22 +65,12 @@ public class GsonIO extends JsonIO {
     public JsonArray asArray(StringBuffer input) throws JsonException {
         return null;
     }
-
-    @Override
-    public <T> T asObject(StringBuffer input, Type objectType) throws JsonException {
-        return null;
-    }
-
+    
     @Override
     public <T> T asObject(StringBuffer input, Class<T> objectType) throws JsonException {
         return null;
     }
-
-    @Override
-    public <T> T[] asArray(StringBuffer input, Type arrayType) throws JsonException {
-        return null;
-    }
-
+    
     @Override
     public <T> T[] asArray(StringBuffer input, Class<T> arrayType) throws JsonException {
         return null;
@@ -110,22 +90,12 @@ public class GsonIO extends JsonIO {
     public JsonArray asArray(StringBuilder input) throws JsonException {
         return null;
     }
-
-    @Override
-    public <T> T asObject(StringBuilder input, Type objectType) throws JsonException {
-        return null;
-    }
-
+    
     @Override
     public <T> T asObject(StringBuilder input, Class<T> objectType) throws JsonException {
         return null;
     }
-
-    @Override
-    public <T> T[] asArray(StringBuilder input, Type arrayType) throws JsonException {
-        return null;
-    }
-
+    
     @Override
     public <T> T[] asArray(StringBuilder input, Class<T> arrayType) throws JsonException {
         return null;
@@ -145,22 +115,12 @@ public class GsonIO extends JsonIO {
     public JsonArray asArray(Reader input) throws JsonException {
         return null;
     }
-
-    @Override
-    public <T> T asObject(Reader input, Type objectType) throws JsonException {
-        return null;
-    }
-
+    
     @Override
     public <T> T asObject(Reader input, Class<T> objectType) throws JsonException {
         return null;
     }
-
-    @Override
-    public <T> T[] asArray(Reader input, Type arrayType) throws JsonException {
-        return null;
-    }
-
+    
     @Override
     public <T> T[] asArray(Reader input, Class<T> arrayType) throws JsonException {
         return null;
@@ -180,22 +140,12 @@ public class GsonIO extends JsonIO {
     public JsonArray asArray(File input) throws JsonException {
         return null;
     }
-
-    @Override
-    public <T> T asObject(File input, Type objectType) throws JsonException {
-        return null;
-    }
-
+    
     @Override
     public <T> T asObject(File input, Class<T> objectType) throws JsonException {
         return null;
     }
-
-    @Override
-    public <T> T[] asArray(File input, Type arrayType) throws JsonException {
-        return null;
-    }
-
+    
     @Override
     public <T> T[] asArray(File input, Class<T> arrayType) throws JsonException {
         return null;
@@ -215,22 +165,12 @@ public class GsonIO extends JsonIO {
     public JsonArray asArray(InputStream input) throws JsonException {
         return null;
     }
-
-    @Override
-    public <T> T asObject(InputStream input, Type objectType) throws JsonException {
-        return null;
-    }
-
+    
     @Override
     public <T> T asObject(InputStream input, Class<T> objectType) throws JsonException {
         return null;
     }
-
-    @Override
-    public <T> T[] asArray(InputStream input, Type arrayType) throws JsonException {
-        return null;
-    }
-
+    
     @Override
     public <T> T[] asArray(InputStream input, Class<T> arrayType) throws JsonException {
         return null;
@@ -250,22 +190,12 @@ public class GsonIO extends JsonIO {
     public JsonArray asArray(Path input) throws JsonException {
         return null;
     }
-
-    @Override
-    public <T> T asObject(Path input, Type objectType) throws JsonException {
-        return null;
-    }
-
+    
     @Override
     public <T> T asObject(Path input, Class<T> objectType) throws JsonException {
         return null;
     }
-
-    @Override
-    public <T> T[] asArray(Path input, Type arrayType) throws JsonException {
-        return null;
-    }
-
+    
     @Override
     public <T> T[] asArray(Path input, Class<T> arrayType) throws JsonException {
         return null;
@@ -305,42 +235,7 @@ public class GsonIO extends JsonIO {
     public List<JsonObject> asList(InputStream input) throws JsonException {
         return null;
     }
-
-    @Override
-    public <T> List<T> asList(String input, Type listType) throws JsonException {
-        return null;
-    }
-
-    @Override
-    public <T> List<T> asList(StringBuffer input, Type listType) throws JsonException {
-        return null;
-    }
-
-    @Override
-    public <T> List<T> asList(StringBuilder input, Type listType) throws JsonException {
-        return null;
-    }
-
-    @Override
-    public <T> List<T> asList(File input, Type listType) throws JsonException {
-        return null;
-    }
-
-    @Override
-    public <T> List<T> asList(Path input, Type listType) throws JsonException {
-        return null;
-    }
-
-    @Override
-    public <T> List<T> asList(Reader input, Type listType) throws JsonException {
-        return null;
-    }
-
-    @Override
-    public <T> List<T> asList(InputStream input, Type listType) throws JsonException {
-        return null;
-    }
-
+    
     @Override
     public <T> List<T> asList(String input, Class<T> listType) throws JsonException {
         return null;
@@ -410,42 +305,7 @@ public class GsonIO extends JsonIO {
     public Map<String, ? extends JsonElement> asMap(InputStream input) throws JsonException {
         return null;
     }
-
-    @Override
-    public <T> Map<String, ? extends T> asMap(String input, Type mapType) throws JsonException {
-        return null;
-    }
-
-    @Override
-    public <T> Map<String, ? extends T> asMap(StringBuffer input, Type mapType) throws JsonException {
-        return null;
-    }
-
-    @Override
-    public <T> Map<String, ? extends T> asMap(StringBuilder input, Type mapType) throws JsonException {
-        return null;
-    }
-
-    @Override
-    public <T> Map<String, ? extends T> asMap(File input, Type mapType) throws JsonException {
-        return null;
-    }
-
-    @Override
-    public <T> Map<String, ? extends T> asMap(Path input, Type mapType) throws JsonException {
-        return null;
-    }
-
-    @Override
-    public <T> Map<String, ? extends T> asMap(Reader input, Type mapType) throws JsonException {
-        return null;
-    }
-
-    @Override
-    public <T> Map<String, ? extends T> asMap(InputStream input, Type mapType) throws JsonException {
-        return null;
-    }
-
+    
     @Override
     public <T> Map<String, ? extends T> asMap(String input, Class<T> mapType) throws JsonException {
         return null;

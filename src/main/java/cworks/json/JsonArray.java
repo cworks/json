@@ -103,6 +103,11 @@ public class JsonArray extends JsonElement implements Iterable<Object> {
         
         return element.asArray().asObject();
     }
+    
+    public Double doubleAt(final int index) {
+        Double value = (Double)list.get(index);
+        return value;
+    }
 
     @Override
     public Iterator<Object> iterator() {
