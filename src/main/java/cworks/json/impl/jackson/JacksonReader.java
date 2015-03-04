@@ -88,12 +88,21 @@ public class JacksonReader implements JsonReader {
         if(!input.trim().startsWith("[")) {
             throw new JsonException("Json input isn't valid json array.");
         }
+
+        JsonObject[] list = asArray(input, JsonObject.class);
         
-        List list = asObject(input, List.class);
-        
-        return new JsonArray(list);
+        JsonArray array = new JsonArray();
+        return array.addElements(list);
     }
-    
+
+    /**
+     * Tested
+     * @param input
+     * @param objectType
+     * @param <T>
+     * @return
+     * @throws JsonException
+     */
     @Override
     public <T> T asObject(String input, Class<T> objectType) throws JsonException {
         T object;
@@ -105,14 +114,22 @@ public class JacksonReader implements JsonReader {
 
         return object;
     }
-    
+
+    /**
+     * Tested
+     * @param input
+     * @param arrayType
+     * @param <T>
+     * @return
+     * @throws JsonException
+     */
     @Override
     public <T> T[] asArray(String input, Class<T> arrayType) throws JsonException {
         T[] array;
 
         try {
-            ArrayType arrt = mapper.getTypeFactory().constructArrayType(arrayType);
-            array = mapper.readValue(wrapper(input), arrt);
+            ArrayType arrType = mapper.getTypeFactory().constructArrayType(arrayType);
+            array = mapper.readValue(wrapper(input), arrType);
         } catch (Exception ex) {
             throw new JsonException(ex);
         }
@@ -120,86 +137,102 @@ public class JacksonReader implements JsonReader {
         return array;
     }
 
+    /**
+     * Tested
+     * @param input
+     * @return
+     * @throws JsonException
+     */
     @Override
     public JsonElement asElement(StringBuffer input) throws JsonException {
-        
-        JsonElement element = asElement(input.toString());
-        
-        return element;
+        return asElement(input.toString());
     }
 
+    /**
+     * Tested
+     * @param input
+     * @return
+     * @throws JsonException
+     */
     @Override
     public JsonObject asObject(StringBuffer input) throws JsonException {
-        
-        JsonObject object = asObject(input.toString());
-        
-        return object;
+        return asObject(input.toString());
     }
 
+    /**
+     * Tested
+     * @param input
+     * @return
+     * @throws JsonException
+     */
     @Override
     public JsonArray asArray(StringBuffer input) throws JsonException {
-        
-        JsonArray array = asArray(input.toString());
-        
-        return array;
-    }
-    
-    @Override
-    public <T> T asObject(StringBuffer input, Class<T> objectType) throws JsonException {
-        
-        T object = asObject(input.toString(), objectType);
-        
-        return object;
-    }
-    
-    @Override
-    public <T> T[] asArray(StringBuffer input, Class<T> arrayType) throws JsonException {
-        
-        T[] array = asArray(input.toString(), arrayType);
-        
-        return array;
+        return asArray(input.toString());
     }
 
+    /**
+     * Tested
+     * @param input
+     * @param objectType
+     * @param <T>
+     * @return
+     * @throws JsonException
+     */
+    @Override
+    public <T> T asObject(StringBuffer input, Class<T> objectType) throws JsonException {
+        return asObject(input.toString(), objectType);
+    }
+
+    /**
+     * Tested
+     * @param input
+     * @param arrayType
+     * @param <T>
+     * @return
+     * @throws JsonException
+     */
+    @Override
+    public <T> T[] asArray(StringBuffer input, Class<T> arrayType) throws JsonException {
+        return asArray(input.toString(), arrayType);
+    }
+
+    /**
+     * Tested
+     * @param input
+     * @return
+     * @throws JsonException
+     */
     @Override
     public JsonElement asElement(StringBuilder input) throws JsonException {
-        
-        JsonElement element = asElement(input.toString());
-        
-        return element;
+        return asElement(input.toString());
     }
 
     @Override
     public JsonObject asObject(StringBuilder input) throws JsonException {
-        
-        JsonObject object = asObject(input.toString());
-        
-        return object;
+        return asObject(input.toString());
     }
 
     @Override
     public JsonArray asArray(StringBuilder input) throws JsonException {
-        
-        JsonArray array = asArray(input.toString());
-        
-        return array;
+        return asArray(input.toString());
     }
     
     @Override
     public <T> T asObject(StringBuilder input, Class<T> objectType) throws JsonException {
-        
-        T object = asObject(input.toString(), objectType);
-        
-        return object;
+        return asObject(input.toString(), objectType);
     }
     
     @Override
     public <T> T[] asArray(StringBuilder input, Class<T> arrayType) throws JsonException {
-        
-        T[] array = asArray(input.toString(), arrayType);
-        
-        return array;
+        return asArray(input.toString(), arrayType);
     }
 
+    /**
+     * Tested
+     * @param input
+     * @return
+     * @throws JsonException
+     */
     @Override
     public JsonElement asElement(final Reader input) throws JsonException {
         JsonElement element;
@@ -216,6 +249,12 @@ public class JacksonReader implements JsonReader {
         return element;
     }
 
+    /**
+     * Tested
+     * @param input
+     * @return
+     * @throws JsonException
+     */
     @Override
     public JsonObject asObject(final Reader input) throws JsonException {
         JsonObject object;
@@ -232,6 +271,12 @@ public class JacksonReader implements JsonReader {
         return object;
     }
 
+    /**
+     * Tested
+     * @param input
+     * @return
+     * @throws JsonException
+     */
     @Override
     public JsonArray asArray(final Reader input) throws JsonException {
         JsonArray array;

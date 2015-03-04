@@ -1,19 +1,10 @@
 package cworks.json.java8;
 
-import cworks.json.Json;
-import cworks.json.JsonObject;
-import cworks.json.streaming.Token;
 import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Spliterator;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 public class Java8Streams {
     
@@ -60,105 +51,5 @@ public class Java8Streams {
                 System.out.println("forEach: " + s);
             });
     }
-    
-    @Test
-    public void testSupplier() {
-
-
-        StreamSupport.stream(new Spliterator<Token>() {
-            @Override
-            public boolean tryAdvance(Consumer<? super Token> action) {
-                return false;
-            }
-
-            @Override
-            public Spliterator<Token> trySplit() {
-                return null;
-            }
-
-            @Override
-            public long estimateSize() {
-                return 0;
-            }
-
-            @Override
-            public int characteristics() {
-                return 0;
-            }
-        }, false);
-        
-        
-        final BlockingQueue<Token> tokenQueue = new LinkedBlockingQueue<Token>();
-        
-
-        
-        Supplier<Token> tokenSupplier = new Supplier<Token>() {
-
-            @Override
-            public Token get() {
-                try {
-                    return tokenQueue.take();
-                } catch (InterruptedException ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
-        };
-
-        // generate data
-        for(int i = 0; i < 10; i++) {
-            int n = i;
-            tokenQueue.add(new Token() {
-
-                @Override
-                public String asString() {
-                    return String.valueOf(n);
-                }
-
-                @Override
-                public int asInteger() {
-                    return n;
-                }
-
-                @Override
-                public double asDouble() {
-                    return (double)n;
-                }
-
-                @Override
-                public boolean asBoolean() {
-                    return n % 2 == 0;
-                }
-
-                @Override
-                public String id() {
-                    return String.valueOf(n);
-                }
-            
-                @Override
-                public String asJson() {
-                    return "";
-                }
-            });
-        }
-
-        Stream.generate(tokenSupplier)
-                .forEach(token -> {
-                    System.out.println(token.toString());
-                });
-    }
-
-    @Test
-    public void testStreamCreation() {
-        // produces an infinite stream
-        Stream<String> echo = Stream.generate(() -> "echo");
-        //echo.forEach(System.out::println);
-
-
-        Stream<JsonObject> json = Stream.generate(() -> Json.object().string("name", "Bucky").build());
-        json.forEach(j -> {
-            System.out.println(j.asString());
-        });
-    }
-    
 
 }

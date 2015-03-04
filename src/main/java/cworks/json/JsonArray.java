@@ -46,7 +46,7 @@ public class JsonArray extends JsonElement implements Iterable<Object> {
         list.add(value.map);
         return this;
     }
-
+    
     public JsonArray addArray(JsonArray value) {
         list.add(value.list);
         return this;
@@ -57,6 +57,13 @@ public class JsonArray extends JsonElement implements Iterable<Object> {
             return addArray(value.asArray());
         }
         return addObject(value.asObject());
+    }
+    
+    public JsonArray addElements(JsonElement...values) {
+        for(JsonElement v : values) {
+            addElement(v);
+        }
+        return this;
     }
 
     public JsonArray addNumber(Number value) {

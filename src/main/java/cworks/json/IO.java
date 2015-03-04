@@ -15,10 +15,32 @@ public class IO {
         return asString(reader);
     }
     
+    public static StringBuffer asStringBuffer(final File file) throws IOException {
+        Reader reader = new FileReader(file);
+        return asStringBuffer(reader);
+    }
+    
+    public static StringBuilder asStringBuilder(final File file) throws IOException {
+        Reader reader = new FileReader(file);
+        return asStringBuilder(reader);
+    }
+    
     public static String asString(final Reader reader) throws IOException {
         final StringWriter writer = new StringWriter();
         cp(reader, writer);
         return writer.toString();
+    }
+    
+    public static StringBuffer asStringBuffer(final Reader reader) throws IOException {
+        final StringWriter writer = new StringWriter();
+        cp(reader, writer);
+        return writer.getBuffer();
+    }
+    
+    public static StringBuilder asStringBuilder(final Reader reader) throws IOException {
+        final StringWriter writer = new StringWriter();
+        cp(reader, writer);
+        return new StringBuilder(writer.toString());
     }
     
     public static String asString(final Reader reader, int bufferSize) throws IOException {
