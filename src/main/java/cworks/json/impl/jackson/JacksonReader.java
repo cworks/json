@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.ArrayType;
 import com.fasterxml.jackson.databind.type.CollectionType;
+import com.fasterxml.jackson.databind.type.MapType;
 import cworks.json.IO;
 import cworks.json.JsonArray;
 import cworks.json.JsonElement;
@@ -16,6 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
@@ -422,6 +424,14 @@ public class JacksonReader implements JsonReader {
         return object;
     }
 
+    /**
+     * Tested
+     * @param input
+     * @param arrayType
+     * @param <T>
+     * @return
+     * @throws JsonException
+     */
     @Override
     public <T> T[] asArray(File input, Class<T> arrayType) throws JsonException {
         T[] array;
@@ -436,63 +446,209 @@ public class JacksonReader implements JsonReader {
         return array;
     }
 
+    /**
+     * Tested
+     * @param input
+     * @return
+     * @throws JsonException
+     */
     @Override
     public JsonElement asElement(InputStream input) throws JsonException {
-        return null;
+        JsonElement element;
+        
+        try {
+            String json = IO.asString(input);
+            element = asElement(json);
+        } catch (IOException ex) {
+            throw new JsonException(ex);
+        }
+
+        return element;
     }
 
+    
     @Override
     public JsonObject asObject(InputStream input) throws JsonException {
-        return null;
+        JsonObject object;
+
+        try {
+            String json = IO.asString(input);
+            object = asObject(json);
+        } catch (IOException ex) {
+            throw new JsonException(ex);
+        }
+
+        return object;
     }
 
     @Override
     public JsonArray asArray(InputStream input) throws JsonException {
-        return null;
+        JsonArray array;
+
+        try {
+            String json = IO.asString(input);
+            array = asArray(json);
+        } catch (IOException ex) {
+            throw new JsonException(ex);
+        }
+
+        return array;
     }
 
+    /**
+     * Tested 
+     * @param input
+     * @param objectType
+     * @param <T>
+     * @return
+     * @throws JsonException
+     */
     @Override
     public <T> T asObject(InputStream input, Class<T> objectType) throws JsonException {
-        return null;
+        T object;
+
+        try {
+            String json = IO.asString(input);
+            object = asObject(json, objectType);
+        } catch (IOException ex) {
+            throw new JsonException(ex);
+        }
+
+        return object;
     }
 
     @Override
     public <T> T[] asArray(InputStream input, Class<T> arrayType) throws JsonException {
-        return null;
+        T[] array;
+
+        try {
+            String json = IO.asString(input);
+            array = asArray(json, arrayType);
+        } catch (IOException ex) {
+            throw new JsonException(ex);
+        }
+
+        return array;
     }
 
+    /**
+     * Tested
+     * @param input
+     * @return
+     * @throws JsonException
+     */
     @Override
     public JsonElement asElement(Path input) throws JsonException {
-        return null;
+        JsonElement element;
+
+        try {
+            Reader reader = Files.newBufferedReader(input);
+            element = asElement(reader);
+        } catch (IOException ex) {
+            throw new JsonException(ex);
+        }
+
+        return element;
     }
 
     @Override
     public JsonObject asObject(Path input) throws JsonException {
-        return null;
+        JsonObject object;
+
+        try {
+            Reader reader = Files.newBufferedReader(input);
+            object = asObject(reader);
+        } catch (IOException ex) {
+            throw new JsonException(ex);
+        }
+
+        return object;
     }
 
     @Override
     public JsonArray asArray(Path input) throws JsonException {
-        return null;
+        JsonArray array;
+
+        try {
+            Reader reader = Files.newBufferedReader(input);
+            array = asArray(reader);
+        } catch (IOException ex) {
+            throw new JsonException(ex);
+        }
+
+        return array;
     }
 
     @Override
     public <T> T asObject(Path input, Class<T> objectType) throws JsonException {
-        return null;
+        T object;
+
+        try {
+            Reader reader = Files.newBufferedReader(input);
+            object = asObject(reader, objectType);
+        } catch (IOException ex) {
+            throw new JsonException(ex);
+        }
+
+        return object;
     }
 
     @Override
     public <T> T[] asArray(Path input, Class<T> arrayType) throws JsonException {
-        return null;
+        T[] array;
+
+        try {
+            Reader reader = Files.newBufferedReader(input);
+            array = asArray(reader, arrayType);
+        } catch (IOException ex) {
+            throw new JsonException(ex);
+        }
+
+        return array;
     }
 
     @Override
     public List<JsonObject> asList(String input) throws JsonException {
-        List<JsonObject> list;
+        return asList(input, JsonObject.class);
+    }
+
+    @Override
+    public List<JsonObject> asList(StringBuffer input) throws JsonException {
+        return asList(input.toString(), JsonObject.class);
+    }
+
+    @Override
+    public List<JsonObject> asList(StringBuilder input) throws JsonException {
+        return asList(input.toString(), JsonObject.class);
+    }
+
+    @Override
+    public List<JsonObject> asList(File input) throws JsonException {
+        return asList(input, JsonObject.class);
+    }
+
+    @Override
+    public List<JsonObject> asList(Path input) throws JsonException {
+        return asList(input, JsonObject.class);
+    }
+
+    @Override
+    public List<JsonObject> asList(Reader input) throws JsonException {
+        return asList(input, JsonObject.class);
+    }
+
+    @Override
+    public List<JsonObject> asList(InputStream input) throws JsonException {
+        return asList(input, JsonObject.class);
+    }
+
+    @Override
+    public <T> List<T> asList(String input, Class<T> listType) throws JsonException {
+        List<T> list;
 
         try {
             CollectionType collectionType = mapper.getTypeFactory()
-                    .constructCollectionType(List.class, JsonObject.class);
+                    .constructCollectionType(List.class, listType);
             list = mapper.readValue(wrapper(input), collectionType);
         } catch (Exception ex) {
             throw new JsonException(ex);
@@ -502,108 +658,157 @@ public class JacksonReader implements JsonReader {
     }
 
     @Override
-    public List<JsonObject> asList(StringBuffer input) throws JsonException {
-        return null;
-    }
-
-    @Override
-    public List<JsonObject> asList(StringBuilder input) throws JsonException {
-        return null;
-    }
-
-    @Override
-    public List<JsonObject> asList(File input) throws JsonException {
-        return null;
-    }
-
-    @Override
-    public List<JsonObject> asList(Path input) throws JsonException {
-        return null;
-    }
-
-    @Override
-    public List<JsonObject> asList(Reader input) throws JsonException {
-        return null;
-    }
-
-    @Override
-    public List<JsonObject> asList(InputStream input) throws JsonException {
-        return null;
-    }
-
-    @Override
-    public <T> List<T> asList(String input, Class<T> listType) throws JsonException {
-        return null;
-    }
-
-    @Override
     public <T> List<T> asList(StringBuffer input, Class<T> listType) throws JsonException {
-        return null;
+        return asList(input.toString(), listType);
     }
 
     @Override
     public <T> List<T> asList(StringBuilder input, Class<T> listType) throws JsonException {
-        return null;
+        return asList(input.toString(), listType);
     }
 
     @Override
     public <T> List<T> asList(File input, Class<T> listType) throws JsonException {
-        return null;
+        List<T> list;
+
+        try {
+            String json = IO.asString(input);
+            list = asList(json, listType);
+        } catch (IOException ex) {
+            throw new JsonException(ex);
+        }
+
+        return list;
     }
 
     @Override
     public <T> List<T> asList(Path input, Class<T> listType) throws JsonException {
-        return null;
+        List<T> list;
+
+        try {
+            String json = IO.asString(input);
+            list = asList(json, listType);
+        } catch (IOException ex) {
+            throw new JsonException(ex);
+        }
+
+        return list;
     }
 
     @Override
     public <T> List<T> asList(Reader input, Class<T> listType) throws JsonException {
-        return null;
+        List<T> list;
+
+        try {
+            String json = IO.asString(input);
+            list = asList(json, listType);
+        } catch (IOException ex) {
+            throw new JsonException(ex);
+        }
+
+        return list;
     }
 
     @Override
     public <T> List<T> asList(InputStream input, Class<T> listType) throws JsonException {
-        return null;
+        List<T> list;
+
+        try {
+            String json = IO.asString(input);
+            list = asList(json, listType);
+        } catch (IOException ex) {
+            throw new JsonException(ex);
+        }
+
+        return list;
     }
 
     @Override
-    public Map<String, ? extends JsonElement> asMap(String input) throws JsonException {
-        return null;
+    public Map<String, Object> asMap(String input) throws JsonException {
+        Map map = asMap(input, Object.class);
+        return map;
     }
 
     @Override
-    public Map<String, ? extends JsonElement> asMap(StringBuffer input) throws JsonException {
-        return null;
+    public Map<String, Object> asMap(StringBuffer input) throws JsonException {
+        Map map = asMap(input.toString(), Object.class);
+        return map;
     }
 
     @Override
-    public Map<String, ? extends JsonElement> asMap(StringBuilder input) throws JsonException {
-        return null;
+    public Map<String, Object> asMap(StringBuilder input) throws JsonException {
+        Map map = asMap(input.toString(), Object.class);
+        return map;
     }
 
     @Override
-    public Map<String, ? extends JsonElement> asMap(File input) throws JsonException {
-        return null;
+    public Map<String, Object> asMap(File input) throws JsonException {
+        Map map;
+        
+        try {
+            String json = IO.asString(input);
+            map = asMap(json, Object.class);
+        } catch (IOException ex) {
+            throw new JsonException(ex);
+        }
+
+        return map;
     }
 
     @Override
-    public Map<String, ? extends JsonElement> asMap(Path input) throws JsonException {
-        return null;
+    public Map<String, Object> asMap(Path input) throws JsonException {
+        Map map;
+        
+        try {
+            String json = IO.asString(input);
+            map = asMap(json, Object.class);
+        } catch (IOException ex) {
+            throw new JsonException(ex);
+        }
+
+        return map;
     }
 
     @Override
-    public Map<String, ? extends JsonElement> asMap(Reader input) throws JsonException {
-        return null;
+    public Map<String, Object> asMap(Reader input) throws JsonException {
+        Map map;
+        
+        try {
+            String json = IO.asString(input);
+            map = asMap(json, Object.class);
+        } catch (IOException ex) {
+            throw new JsonException(ex);
+        }
+
+        return map;
     }
 
     @Override
-    public Map<String, ? extends JsonElement> asMap(InputStream input) throws JsonException {
-        return null;
+    public Map<String, Object> asMap(InputStream input) throws JsonException {
+        Map map;
+        
+        try {
+            String json = IO.asString(input);
+            map = asMap(json, Object.class);
+        } catch (IOException ex) {
+            throw new JsonException(ex);
+        }
+
+        return map;
     }
 
     @Override
-    public <T> Map<String, ? extends T> asMap(String input, Class<T> mapType) throws JsonException {
-        return null;
+    public <T> Map<String, ? extends T> asMap(String input, Class<T> valueType) throws JsonException {
+        Map<String, ? extends T> map;
+        
+        try {
+            MapType mt = mapper.getTypeFactory().constructMapType(Map.class, String.class, valueType);
+            map = mapper.readValue(wrapper(input), mt);
+        } catch (IOException ex) {
+            throw new JsonException(ex);
+        }
+
+        return map;
     }
 
     @Override

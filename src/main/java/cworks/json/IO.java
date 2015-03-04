@@ -1,6 +1,19 @@
 package cworks.json;
 
-import java.io.*;
+import org.apache.commons.codec.Charsets;
+
+import java.io.Closeable;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class IO {
     
@@ -10,6 +23,11 @@ public class IO {
 
     private static final int EOF = -1;
 
+    public static String asString(final Path path) throws IOException {
+        Reader reader = Files.newBufferedReader(path);
+        return asString(reader);
+    }
+    
     public static String asString(final File file) throws IOException {
         Reader reader = new FileReader(file);
         return asString(reader);
@@ -50,6 +68,21 @@ public class IO {
         }
         char[] buffer = new char[bufferSize];
         cp(reader, writer, buffer);
+        return writer.toString();
+    }
+
+    public static String asString(final InputStream input) throws IOException {
+        return asString(input, Charsets.UTF_8);
+    }
+    
+    public static String asString(final InputStream input, String encoding) throws IOException {
+        return asString(input, Charsets.toCharset(encoding));
+    }
+    
+    public static String asString(final InputStream input, final Charset encoding) throws IOException {
+        final StringWriter writer = new StringWriter();
+        InputStreamReader reader = new InputStreamReader(input, Charsets.toCharset(encoding));
+        cp(reader, writer);
         return writer.toString();
     }
     

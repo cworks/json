@@ -78,13 +78,13 @@ public interface JsonReader {
     public <T> List<T> asList(Reader input, Class<T> listType) throws JsonException;
     public <T> List<T> asList(InputStream input, Class<T> listType) throws JsonException;
 
-    public Map<String, ? extends JsonElement> asMap(String input) throws JsonException;
-    public Map<String, ? extends JsonElement> asMap(StringBuffer input) throws JsonException;
-    public Map<String, ? extends JsonElement> asMap(StringBuilder input) throws JsonException;
-    public Map<String, ? extends JsonElement> asMap(File input) throws JsonException;
-    public Map<String, ? extends JsonElement> asMap(Path input) throws JsonException;
-    public Map<String, ? extends JsonElement> asMap(Reader input) throws JsonException;
-    public Map<String, ? extends JsonElement> asMap(InputStream input) throws JsonException;
+    public Map<String, Object> asMap(String input) throws JsonException;
+    public Map<String, Object> asMap(StringBuffer input) throws JsonException;
+    public Map<String, Object> asMap(StringBuilder input) throws JsonException;
+    public Map<String, Object> asMap(File input) throws JsonException;
+    public Map<String, Object> asMap(Path input) throws JsonException;
+    public Map<String, Object> asMap(Reader input) throws JsonException;
+    public Map<String, Object> asMap(InputStream input) throws JsonException;
 
     public <T> Map<String, ? extends T> asMap(String input, Class<T> mapType) throws JsonException;
     public <T> Map<String, ? extends T> asMap(StringBuffer input, Class<T> mapType) throws JsonException;

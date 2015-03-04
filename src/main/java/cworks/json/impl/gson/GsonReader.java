@@ -9,7 +9,6 @@ import cworks.json.spi.JsonReader;
 import java.io.File;
 import java.io.InputStream;
 import java.io.Reader;
-import java.lang.reflect.Type;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
@@ -261,37 +260,37 @@ public class GsonReader implements JsonReader {
     }
 
     @Override
-    public Map<String, ? extends JsonElement> asMap(String input) throws JsonException {
+    public Map<String, Object> asMap(String input) throws JsonException {
         return null;
     }
 
     @Override
-    public Map<String, ? extends JsonElement> asMap(StringBuffer input) throws JsonException {
+    public Map<String, Object> asMap(StringBuffer input) throws JsonException {
         return null;
     }
 
     @Override
-    public Map<String, ? extends JsonElement> asMap(StringBuilder input) throws JsonException {
+    public Map<String, Object> asMap(StringBuilder input) throws JsonException {
         return null;
     }
 
     @Override
-    public Map<String, ? extends JsonElement> asMap(File input) throws JsonException {
+    public Map<String, Object> asMap(File input) throws JsonException {
         return null;
     }
 
     @Override
-    public Map<String, ? extends JsonElement> asMap(Path input) throws JsonException {
+    public Map<String, Object> asMap(Path input) throws JsonException {
         return null;
     }
 
     @Override
-    public Map<String, ? extends JsonElement> asMap(Reader input) throws JsonException {
+    public Map<String, Object> asMap(Reader input) throws JsonException {
         return null;
     }
 
     @Override
-    public Map<String, ? extends JsonElement> asMap(InputStream input) throws JsonException {
+    public Map<String, Object> asMap(InputStream input) throws JsonException {
         return null;
     }
 
