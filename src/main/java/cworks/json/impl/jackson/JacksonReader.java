@@ -292,7 +292,15 @@ public class JacksonReader implements JsonReader {
         
         return array;
     }
-    
+
+    /**
+     * Tested
+     * @param input
+     * @param objectType
+     * @param <T>
+     * @return
+     * @throws JsonException
+     */
     @Override
     public <T> T asObject(final Reader input, Class<T> objectType) throws JsonException {
         T object;
@@ -309,34 +317,123 @@ public class JacksonReader implements JsonReader {
         return object;
     }
 
+    /**
+     * Tested
+     * @param input
+     * @param arrayType
+     * @param <T>
+     * @return
+     * @throws JsonException
+     */
     @Override
     public <T> T[] asArray(Reader input, Class<T> arrayType) throws JsonException {
-        return null;
+        T[] array;
+        
+        try {
+            String json = IO.asString(input);
+            array = asArray(json, arrayType);
+        } catch (IOException ex) {
+            throw new JsonException(ex);
+        } finally {
+            IO.closeQuietly(input);
+        }
+
+        return array;
     }
 
+    /**
+     * Tested
+     * @param input
+     * @return
+     * @throws JsonException
+     */
     @Override
     public JsonElement asElement(File input) throws JsonException {
-        return null;
+        JsonElement element;
+        
+        try {
+            String json = IO.asString(input);
+            element = asElement(json);
+        } catch (IOException ex) {
+            throw new JsonException(ex);
+        }
+        
+        return element;
     }
 
+    /**
+     * Tested
+     * @param input
+     * @return
+     * @throws JsonException
+     */
     @Override
     public JsonObject asObject(File input) throws JsonException {
-        return null;
+        JsonObject object;
+
+        try {
+            String json = IO.asString(input);
+            object = asObject(json);
+        } catch (IOException ex) {
+            throw new JsonException(ex);
+        }
+
+        return object;
     }
 
+    /**
+     * Tested
+     * @param input
+     * @return
+     * @throws JsonException
+     */
     @Override
     public JsonArray asArray(File input) throws JsonException {
-        return null;
+        JsonArray array;
+
+        try {
+            String json = IO.asString(input);
+            array = asArray(json);
+        } catch (IOException ex) {
+            throw new JsonException(ex);
+        }
+
+        return array;
     }
 
+    /**
+     * Tested
+     * @param input
+     * @param objectType
+     * @param <T>
+     * @return
+     * @throws JsonException
+     */
     @Override
     public <T> T asObject(File input, Class<T> objectType) throws JsonException {
-        return null;
+        T object;
+        try {
+            String json = IO.asString(input);
+            object = asObject(json, objectType);
+        } catch (IOException ex) {
+            throw new JsonException(ex);
+        }
+
+        return object;
     }
 
     @Override
     public <T> T[] asArray(File input, Class<T> arrayType) throws JsonException {
-        return null;
+        T[] array;
+
+        try {
+            String json = IO.asString(input);
+            array = asArray(json, arrayType);
+        } catch (IOException ex) {
+            throw new JsonException(ex);
+        }
+
+        return array;
     }
 
     @Override

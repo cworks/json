@@ -159,4 +159,69 @@ public class JacksonReaderTest extends JsonTestCore {
         Assert.assertNotNull(array);
         assertGoodSmallObjectArray(array);
     }
+    
+    @Test
+    public void testAsObject_Reader_Class() throws IOException {
+        Reader reader = new FileReader(new File("src/test/resources/small_object.json"));
+        JsonReader jackson = new JacksonIO().getReader();
+
+        TestUser user = jackson.asObject(reader, TestUser.class);
+        Assert.assertEquals("Roy", user.getFirstName());
+        Assert.assertEquals("Watkins", user.getLastName());
+        Assert.assertEquals("rwatkins0@studiopress.com", user.getEmail());
+        Assert.assertEquals("China", user.getCountry());
+        Assert.assertEquals("10.242.205.116", user.getIpAddress());
+        
+    }
+    
+    @Test
+    public void testAsArray_Reader_Close() throws IOException {
+        Reader reader = new FileReader(new File("src/test/resources/small_object_array.json"));
+        JsonReader jackson = new JacksonIO().getReader();
+
+        TestUser[] users = jackson.asArray(reader, TestUser.class);
+        Assert.assertEquals(1000, users.length);
+        Assert.assertEquals(195, users[194].getId().intValue());
+        Assert.assertEquals("Stephen", users[194].getFirstName());
+        Assert.assertEquals("Mason", users[194].getLastName());
+        Assert.assertEquals("smason5e@barnesandnoble.com", users[194].getEmail());
+        Assert.assertEquals("Ukraine", users[194].getCountry());
+        Assert.assertEquals("54.49.166.253", users[194].getIpAddress());
+    }
+    
+    @Test
+    public void testAsElement_File() throws IOException {
+        JsonReader jackson = new JacksonIO().getReader();
+        JsonElement element = jackson.asElement(new File("src/test/resources/large_object.json"));
+        Assert.assertTrue(element.isObject());
+        assertGoodLargeObject(element.asObject());
+    }
+
+    @Test
+    public void testAsObject_File() throws IOException {
+        JsonReader jackson = new JacksonIO().getReader();
+        JsonObject object = jackson.asObject(new File("src/test/resources/large_object.json"));
+        Assert.assertTrue(object.isObject());
+        assertGoodLargeObject(object.asObject());
+    }
+
+    @Test
+    public void testAsArray_File() throws IOException {
+        JsonReader jackson = new JacksonIO().getReader();
+        JsonArray array = jackson.asArray(new File("src/test/resources/small_object_array.json"));
+        Assert.assertNotNull(array);
+        assertGoodSmallObjectArray(array);
+    }
+
+    @Test
+    public void testAsObject_File_Class() throws IOException {
+        JsonReader jackson = new JacksonIO().getReader();
+
+        TestUser user = jackson.asObject(new File("src/test/resources/small_object.json"), TestUser.class);
+        Assert.assertEquals("Roy", user.getFirstName());
+        Assert.assertEquals("Watkins", user.getLastName());
+        Assert.assertEquals("rwatkins0@studiopress.com", user.getEmail());
+        Assert.assertEquals("China", user.getCountry());
+        Assert.assertEquals("10.242.205.116", user.getIpAddress());
+    }
 }
