@@ -13,7 +13,7 @@ import java.io.Reader;
 public class JacksonReaderTest extends JsonTestCore {
     
     @Test
-    public void testAsElement_String_Arg() throws IOException {
+    public void testAsElement_String() throws IOException {
         String json = IO.asString(new File("src/test/resources/large_object.json"));
         JsonReader jackson = new JacksonIO().getReader();
         JsonElement element = jackson.asElement(json);
@@ -22,7 +22,7 @@ public class JacksonReaderTest extends JsonTestCore {
     }
 
     @Test
-    public void testAsObject_String_Arg() throws IOException {
+    public void testAsObject_String() throws IOException {
         String json = IO.asString(new File("src/test/resources/large_object.json"));
         JsonReader jackson = new JacksonIO().getReader();
         JsonObject object = jackson.asObject(json);
@@ -31,7 +31,7 @@ public class JacksonReaderTest extends JsonTestCore {
     }
 
     @Test
-    public void testAsArray_String_Arg() throws IOException {
+    public void testAsArray_String() throws IOException {
         String json = IO.asString(new File("src/test/resources/small_object_array.json"));
         JsonReader jackson = new JacksonIO().getReader();
         JsonArray array = jackson.asArray(json);
@@ -40,7 +40,22 @@ public class JacksonReaderTest extends JsonTestCore {
     }
     
     @Test
-    public void testAsElement_Reader_Arg() throws IOException {
+    public void testAsObject_String_Class() throws IOException {
+        
+        String json = IO.asString(new File("src/test/resources/small_object.json"));
+        JsonReader jackson = new JacksonIO().getReader();
+        
+        TestUser user = jackson.asObject(json, TestUser.class);
+        Assert.assertEquals("Roy", user.getFirstName());
+        Assert.assertEquals("Watkins", user.getLastName());
+        Assert.assertEquals("rwatkins0@studiopress.com", user.getEmail());
+        Assert.assertEquals("China", user.getCountry());
+        Assert.assertEquals("10.242.205.116", user.getIpAddress());
+    }
+    
+    
+    @Test
+    public void testAsElement_Reader() throws IOException {
         Reader reader = new FileReader("src/test/resources/large_object.json");
         JsonReader jackson = new JacksonIO().getReader();
         JsonElement element = jackson.asElement(reader);

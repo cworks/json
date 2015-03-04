@@ -4,7 +4,11 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.ArrayType;
 import com.fasterxml.jackson.databind.type.CollectionType;
-import cworks.json.*;
+import cworks.json.IO;
+import cworks.json.JsonArray;
+import cworks.json.JsonElement;
+import cworks.json.JsonException;
+import cworks.json.JsonObject;
 import cworks.json.parser.jackson.ParserDelegate;
 import cworks.json.spi.JsonReader;
 
@@ -12,7 +16,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
-import java.lang.reflect.Type;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +28,12 @@ public class JacksonReader implements JsonReader {
         this.mapper = mapper;
     }
 
+    /**
+     * Tested
+     * @param input
+     * @return
+     * @throws JsonException
+     */
     @Override
     public JsonElement asElement(String input) throws JsonException {
 
@@ -49,6 +58,12 @@ public class JacksonReader implements JsonReader {
         return element;
     }
 
+    /**
+     * Tested 
+     * @param input
+     * @return
+     * @throws JsonException
+     */
     @Override
     public JsonObject asObject(String input) throws JsonException {
         
@@ -61,6 +76,12 @@ public class JacksonReader implements JsonReader {
         return new JsonObject(map);
     }
 
+    /**
+     * Tested
+     * @param input
+     * @return
+     * @throws JsonException
+     */
     @Override
     public JsonArray asArray(String input) throws JsonException {
         
