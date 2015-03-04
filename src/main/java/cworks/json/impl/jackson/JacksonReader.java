@@ -1,6 +1,7 @@
 package cworks.json.impl.jackson;
 
 import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.ArrayType;
 import com.fasterxml.jackson.databind.type.CollectionType;
@@ -12,6 +13,8 @@ import cworks.json.JsonException;
 import cworks.json.JsonObject;
 import cworks.json.parser.jackson.ParserDelegate;
 import cworks.json.spi.JsonReader;
+import cworks.json.streaming.StreamHandler;
+import cworks.json.streaming.Token;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,13 +22,25 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public class JacksonReader implements JsonReader {
 
+    /**
+     * Heart of the Jackson processor 
+     */
     private final ObjectMapper mapper;
-    
+
+    /**
+     * Create this JsonReader with the powerful Jackson ObjectMapper
+     * @param mapper
+     */
     public JacksonReader(ObjectMapper mapper) {
         this.mapper = mapper;
     }
@@ -798,8 +813,8 @@ public class JacksonReader implements JsonReader {
     }
 
     @Override
-    public <T> Map<String, ? extends T> asMap(String input, Class<T> valueType) throws JsonException {
-        Map<String, ? extends T> map;
+    public <T> Map<String, T> asMap(String input, Class<T> valueType) throws JsonException {
+        Map<String, T> map;
         
         try {
             MapType mt = mapper.getTypeFactory().constructMapType(Map.class, String.class, valueType);
@@ -812,53 +827,240 @@ public class JacksonReader implements JsonReader {
     }
 
     @Override
-    public <T> Map<String, ? extends T> asMap(StringBuffer input, Class<T> mapType) throws JsonException {
-        return null;
+    public <T> Map<String, T> asMap(StringBuffer input, Class<T> valueType) throws JsonException {
+        return asMap(input.toString(), valueType);
     }
 
     @Override
-    public <T> Map<String, ? extends T> asMap(StringBuilder input, Class<T> mapType) throws JsonException {
-        return null;
+    public <T> Map<String, T> asMap(StringBuilder input, Class<T> valueType) throws JsonException {
+        return asMap(input.toString(), valueType);
     }
 
     @Override
-    public <T> Map<String, ? extends T> asMap(File input, Class<T> mapType) throws JsonException {
-        return null;
+    public <T> Map<String, T> asMap(File input, Class<T> valueType) throws JsonException {
+        Map map;
+        
+        try {
+            String json = IO.asString(input);
+            map = asMap(json, valueType);
+        } catch (IOException ex) {
+            throw new JsonException(ex);
+        }
+        
+        return map;
     }
 
     @Override
-    public <T> Map<String, ? extends T> asMap(Path input, Class<T> mapType) throws JsonException {
-        return null;
+    public <T> Map<String, T> asMap(Path input, Class<T> valueType) throws JsonException {
+        Map map;
+
+        try {
+            String json = IO.asString(input);
+            map = asMap(json, valueType);
+        } catch (IOException ex) {
+            throw new JsonException(ex);
+        }
+
+        return map;
     }
 
     @Override
-    public <T> Map<String, ? extends T> asMap(Reader input, Class<T> mapType) throws JsonException {
-        return null;
+    public <T> Map<String, T> asMap(Reader input, Class<T> valueType) throws JsonException {
+        Map map;
+
+        try {
+            String json = IO.asString(input);
+            map = asMap(json, valueType);
+        } catch (IOException ex) {
+            throw new JsonException(ex);
+        }
+
+        return map;
     }
 
     @Override
-    public <T> Map<String, ? extends T> asMap(InputStream input, Class<T> mapType) throws JsonException {
-        return null;
+    public <T> Map<String, T> asMap(InputStream input, Class<T> valueType) throws JsonException {
+        Map map;
+
+        try {
+            String json = IO.asString(input);
+            map = asMap(json, valueType);
+        } catch (IOException ex) {
+            throw new JsonException(ex);
+        }
+
+        return map;
+    }
+
+    @Override
+    public void asStream(final InputStream input, StreamHandler<Token> handler) throws JsonException {
+
+        try {
+            Iterator<Token> iterator = new JacksonIterator(wrapper(input));
+            while(iterator.hasNext()) {
+                handler.handle(iterator.next());
+            }
+
+        } catch(IOException ex) {
+            throw new JsonException(ex);
+        }
+    }
+
+    @Override
+    public Stream<Token> asStream(final InputStream input) {
+
+        Stream stream;
+        
+        try {
+            Iterator<Token> iterator = new JacksonIterator(wrapper(input));
+            stream = StreamSupport.stream(Spliterators.spliteratorUnknownSize(
+                    iterator, Spliterator.ORDERED | Spliterator.NONNULL), false);
+            
+        } catch (IOException ex) {
+            throw new JsonException(ex);
+        }
+        
+        return stream;
+    }
+
+    @Override
+    public void asStream(final Reader input, StreamHandler<Token> handler) throws JsonException {
+        
+        try {
+            Iterator<Token> iterator = new JacksonIterator(wrapper(input));
+            while(iterator.hasNext()) {
+                handler.handle(iterator.next());
+            }
+
+        } catch(IOException ex) {
+            throw new JsonException(ex);
+        }
+        
+    }
+
+    @Override
+    public Stream<Token> asStream(final Reader input) throws JsonException {
+        Stream stream;
+
+        try {
+            Iterator<Token> iterator = new JacksonIterator(wrapper(input));
+            stream = StreamSupport.stream(Spliterators.spliteratorUnknownSize(
+                    iterator, Spliterator.ORDERED | Spliterator.NONNULL), false);
+
+        } catch (IOException ex) {
+            throw new JsonException(ex);
+        }
+
+        return stream;
+        
+    }
+
+    @Override
+    public void asStream(final File input, final StreamHandler<Token> handler) throws JsonException {
+
+        try {
+            Reader reader = Files.newBufferedReader(input.toPath());
+            Iterator<Token> iterator = new JacksonIterator(wrapper(reader));
+            while(iterator.hasNext()) {
+                handler.handle(iterator.next());
+            }
+
+        } catch(IOException ex) {
+            throw new JsonException(ex);
+        }        
+        
+    }
+
+    @Override
+    public Stream<Token> asStream(final File input) throws JsonException {
+        Stream stream;
+
+        try {
+            Reader reader = Files.newBufferedReader(input.toPath());
+            Iterator<Token> iterator = new JacksonIterator(wrapper(reader));
+            stream = StreamSupport.stream(Spliterators.spliteratorUnknownSize(
+                    iterator, Spliterator.ORDERED | Spliterator.NONNULL), false);
+
+        } catch (IOException ex) {
+            throw new JsonException(ex);
+        }
+
+        return stream;
+    }
+
+    @Override
+    public void asStream(final Path input, final StreamHandler<Token> handler) throws JsonException {
+        
+        try {
+            Reader reader = Files.newBufferedReader(input);
+            Iterator<Token> iterator = new JacksonIterator(wrapper(reader));
+            while(iterator.hasNext()) {
+                handler.handle(iterator.next());
+            }
+
+        } catch(IOException ex) {
+            throw new JsonException(ex);
+        }
+    }
+
+    @Override
+    public Stream<Token> asStream(final Path input) throws JsonException {
+        Stream stream;
+
+        try {
+            Reader reader = Files.newBufferedReader(input);
+            Iterator<Token> iterator = new JacksonIterator(wrapper(reader));
+            stream = StreamSupport.stream(Spliterators.spliteratorUnknownSize(
+                    iterator, Spliterator.ORDERED | Spliterator.NONNULL), false);
+
+        } catch (IOException ex) {
+            throw new JsonException(ex);
+        }
+
+        return stream;
     }
 
     /**
      * Create a wrapper around the Jackson parser so that we can tweak some features
      * to our liking
      * *
-     * @param json json text
+     * @param input json String
      * @return jackson parser
      * @throws java.io.IOException
      */
-    private com.fasterxml.jackson.core.JsonParser wrapper(String json) throws IOException {
+    private com.fasterxml.jackson.core.JsonParser wrapper(String input) throws IOException {
         JsonFactory factory = mapper.getFactory();
-        com.fasterxml.jackson.core.JsonParser parser = factory.createParser(json);
+        JsonParser parser = factory.createParser(input);
 
         return new ParserDelegate(parser);
     }
 
-    private com.fasterxml.jackson.core.JsonParser wrapper(InputStream json) throws IOException {
+    /**
+     * Create a wrapper around the Jackson parser so that we can tweak some features
+     * to our liking
+     * *
+     * @param input json InputStream
+     * @return jackson parser
+     * @throws java.io.IOException
+     */
+    private com.fasterxml.jackson.core.JsonParser wrapper(InputStream input) throws IOException {
         JsonFactory factory = mapper.getFactory();
-        com.fasterxml.jackson.core.JsonParser parser = factory.createParser(json);
+        JsonParser parser = factory.createParser(input);
+
+        return new ParserDelegate(parser);
+    }
+
+    /**
+     * Create a wrapper around the Jackson parser so that we can tweak some features
+     * to our liking
+     * *
+     * @param input json Reader
+     * @return jackson parser
+     * @throws java.io.IOException
+     */
+    private com.fasterxml.jackson.core.JsonParser wrapper(Reader input) throws IOException {
+        JsonFactory factory = mapper.getFactory();
+        JsonParser parser = factory.createParser(input);
 
         return new ParserDelegate(parser);
     }

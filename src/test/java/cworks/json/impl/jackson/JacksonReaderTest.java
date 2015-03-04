@@ -7,6 +7,7 @@ import cworks.json.JsonObject;
 import cworks.json.JsonTestCore;
 import cworks.json.TestUser;
 import cworks.json.spi.JsonReader;
+import cworks.json.streaming.Token;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -19,6 +20,7 @@ import java.io.Reader;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class JacksonReaderTest extends JsonTestCore {
     
@@ -329,10 +331,84 @@ public class JacksonReaderTest extends JsonTestCore {
     }
     
     @Test
-    public void testAsMap_String() throws IOException {
+    public void testAsMap_Object() throws IOException {
         String json = IO.asString(new File("src/test/resources/large_object.json"));
         JsonReader jackson = new JacksonIO().getReader();
         Map<String, Object> map = jackson.asMap(json);
         assertGoodLargeObject(new JsonObject(map));
     }
+    
+    @Test
+    public void testAsMap_Double() throws IOException {
+        String json = IO.asString(new File("src/test/resources/batting_averages.json"));
+        JsonReader jackson = new JacksonIO().getReader();
+        Map<String, Double> map = jackson.asMap(json, Double.class);
+        Assert.assertEquals(0.36636, map.get("baTCobb"), 0.0);
+        Assert.assertEquals(0.3585, map.get("baRHornsby"), 0.0);
+        Assert.assertEquals(0.35575, map.get("baJJackson"), 0.0);
+        Assert.assertEquals(0.3459, map.get("baEDelahanty"), 0.0);
+        Assert.assertEquals(0.34468, map.get("baTSpeaker"), 0.0);
+    }
+
+    @Test
+    public void testLargeObject() throws IOException {
+
+        InputStream in = new FileInputStream("src/test/resources/large_object.json");
+        JsonReader jackson = new JacksonIO().getReader();
+        jackson.asStream(in, token -> {
+            if(token.id().contains("state")) {
+                Assert.assertTrue("Michigan".equals(token.asString()) ||
+                        "Maryland".equals(token.asString()) ||
+                        "Virginia".equals(token.asString()) ||
+                        "Missouri".equals(token.asString()));
+            }
+        });
+    }
+
+
+    @Test
+    public void testAsStream_InputStream_Handler_1() throws IOException {
+
+        InputStream in = new FileInputStream("src/test/resources/small_object_array.json");
+        JsonReader jackson = new JacksonIO().getReader();
+        jackson.asStream(in, token -> {
+            System.out.println(token.toString());
+        });
+    }
+
+    @Test
+    public void testAsStream_InputStream_Handler_2() throws IOException {
+
+        InputStream in = new FileInputStream("src/test/resources/small_object_array.json");
+        JsonReader jackson = new JacksonIO().getReader();
+        jackson.asStream(in, token -> {
+            if(token.id().startsWith("[13].id")) {
+                Assert.assertEquals(14, token.asInteger());
+            } else if(token.id().startsWith("[13].firstName")) {
+                Assert.assertEquals("Jacqueline", token.asString());
+            } else if(token.id().startsWith("[13].lastName")) {
+                Assert.assertEquals("Kim", token.asString());
+            } else if(token.id().startsWith("[13].email")) {
+                Assert.assertEquals("jkimd@sogou.com", token.asString());
+            }
+        });
+    }
+    
+    @Test
+    public void testAsStream_Emails() throws IOException {
+
+        InputStream input = new FileInputStream("src/test/resources/small_object_array.json");
+        JsonReader jackson = new JacksonIO().getReader();
+        
+        List<String> emails = jackson.asStream(input)
+            .filter(token -> token.id().contains("email"))
+            .map(Token::asString)
+            .sorted()
+            .collect(Collectors.toList());
+        
+        Assert.assertEquals(1000, emails.size());
+        Assert.assertEquals("aalleng1@webeden.co.uk", emails.get(0));
+        Assert.assertEquals("wwood7e@princeton.edu", emails.get(999));
+    }
+
 }

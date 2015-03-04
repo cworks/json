@@ -5,6 +5,8 @@ import cworks.json.JsonElement;
 import cworks.json.JsonException;
 import cworks.json.JsonObject;
 import cworks.json.spi.JsonReader;
+import cworks.json.streaming.StreamHandler;
+import cworks.json.streaming.Token;
 
 import java.io.File;
 import java.io.InputStream;
@@ -12,8 +14,49 @@ import java.io.Reader;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 public class GsonReader implements JsonReader {
+    @Override
+    public void asStream(InputStream in, StreamHandler<Token> handler) throws JsonException {
+
+    }
+
+    @Override
+    public Stream<Token> asStream(InputStream input) throws JsonException {
+        return null;
+    }
+
+    @Override
+    public void asStream(Reader input, StreamHandler<Token> handler) throws JsonException {
+
+    }
+
+    @Override
+    public Stream<Token> asStream(Reader input) throws JsonException {
+        return null;
+    }
+
+    @Override
+    public void asStream(File input, StreamHandler<Token> handler) throws JsonException {
+
+    }
+
+    @Override
+    public Stream<Token> asStream(File input) throws JsonException {
+        return null;
+    }
+
+    @Override
+    public void asStream(Path input, StreamHandler<Token> handler) throws JsonException {
+
+    }
+
+    @Override
+    public Stream<Token> asStream(Path input) throws JsonException {
+        return null;
+    }
+
     @Override
     public JsonElement asElement(String input) throws JsonException {
         return null;
@@ -295,37 +338,37 @@ public class GsonReader implements JsonReader {
     }
 
     @Override
-    public <T> Map<String, ? extends T> asMap(String input, Class<T> mapType) throws JsonException {
+    public <T> Map<String, T> asMap(String input, Class<T> mapType) throws JsonException {
         return null;
     }
 
     @Override
-    public <T> Map<String, ? extends T> asMap(StringBuffer input, Class<T> mapType) throws JsonException {
+    public <T> Map<String, T> asMap(StringBuffer input, Class<T> mapType) throws JsonException {
         return null;
     }
 
     @Override
-    public <T> Map<String, ? extends T> asMap(StringBuilder input, Class<T> mapType) throws JsonException {
+    public <T> Map<String, T> asMap(StringBuilder input, Class<T> mapType) throws JsonException {
         return null;
     }
 
     @Override
-    public <T> Map<String, ? extends T> asMap(File input, Class<T> mapType) throws JsonException {
+    public <T> Map<String, T> asMap(File input, Class<T> mapType) throws JsonException {
         return null;
     }
 
     @Override
-    public <T> Map<String, ? extends T> asMap(Path input, Class<T> mapType) throws JsonException {
+    public <T> Map<String, T> asMap(Path input, Class<T> mapType) throws JsonException {
         return null;
     }
 
     @Override
-    public <T> Map<String, ? extends T> asMap(Reader input, Class<T> mapType) throws JsonException {
+    public <T> Map<String, T> asMap(Reader input, Class<T> mapType) throws JsonException {
         return null;
     }
 
     @Override
-    public <T> Map<String, ? extends T> asMap(InputStream input, Class<T> mapType) throws JsonException {
+    public <T> Map<String, T> asMap(InputStream input, Class<T> mapType) throws JsonException {
         return null;
     }
 }
