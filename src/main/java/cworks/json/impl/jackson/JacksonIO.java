@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDelegatingDeserializer;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.util.StdConverter;
 import cworks.json.*;
+import cworks.json.io.JsonIO;
 import cworks.json.spi.JsonReader;
 import cworks.json.spi.JsonWriter;
 import cworks.json.streaming.StreamHandler;
@@ -24,7 +25,6 @@ public class JacksonIO extends JsonIO {
     private final ObjectMapper mapper;
 
     public JacksonIO() {
-        super(JsonLib.JACKSON);
         mapper = new ObjectMapper();
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         mapper.configure(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES, false);

@@ -20,7 +20,7 @@ import java.util.List;
 public abstract class JsonParser {
 
     /**
-     * to make json pretty or not 
+     * to build json pretty or not
      */
     protected Boolean pretty;
 

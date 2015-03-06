@@ -2,6 +2,7 @@ package cworks.json;
 
 import cworks.json.impl.gson.GsonIO;
 import cworks.json.impl.jackson.JacksonIO;
+import cworks.json.io.JsonIO;
 import cworks.json.spi.JsonReader;
 import cworks.json.spi.JsonWriter;
 import org.junit.Test;

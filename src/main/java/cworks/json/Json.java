@@ -10,9 +10,9 @@ package cworks.json;
 
 import cworks.json.builder.JsonArrayBuilder;
 import cworks.json.builder.JsonObjectBuilder;
+import cworks.json.io.JsonIO;
+import cworks.json.io.JsonIOBuilder;
 import cworks.json.parser.JsonParser;
-import cworks.json.parser.JsonParserBuilder;
-import cworks.json.parser.ParserType;
 import cworks.json.parser.jackson.JacksonParser;
 import cworks.json.streaming.JsonStreamHandler;
 import cworks.json.streaming.StreamHandler;
@@ -30,14 +30,10 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 /**
- * This class is a simple JSON string to Java Object and vice-versa
- * conversion utility.
+ * This class is a simple JSON toolkit that prides itself on simplicity
  *
  * @author corbett
  */
@@ -49,7 +45,7 @@ public final class Json {
      *
      * @return JsonParser
      */
-    static JsonParser parser() {
+    static JsonIO io() {
 
         Map data = new HashMap<String, Object>();
         data.put("dateFormat", "yyyy-MM-dd'T'HH:mm:ssz");
@@ -57,41 +53,41 @@ public final class Json {
         data.put("allowComments", true);
         JsonObject config = new JsonObject(data);
 
-        return parser(config);
+        return io(config);
     }
 
     /**
-     * Create a pretty print JsonParser which is same as default parser
+     * Create a pretty print JsonParser which is same as default io
      * except that it pretty prints Json text.
      *
      * @return JsonParser
      */
-    static JsonParser prettyParser() {
+    static JsonIO prettyParser() {
         Map data = new HashMap<String, Object>();
         data.put("dateFormat", "yyyy-MM-dd'T'HH:mm:ssz");
         data.put("pretty", true);
         data.put("allowComments", true);
         JsonObject config = new JsonObject(data);
 
-        return parser(config);
+        return io(config);
     }
 
     /**
      * Create a default JsonParser but with some extra config options.  By
-     * default Jackson parser suite is used.
+     * default Jackson io suite is used.
      *
      * @param config
      * @return JsonParser
      */
-    static JsonParser parser(JsonObject config) {
+    static JsonIO io(JsonObject config) {
 
-        String name = System.getProperty("json.parser", "jackson");
+        String name = System.getProperty("json.io", "jackson");
 
-        JsonParser parser = JsonParserBuilder.parser(ParserType.valueOf(name))
+        JsonIO parser = JsonIOBuilder.io(JsonLib.valueOf(name))
             .dateFormat(config.getString("dateFormat", "yyyy-MM-dd'T'HH:mm:ssz"))
             .pretty(config.getBoolean("pretty", false))
             .allowComments(config.getBoolean("allowComments", true))
-            .make();
+            .build();
 
         return parser;
     }
@@ -123,7 +119,7 @@ public final class Json {
 
         throwIfNotArray(json);
 
-        JsonElement element = parser().toObject(json.trim());
+        JsonElement element = io().toObject(json.trim());
         if (element.isArray()) {
             return (JsonArray) element;
         }
@@ -143,7 +139,7 @@ public final class Json {
 
         throwIfNotArray(json);
         
-        return parser().toArray(json, clazz);
+        return io().toArray(json, clazz);
     }
 
     /**
@@ -190,7 +186,7 @@ public final class Json {
         
         throwIfNotArray(json);
         
-        return parser().toList(json);
+        return io().toList(json);
     }
 
     /**
@@ -205,7 +201,7 @@ public final class Json {
         
         throwIfNotArray(json);
         
-        return parser().toList(json, clazz);
+        return io().toList(json, clazz);
     }
 
     /**
@@ -221,7 +217,7 @@ public final class Json {
         }
         
         String buffer = bufferFile(file).toString();
-        return parser().toList(buffer);
+        return io().toList(buffer);
     }
 
     /**
@@ -239,7 +235,7 @@ public final class Json {
         }
         
         String buffer = bufferFile(file).toString();
-        return parser().toList(buffer, clazz);
+        return io().toList(buffer, clazz);
     }
 
     /**
@@ -251,7 +247,7 @@ public final class Json {
 
         throwIfNotObject(json);
 
-        JsonElement element = parser().toObject(json.trim());
+        JsonElement element = io().toObject(json.trim());
         if (element.isObject()) {
             return (JsonObject) element;
         }
@@ -304,7 +300,7 @@ public final class Json {
 
         throwIfNotObject(json);
 
-        return parser().toObject(json.trim(), clazz);
+        return io().toObject(json.trim(), clazz);
     }
 
     /**
@@ -324,9 +320,9 @@ public final class Json {
             }
 
             if (genericType == Object.class) {
-                parser().read(in, (StreamHandler<Token>) handler);
+                io().read(in, (StreamHandler<Token>) handler);
             } else {
-                parser().read(in, genericType, handler);
+                io().read(in, genericType, handler);
             }
         } finally {
             closeQuietly(in);
@@ -343,40 +339,10 @@ public final class Json {
     public static <T> void asStream(InputStream in, final JsonStreamHandler handler) throws JsonException {
 
         try {
-            parser().read(in, handler);
+            io().read(in, handler);
         } finally {
             closeQuietly(in);
         }
-    }
-    
-    
-    public static <T> Stream<T> asStream(InputStream inputStream, Function<Token, T> tokenFunction) {
-        return null;
-    }
-    
-    public static <T> Stream<T> asStream(InputStream inputStream, Function<Token, T> tokenFunction, Consumer<? super JsonException> exceptionConsumer) {
-        
-       return null; 
-    }
-    
-    public static <T> Stream<T> asStream(Token token, Function<Token, T> tokenFunction) {
-        
-        return null;
-    }
-    
-    public static <T> Stream<T> asStream(Token token, Function<Token, T> tokenFunction, Consumer<? super JsonException> exceptionConsumer) {
-        
-        return null;
-    }
-    
-    public static <T> Stream<T> asStream(Supplier<? extends Token> supplier, Function<Token, T> tokenFunction) {
-
-        return null;
-    }
-    
-    public static <T> Stream<T> asStream(Supplier<? extends Token> supplier, Function<Token, T> tokenFunction, Consumer<? super JsonException> exceptionConsumer) {
-        
-        return null;
     }
 
     public static Stream<Token> asStream(InputStream in) throws IOException {
@@ -407,7 +373,7 @@ public final class Json {
      */
     public static String toString(JsonElement element) {
 
-        return parser().toJson(element);
+        return io().toJson(element);
     }
 
     /**
@@ -426,7 +392,7 @@ public final class Json {
      * @throws JsonException
      */
     public static String toString(Object obj) throws JsonException {
-        return parser().toJson(obj);
+        return io().toJson(obj);
     }
 
     /**

@@ -29,7 +29,7 @@ public interface JsonReader {
     public JsonElement asElement(String input) throws JsonException;
     public JsonObject asObject(String input) throws JsonException;
     public JsonArray asArray(String input) throws JsonException;
-
+    
     public <T> T asObject(String input, Class<T> objectType) throws JsonException;
     public <T> T[] asArray(String input, Class<T> arrayType) throws JsonException;
 
@@ -106,4 +106,5 @@ public interface JsonReader {
     public <T> Map<String, T> asMap(Path input, Class<T> mapType) throws JsonException;
     public <T> Map<String, T> asMap(Reader input, Class<T> mapType) throws JsonException;
     public <T> Map<String, T> asMap(InputStream input, Class<T> mapType) throws JsonException;
+
 }

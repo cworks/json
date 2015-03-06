@@ -1,6 +1,7 @@
 package cworks.json.impl.gson;
 
 import cworks.json.*;
+import cworks.json.io.JsonIO;
 import cworks.json.spi.JsonReader;
 import cworks.json.spi.JsonWriter;
 import cworks.json.streaming.StreamHandler;
@@ -16,7 +17,6 @@ import java.util.stream.Stream;
 public class GsonIO extends JsonIO {
     
     public GsonIO() {
-        super(JsonLib.GSON);
     }
     
     @Override

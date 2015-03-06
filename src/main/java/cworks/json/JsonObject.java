@@ -44,7 +44,7 @@ public class JsonObject extends JsonElement {
      * @param json string form of a JSON object
      */
     public JsonObject(String json) {
-        map = Json.parser().toObject(json, Map.class);
+        map = Json.io().toObject(json, Map.class);
     }
 
     public JsonObject setString(String field, String value) {
