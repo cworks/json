@@ -19,8 +19,6 @@ public abstract class JsonIO implements JsonWriter, JsonReader {
      * to allow comments or not 
      */
     protected Boolean allowComments;
-    
-    
 
     /**
      * Create a JsonIO instance with default settings 

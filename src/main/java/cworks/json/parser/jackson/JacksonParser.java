@@ -21,7 +21,6 @@ import com.fasterxml.jackson.databind.type.ArrayType;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.util.StdConverter;
 import cworks.json.JsonArray;
-import cworks.json.JsonContext;
 import cworks.json.JsonElement;
 import cworks.json.JsonException;
 import cworks.json.JsonHandler;
@@ -154,10 +153,10 @@ public class JacksonParser extends JsonParser {
             while(jp.nextToken() == JsonToken.START_OBJECT) {
                 final JsonObject thing = mapper.readValue(jp, JsonObject.class);
                 if(thing == null) {
-                    handler.complete(new JsonContext() { });
+                    handler.complete(() -> false);
                     break;
                 }
-                handler.handle(thing, new JsonContext() {});
+                handler.handle(thing, () -> false);
             }
         } catch (IOException ex) {
             throw new JsonException(ex);

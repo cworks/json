@@ -1,6 +1,9 @@
 package cworks.json.impl.jackson;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import cworks.json.JsonArray;
+import cworks.json.JsonContext;
 import cworks.json.JsonElement;
 import cworks.json.JsonException;
 import cworks.json.JsonObject;
@@ -15,9 +18,31 @@ import java.util.List;
 import java.util.Map;
 
 public class JacksonWriter implements JsonWriter {
+    
+    private final JsonContext context;
+    private final ObjectMapper mapper;
+    
+    public JacksonWriter(ObjectMapper mapper, JsonContext context) {
+        this.mapper = mapper;
+        this.context = context;
+    }
+    
     @Override
     public String asJson(Object object) throws JsonException {
-        return null;
+        String json;
+        try {
+            if(context.isPretty()) {
+                mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
+                json = mapper.writeValueAsString(object);
+            } else {
+                mapper.configure(SerializationFeature.INDENT_OUTPUT, false);
+                json = mapper.writeValueAsString(object);
+            }
+        } catch (Exception ex) {
+            throw new JsonException(ex);
+        }
+
+        return json;
     }
 
     @Override
@@ -137,7 +162,16 @@ public class JacksonWriter implements JsonWriter {
 
     @Override
     public String asJson(JsonElement element) throws JsonException {
-        return null;
+
+        if(element.isObject()) {
+            Map data = ((JsonObject)element).toMap();
+            return asJson(data);
+        } else if(element.isArray()) {
+            Object[] data = ((JsonArray)element).toArray();
+            return asJson(data);
+        }
+
+        return "";
     }
 
     @Override

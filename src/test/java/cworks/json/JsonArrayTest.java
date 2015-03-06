@@ -44,9 +44,9 @@ public class JsonArrayTest {
         JsonObject user2  = users.get(1);
         JsonObject user10 = users.get(9);
 
-        Assert.assertEquals("Alice",   user1.getString("first_name"));
-        Assert.assertEquals("Timothy", user2.getString("first_name"));
-        Assert.assertEquals("Tina",    user10.getString("first_name"));
+        Assert.assertEquals("Alice",   user1.getString("firstName"));
+        Assert.assertEquals("Timothy", user2.getString("firstName"));
+        Assert.assertEquals("Tina",    user10.getString("firstName"));
 
         Assert.assertEquals(10, users.size());
     }

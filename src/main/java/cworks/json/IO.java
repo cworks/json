@@ -2,8 +2,11 @@ package cworks.json;
 
 import org.apache.commons.codec.Charsets;
 
+import java.io.BufferedInputStream;
 import java.io.Closeable;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -117,6 +120,35 @@ public class IO {
         return checkSum;
     }
 
+    /**
+     * This class method will buffer the whole file before being used to convert
+     * the content to JsonObject, JsonArray or a Java Type.
+     *
+     * TODO consider placing an upper limit on the buffer to protect against OoM
+     * @param file
+     */
+    public static StringBuffer bufferFile(File file) {
+
+        InputStream in = null;
+        StringBuffer buffer = new StringBuffer();
+        try {
+            in = new BufferedInputStream(new FileInputStream(file));
+            byte[] b = new byte[DEFAULT_BUFFER_SIZE];
+            for (int n; (n = in.read(b)) != -1; ) {
+                buffer.append(new String(b, 0, n));
+            }
+        } catch (FileNotFoundException ex) {
+            throw new JsonException("File "
+                    + file.getPath() + " not found.", ex);
+        } catch(IOException ex) {
+            throw new JsonException("I/O error while reading from File "
+                    + file.getPath(), ex);
+        } finally {
+            closeQuietly(in);
+        }
+
+        return buffer;
+    }
     
     public static void checkArg(Object object) {
         if(object == null) {
@@ -133,6 +165,4 @@ public class IO {
             if(closeable != null) { closeable.close(); }
         } catch (final IOException ignore) { }
     }
-
-
 }
