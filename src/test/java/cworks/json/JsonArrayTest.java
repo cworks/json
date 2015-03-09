@@ -8,13 +8,6 @@ import java.io.File;
 public class JsonArrayTest {
     
     @Test
-    public void testToArrayBasic() {
-        
-        JsonArray array = Json.asArray(JsonTestData.USERS_ARRAY);
-        Assert.assertEquals(10, array.size());
-    }
-    
-    @Test
     public void testToTypedArray() {
         
         TestUser[] array = Json.asArray(JsonTestData.USERS_ARRAY, TestUser.class);

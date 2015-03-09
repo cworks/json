@@ -106,10 +106,24 @@ public class JacksonReader implements JsonReader {
             throw new JsonException("Json input isn't valid json array.");
         }
 
-        JsonObject[] list = asArray(input, JsonObject.class);
+        //Object[] list = asArray(input, Object.class);
+        //JsonObject[] list = asArray(input, JsonObject.class);
+        //String wrapped = "{\"cworksarr\":" + input + "}";
         
-        JsonArray array = new JsonArray();
-        return array.addElements(list);
+        
+        JsonElement element = asElement(input);
+        if(element.isArray()) {
+            return element.asArray();
+        }
+        
+        //if (element.isArray()) {
+        //    return (JsonArray) element;
+        //}
+
+        return null;
+        
+        //JsonArray array = new JsonArray(list);
+        //return array;
     }
 
     /**

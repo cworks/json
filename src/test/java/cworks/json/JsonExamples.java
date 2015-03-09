@@ -126,7 +126,7 @@ public class JsonExamples {
         ja = builder.build();
         System.out.println(Json.asJson(ja));
 
-        JsonArray jsonArray = Json.asArray("[true,\"Nacho\",100,{\"address\":\"1 easy street\"}]");
+        JsonArray jsonArray = Json.asArray("[true,\"Nacho\",100,{\"my_address\":\"1 easy street\"}]");
         Boolean bool = jsonArray.get(0);
         String str   = jsonArray.get(1);
         Integer num  = jsonArray.get(2);
@@ -135,7 +135,7 @@ public class JsonExamples {
         Assert.assertTrue(bool);
         Assert.assertEquals("Nacho", str);
         Assert.assertEquals(100L, num.longValue());
-        Assert.assertEquals("1 easy street", object.getString("address"));
+        Assert.assertEquals("1 easy street", object.getString("my_address"));
     }
 
     @Test
