@@ -57,12 +57,12 @@ public class JacksonReader implements JsonReader {
         JsonElement element = null;
 
         try {
-            if (input.startsWith("[")) {
-                List list = asObject(input, List.class);
-                element = new JsonArray(list);
-            } else if (input.startsWith("{")) {
-                Map map = asObject(input, Map.class);
-                element = new JsonObject(map);
+            if (input.trim().startsWith("[")) {
+                JsonArray list = asObject(input, JsonArray.class);
+                element = list;
+            } else if (input.trim().startsWith("{")) {
+                JsonObject map = asObject(input, JsonObject.class);
+                element = map;
             }
         } catch(Exception ex) {
             throw new JsonException(ex);
@@ -88,9 +88,12 @@ public class JacksonReader implements JsonReader {
             throw new JsonException("Json input isn't valid json object.");
         }
         
-        Map map = asObject(input, Map.class);
+        JsonElement element = asElement(input);
+        if(element.isObject()) {
+            return element.asObject();
+        }
         
-        return new JsonObject(map);
+        return null;
     }
 
     /**
@@ -106,24 +109,12 @@ public class JacksonReader implements JsonReader {
             throw new JsonException("Json input isn't valid json array.");
         }
 
-        //Object[] list = asArray(input, Object.class);
-        //JsonObject[] list = asArray(input, JsonObject.class);
-        //String wrapped = "{\"cworksarr\":" + input + "}";
-        
-        
         JsonElement element = asElement(input);
         if(element.isArray()) {
             return element.asArray();
         }
-        
-        //if (element.isArray()) {
-        //    return (JsonArray) element;
-        //}
 
         return null;
-        
-        //JsonArray array = new JsonArray(list);
-        //return array;
     }
 
     /**

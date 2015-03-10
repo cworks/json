@@ -135,7 +135,7 @@ public class JsonExamples {
         Assert.assertTrue(bool);
         Assert.assertEquals("Nacho", str);
         Assert.assertEquals(100L, num.longValue());
-        Assert.assertEquals("1 easy street", object.getString("my_address"));
+        Assert.assertEquals("1 easy street", object.getString("myAddress"));
     }
 
     @Test
@@ -157,22 +157,23 @@ public class JsonExamples {
     @Test
     public void simpleArray() {
         JsonArray arr = Json.array().add(
-            Json.object().string("street", "18318 Namekagon Street")
-                .string("city", "Flint")
-                .string("state", "Michigan")
-                .string("zipcode", "48550").build()).add(
-            Json.object().string("street", "8038 Cherokee Point")
-                .string("city", "Baltimore")
-                .string("state", "Maryland")
-                .string("zipcode", "21281").build()).add(
-            Json.object().string("street", "1070 Randy Terrace")
-                .string("city", "Lynchburg")
-                .string("state", "Virginia")
-                .string("zipcode", "24503").build()).build();
+                Json.object().string("street", "18318 Namekagon Street")
+                        .string("city", "Flint")
+                        .string("state", "Michigan")
+                        .string("zipcode", "48550").build()).add(
+                Json.object().string("street", "8038 Cherokee Point")
+                        .string("city", "Baltimore")
+                        .string("state", "Maryland")
+                        .string("zipcode", "21281").build()).add(
+                Json.object().string("street", "1070 Randy Terrace")
+                        .string("city", "Lynchburg")
+                        .string("state", "Virginia")
+                        .string("zipcode", "24503").build()).build();
 
         System.out.println(Json.asPrettyJson(arr));
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void buildParser() {
 

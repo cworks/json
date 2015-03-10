@@ -3,17 +3,21 @@ package cworks.json.impl.jackson;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.deser.std.StdDelegatingDeserializer;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.databind.util.StdConverter;
-import cworks.json.*;
+import cworks.json.JsonArray;
+import cworks.json.JsonElement;
+import cworks.json.JsonException;
+import cworks.json.JsonObject;
 import cworks.json.io.JsonIO;
 import cworks.json.spi.JsonReader;
 import cworks.json.spi.JsonWriter;
 import cworks.json.streaming.StreamHandler;
 import cworks.json.streaming.Token;
 
-import java.io.*;
+import java.io.File;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Reader;
+import java.io.Writer;
 import java.lang.reflect.Type;
 import java.nio.file.Path;
 import java.util.List;
@@ -34,29 +38,7 @@ public class JacksonIO extends JsonIO {
         mapper.configure(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES, false);
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         mapper.configure(com.fasterxml.jackson.core.JsonParser.Feature.ALLOW_COMMENTS, true);
-
-        SimpleModule module = new SimpleModule("JacksonIO");
-        module.addDeserializer(JsonObject.class,
-                new StdDelegatingDeserializer<>(
-                        new StdConverter<Map, JsonObject>() {
-                            @Override
-                            public JsonObject convert(Map map) {
-                                return new JsonObject(map);
-                            }
-                        }
-                ));
-        module.addDeserializer(JsonArray.class,
-                new StdDelegatingDeserializer<>(
-                        new StdConverter<List, JsonArray>() {
-                            @Override
-                            public JsonArray convert(List list) {
-                                return new JsonArray(list);
-                            }
-                        }
-
-                ));
-
-        mapper.registerModule(module);
+        mapper.registerModule(new JacksonIOModule());
     }
     
     @Override

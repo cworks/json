@@ -410,5 +410,23 @@ public class JacksonReaderTest extends JsonTestCore {
         Assert.assertEquals("aalleng1@webeden.co.uk", emails.get(0));
         Assert.assertEquals("wwood7e@princeton.edu", emails.get(999));
     }
+    
+    @Test
+    public void testArrayOfPrimitives() throws IOException {
+        
+        JsonReader jackson = new JacksonIO().getReader();
+        JsonArray array = jackson.asArray("[true,\"Nacho\",100,{\"my_address\":\"1 easy street\"}]");
+
+        Boolean bool = array.get(0);
+        String str   = array.get(1);
+        Integer num  = array.get(2);
+        JsonObject object = array.get(3);
+
+        Assert.assertTrue(bool);
+        Assert.assertEquals("Nacho", str);
+        Assert.assertEquals(100L, num.longValue());
+        Assert.assertEquals("1 easy street", object.getString("myAddress"));
+
+    }
 
 }
