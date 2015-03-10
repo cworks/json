@@ -10,5 +10,7 @@ public class JacksonIOModule extends SimpleModule {
         super("JacksonIOModule");
         addDeserializer(JsonObject.class, new JacksonJsonObjectDeserializer());
         addDeserializer(JsonArray.class, new JacksonJsonArrayDeserializer());
+        addSerializer(JsonObject.class, new JacksonJsonObjectSerializer());
+        addSerializer(JsonArray.class, new JacksonJsonArraySerializer());
     }
 }

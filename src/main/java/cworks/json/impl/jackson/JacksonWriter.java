@@ -164,11 +164,9 @@ public class JacksonWriter implements JsonWriter {
     public String asJson(JsonElement element) throws JsonException {
 
         if(element.isObject()) {
-            Map data = ((JsonObject)element).toMap();
-            return asJson(data);
+            return asJson(element.asObject());
         } else if(element.isArray()) {
-            Object[] data = ((JsonArray)element).toArray();
-            return asJson(data);
+            return asJson(element.asArray());
         }
 
         return "";
@@ -196,7 +194,21 @@ public class JacksonWriter implements JsonWriter {
 
     @Override
     public String asJson(JsonObject object) throws JsonException {
-        return null;
+
+        String json;
+        try {
+            if(context.isPretty()) {
+                mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
+                json = mapper.writeValueAsString(object);
+            } else {
+                mapper.configure(SerializationFeature.INDENT_OUTPUT, false);
+                json = mapper.writeValueAsString(object);
+            }
+        } catch (Exception ex) {
+            throw new JsonException(ex);
+        }
+
+        return json;
     }
 
     @Override
@@ -221,7 +233,21 @@ public class JacksonWriter implements JsonWriter {
 
     @Override
     public String asJson(JsonArray array) throws JsonException {
-        return null;
+
+        String json;
+        try {
+            if(context.isPretty()) {
+                mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
+                json = mapper.writeValueAsString(array);
+            } else {
+                mapper.configure(SerializationFeature.INDENT_OUTPUT, false);
+                json = mapper.writeValueAsString(array);
+            }
+        } catch (Exception ex) {
+            throw new JsonException(ex);
+        }
+
+        return json;
     }
 
     @Override
