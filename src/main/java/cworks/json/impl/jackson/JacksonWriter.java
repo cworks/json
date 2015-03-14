@@ -10,11 +10,14 @@ import cworks.json.JsonObject;
 import cworks.json.spi.JsonWriter;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
+
+import static cworks.json.IO.closeQuietly;
 
 public class JacksonWriter implements JsonWriter {
     
@@ -172,6 +175,17 @@ public class JacksonWriter implements JsonWriter {
 
     @Override
     public void asJson(JsonElement element, Writer output) throws JsonException {
+
+        try {
+            if(element.isObject()) {
+                asJson(element.asObject(), output);
+            } else if(element.isArray()) {
+                asJson(element.asArray(), output);
+            }
+        } finally {
+            closeQuietly(output);
+        }
+        
     }
 
     @Override
@@ -206,6 +220,20 @@ public class JacksonWriter implements JsonWriter {
 
     @Override
     public void asJson(JsonObject object, Writer output) throws JsonException {
+
+        try {
+            if(context.isPretty()) {
+                mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
+                mapper.writeValue(output, object);
+            } else {
+                mapper.configure(SerializationFeature.INDENT_OUTPUT, false);
+                mapper.writeValue(output, object);
+            }
+        } catch (IOException ex) {
+            throw new JsonException(ex);
+        } finally {
+            closeQuietly(output);
+        }
     }
 
     @Override
@@ -241,6 +269,8 @@ public class JacksonWriter implements JsonWriter {
 
     @Override
     public void asJson(JsonArray array, Writer output) throws JsonException {
+        
+        
     }
 
     @Override

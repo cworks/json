@@ -18,7 +18,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
-import java.lang.reflect.Type;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
@@ -51,7 +50,7 @@ public class JacksonIO extends JsonIO {
 
     @Override
     public JsonWriter getWriter() {
-        final boolean isPretty = this.pretty;
+        final boolean isPretty = true;
         if(this.writer == null) {
             this.writer = new JacksonWriter(mapper, () -> isPretty);
         }
@@ -420,8 +419,8 @@ public class JacksonIO extends JsonIO {
     }
 
     @Override
-    public String asJson(Object object, Type objectType) throws JsonException {
-        return getWriter().asJson(object, objectType);
+    public <T> String asJson(Object object, Class<T> objectType) throws JsonException {
+        return null;
     }
 
     @Override
@@ -430,8 +429,8 @@ public class JacksonIO extends JsonIO {
     }
 
     @Override
-    public String asJson(Object[] objects, Type arrayType) throws JsonException {
-        return getWriter().asJson(objects, arrayType);
+    public <T> String asJson(Object[] objects, Class<T> arrayType) throws JsonException {
+        return null;
     }
 
     @Override
@@ -440,8 +439,8 @@ public class JacksonIO extends JsonIO {
     }
 
     @Override
-    public String asJson(List objects, Type listType) throws JsonException {
-        return getWriter().asJson(objects, listType);
+    public <T> String asJson(List objects, Class<T> listType) throws JsonException {
+        return null;
     }
 
     @Override
@@ -450,8 +449,8 @@ public class JacksonIO extends JsonIO {
     }
 
     @Override
-    public String asJson(Map object, Type mapType) throws JsonException {
-        return getWriter().asJson(object, mapType);
+    public <T> String asJson(Map object, Class<T> mapType) throws JsonException {
+        return null;
     }
 
     @Override
@@ -460,8 +459,8 @@ public class JacksonIO extends JsonIO {
     }
 
     @Override
-    public void asJson(Object object, Type objectType, Writer output) throws JsonException {
-        getWriter().asJson(object, objectType, output);
+    public <T> void asJson(Object object, Class<T> objectType, Writer output) throws JsonException {
+
     }
 
     @Override
@@ -470,8 +469,8 @@ public class JacksonIO extends JsonIO {
     }
 
     @Override
-    public void asJson(Object[] objects, Type arrayType, Writer output) throws JsonException {
-        getWriter().asJson(objects, arrayType, output);
+    public <T> void asJson(Object[] objects, Class<T> arrayType, Writer output) throws JsonException {
+
     }
 
     @Override
@@ -480,8 +479,8 @@ public class JacksonIO extends JsonIO {
     }
 
     @Override
-    public void asJson(Object object, Type objectType, File output) throws JsonException {
-        getWriter().asJson(object, objectType, output);
+    public <T> void asJson(Object object, Class<T> objectType, File output) throws JsonException {
+
     }
 
     @Override
@@ -490,8 +489,8 @@ public class JacksonIO extends JsonIO {
     }
 
     @Override
-    public void asJson(Object[] objects, Type arrayType, File output) throws JsonException {
-        getWriter().asJson(objects, arrayType, output);
+    public <T> void asJson(Object[] objects, Class<T> arrayType, File output) throws JsonException {
+
     }
 
     @Override
@@ -500,8 +499,8 @@ public class JacksonIO extends JsonIO {
     }
 
     @Override
-    public void asJson(Object object, Type objectType, OutputStream output) throws JsonException {
-        getWriter().asJson(object, objectType, output);
+    public <T> void asJson(Object object, Class<T> objectType, OutputStream output) throws JsonException {
+
     }
 
     @Override
@@ -510,8 +509,8 @@ public class JacksonIO extends JsonIO {
     }
 
     @Override
-    public void asJson(Object[] objects, Type objectType, OutputStream output) throws JsonException {
-        getWriter().asJson(objects, objectType, output);
+    public <T> void asJson(Object[] objects, Class<T> objectType, OutputStream output) throws JsonException {
+
     }
 
     @Override
@@ -520,8 +519,8 @@ public class JacksonIO extends JsonIO {
     }
 
     @Override
-    public void asJson(Object object, Type objectType, Path output) throws JsonException {
-        getWriter().asJson(object, objectType, output);
+    public <T> void asJson(Object object, Class<T> objectType, Path output) throws JsonException {
+
     }
 
     @Override
@@ -530,8 +529,8 @@ public class JacksonIO extends JsonIO {
     }
 
     @Override
-    public void asJson(Object[] objects, Type objectType, Path output) throws JsonException {
-        getWriter().asJson(objects, objectType, output);
+    public <T> void asJson(Object[] objects, Class<T> objectType, Path output) throws JsonException {
+
     }
 
     @Override
@@ -540,23 +539,23 @@ public class JacksonIO extends JsonIO {
     }
 
     @Override
-    public String asJson(JsonElement element, Writer output) throws JsonException {
-        return getWriter().asJson(element, output);
+    public void asJson(JsonElement element, Writer output) throws JsonException {
+        getWriter().asJson(element, output);
     }
 
     @Override
-    public String asJson(JsonElement element, File output) throws JsonException {
-        return getWriter().asJson(element, output);
+    public void asJson(JsonElement element, File output) throws JsonException {
+        getWriter().asJson(element, output);
     }
 
     @Override
-    public String asJson(JsonElement element, OutputStream output) throws JsonException {
-        return getWriter().asJson(element, output);
+    public void asJson(JsonElement element, OutputStream output) throws JsonException {
+        getWriter().asJson(element, output);
     }
 
     @Override
-    public String asJson(JsonElement element, Path output) throws JsonException {
-        return getWriter().asJson(element, output);
+    public void asJson(JsonElement element, Path output) throws JsonException {
+        getWriter().asJson(element, output);
     }
 
     @Override
@@ -565,23 +564,23 @@ public class JacksonIO extends JsonIO {
     }
 
     @Override
-    public String asJson(JsonObject object, Writer output) throws JsonException {
-        return getWriter().asJson(object, output);
+    public void asJson(JsonObject object, Writer output) throws JsonException {
+        getWriter().asJson(object, output);
     }
 
     @Override
-    public String asJson(JsonObject object, File output) throws JsonException {
-        return getWriter().asJson(object, output);
+    public void asJson(JsonObject object, File output) throws JsonException {
+        getWriter().asJson(object, output);
     }
 
     @Override
-    public String asJson(JsonObject object, OutputStream output) throws JsonException {
-        return getWriter().asJson(object, output);
+    public void asJson(JsonObject object, OutputStream output) throws JsonException {
+        getWriter().asJson(object, output);
     }
 
     @Override
-    public String asJson(JsonObject object, Path output) throws JsonException {
-        return getWriter().asJson(object, output);
+    public void asJson(JsonObject object, Path output) throws JsonException {
+        getWriter().asJson(object, output);
     }
 
     @Override
@@ -590,22 +589,22 @@ public class JacksonIO extends JsonIO {
     }
 
     @Override
-    public String asJson(JsonArray array, Writer output) throws JsonException {
-        return getWriter().asJson(array, output);
+    public void asJson(JsonArray array, Writer output) throws JsonException {
+        getWriter().asJson(array, output);
     }
 
     @Override
-    public String asJson(JsonArray array, File output) throws JsonException {
-        return getWriter().asJson(array, output);
+    public void asJson(JsonArray array, File output) throws JsonException {
+        getWriter().asJson(array, output);
     }
 
     @Override
-    public String asJson(JsonArray array, OutputStream output) throws JsonException {
-        return getWriter().asJson(array, output);
+    public void asJson(JsonArray array, OutputStream output) throws JsonException {
+        getWriter().asJson(array, output);
     }
 
     @Override
-    public String asJson(JsonArray array, Path output) throws JsonException {
-        return getWriter().asJson(array, output);
+    public void asJson(JsonArray array, Path output) throws JsonException {
+        getWriter().asJson(array, output);
     }
 }

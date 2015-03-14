@@ -9,19 +9,19 @@ import cworks.json.spi.JsonWriter;
 import java.io.File;
 import java.io.OutputStream;
 import java.io.Writer;
-import java.lang.reflect.Type;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 
 public class GsonWriter implements JsonWriter {
+
     @Override
     public String asJson(Object object) throws JsonException {
         return null;
     }
 
     @Override
-    public String asJson(Object object, Type objectType) throws JsonException {
+    public <T> String asJson(Object object, Class<T> objectType) throws JsonException {
         return null;
     }
 
@@ -31,7 +31,7 @@ public class GsonWriter implements JsonWriter {
     }
 
     @Override
-    public String asJson(Object[] objects, Type arrayType) throws JsonException {
+    public <T> String asJson(Object[] objects, Class<T> arrayType) throws JsonException {
         return null;
     }
 
@@ -41,7 +41,7 @@ public class GsonWriter implements JsonWriter {
     }
 
     @Override
-    public String asJson(List objects, Type listType) throws JsonException {
+    public <T> String asJson(List objects, Class<T> listType) throws JsonException {
         return null;
     }
 
@@ -51,7 +51,7 @@ public class GsonWriter implements JsonWriter {
     }
 
     @Override
-    public String asJson(Map object, Type mapType) throws JsonException {
+    public <T> String asJson(Map object, Class<T> mapType) throws JsonException {
         return null;
     }
 
@@ -61,7 +61,7 @@ public class GsonWriter implements JsonWriter {
     }
 
     @Override
-    public void asJson(Object object, Type objectType, Writer output) throws JsonException {
+    public <T> void asJson(Object object, Class<T> objectType, Writer output) throws JsonException {
 
     }
 
@@ -71,7 +71,7 @@ public class GsonWriter implements JsonWriter {
     }
 
     @Override
-    public void asJson(Object[] objects, Type arrayType, Writer output) throws JsonException {
+    public <T> void asJson(Object[] objects, Class<T> arrayType, Writer output) throws JsonException {
 
     }
 
@@ -81,7 +81,7 @@ public class GsonWriter implements JsonWriter {
     }
 
     @Override
-    public void asJson(Object object, Type objectType, File output) throws JsonException {
+    public <T> void asJson(Object object, Class<T> objectType, File output) throws JsonException {
 
     }
 
@@ -91,7 +91,7 @@ public class GsonWriter implements JsonWriter {
     }
 
     @Override
-    public void asJson(Object[] objects, Type arrayType, File output) throws JsonException {
+    public <T> void asJson(Object[] objects, Class<T> arrayType, File output) throws JsonException {
 
     }
 
@@ -101,7 +101,7 @@ public class GsonWriter implements JsonWriter {
     }
 
     @Override
-    public void asJson(Object object, Type objectType, OutputStream output) throws JsonException {
+    public <T> void asJson(Object object, Class<T> objectType, OutputStream output) throws JsonException {
 
     }
 
@@ -111,7 +111,7 @@ public class GsonWriter implements JsonWriter {
     }
 
     @Override
-    public void asJson(Object[] objects, Type objectType, OutputStream output) throws JsonException {
+    public <T> void asJson(Object[] objects, Class<T> objectType, OutputStream output) throws JsonException {
 
     }
 
@@ -121,7 +121,7 @@ public class GsonWriter implements JsonWriter {
     }
 
     @Override
-    public void asJson(Object object, Type objectType, Path output) throws JsonException {
+    public <T> void asJson(Object object, Class<T> objectType, Path output) throws JsonException {
 
     }
 
@@ -131,7 +131,7 @@ public class GsonWriter implements JsonWriter {
     }
 
     @Override
-    public void asJson(Object[] objects, Type objectType, Path output) throws JsonException {
+    public <T> void asJson(Object[] objects, Class<T> objectType, Path output) throws JsonException {
 
     }
 
@@ -141,23 +141,23 @@ public class GsonWriter implements JsonWriter {
     }
 
     @Override
-    public String asJson(JsonElement element, Writer output) throws JsonException {
-        return null;
+    public void asJson(JsonElement element, Writer output) throws JsonException {
+
     }
 
     @Override
-    public String asJson(JsonElement element, File output) throws JsonException {
-        return null;
+    public void asJson(JsonElement element, File output) throws JsonException {
+
     }
 
     @Override
-    public String asJson(JsonElement element, OutputStream output) throws JsonException {
-        return null;
+    public void asJson(JsonElement element, OutputStream output) throws JsonException {
+
     }
 
     @Override
-    public String asJson(JsonElement element, Path output) throws JsonException {
-        return null;
+    public void asJson(JsonElement element, Path output) throws JsonException {
+
     }
 
     @Override
@@ -166,23 +166,23 @@ public class GsonWriter implements JsonWriter {
     }
 
     @Override
-    public String asJson(JsonObject object, Writer output) throws JsonException {
-        return null;
+    public void asJson(JsonObject object, Writer output) throws JsonException {
+
     }
 
     @Override
-    public String asJson(JsonObject object, File output) throws JsonException {
-        return null;
+    public void asJson(JsonObject object, File output) throws JsonException {
+
     }
 
     @Override
-    public String asJson(JsonObject object, OutputStream output) throws JsonException {
-        return null;
+    public void asJson(JsonObject object, OutputStream output) throws JsonException {
+
     }
 
     @Override
-    public String asJson(JsonObject object, Path output) throws JsonException {
-        return null;
+    public void asJson(JsonObject object, Path output) throws JsonException {
+
     }
 
     @Override
@@ -191,22 +191,22 @@ public class GsonWriter implements JsonWriter {
     }
 
     @Override
-    public String asJson(JsonArray array, Writer output) throws JsonException {
-        return null;
+    public void asJson(JsonArray array, Writer output) throws JsonException {
+
     }
 
     @Override
-    public String asJson(JsonArray array, File output) throws JsonException {
-        return null;
+    public void asJson(JsonArray array, File output) throws JsonException {
+
     }
 
     @Override
-    public String asJson(JsonArray array, OutputStream output) throws JsonException {
-        return null;
+    public void asJson(JsonArray array, OutputStream output) throws JsonException {
+
     }
 
     @Override
-    public String asJson(JsonArray array, Path output) throws JsonException {
-        return null;
+    public void asJson(JsonArray array, Path output) throws JsonException {
+
     }
 }

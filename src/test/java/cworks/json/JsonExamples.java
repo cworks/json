@@ -240,5 +240,31 @@ public class JsonExamples {
         }
         
     }
+    
+    @Test
+    public void testArgs() {
+        
+        String home = getArgs(new String[] {"--treefs.home","/home/corbett"});
+        Assert.assertEquals("/home/corbett", home);
+
+        home = getArgs(new String[] {"--treefs.home"});
+        Assert.assertNull(home);
+
+        home = getArgs(new String[] {"--hello", "spongeBob", "--treefs.home","/home/corbett", "applePie"});
+        Assert.assertEquals("/home/corbett", home);
+        
+    }
+    
+    public String getArgs(String[] args) {
+        String home = null;
+        for(int i = 0; i < args.length; i++) {
+            if("--treefs.home".equalsIgnoreCase(args[i])) {
+                if(args.length > (i+1)) {
+                    home = args[i+1];
+                }
+            }
+        }
+        return home;
+    }
 }
 
