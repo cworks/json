@@ -556,7 +556,4 @@ public final class Json {
             throw new IllegalArgumentException("Json argument is not an object.");
         }
     }
-
-
-
 }

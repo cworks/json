@@ -64,4 +64,20 @@ public class TestUser {
     public String toString() {
         return this.id + " " + this.firstName + " " + this.lastName;
     }
+    
+    public boolean equals(Object other) {
+        if(other == this) {
+            return true;
+        }
+        if(!(other instanceof TestUser)) {
+            return false;
+        }
+        TestUser otherUser = (TestUser)other;
+        return (otherUser.id.intValue() == this.id.intValue() &&
+           otherUser.firstName.equals(this.firstName) &&
+           otherUser.lastName.equals(this.lastName) &&
+           otherUser.email.equals(this.email) &&
+           otherUser.ipAddress.equals(this.ipAddress) &&
+           otherUser.country.equals(this.country));
+    }
 }

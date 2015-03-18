@@ -26,6 +26,7 @@ import cworks.json.JsonException;
 import cworks.json.JsonHandler;
 import cworks.json.JsonNull;
 import cworks.json.JsonObject;
+import cworks.json.io.JsonIO;
 import cworks.json.parser.JsonParser;
 import cworks.json.streaming.ArrayNode;
 import cworks.json.streaming.Node;
@@ -153,10 +154,10 @@ public class JacksonParser extends JsonParser {
             while(jp.nextToken() == JsonToken.START_OBJECT) {
                 final JsonObject thing = mapper.readValue(jp, JsonObject.class);
                 if(thing == null) {
-                    handler.complete(() -> false);
+                    handler.complete(new JsonIO.DefaultJsonContext());
                     break;
                 }
-                handler.handle(thing, () -> false);
+                handler.handle(thing, new JsonIO.DefaultJsonContext());
             }
         } catch (IOException ex) {
             throw new JsonException(ex);

@@ -3,14 +3,19 @@ package cworks.json;
 import org.apache.commons.codec.Charsets;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -28,39 +33,50 @@ public class IO {
 
     public static String asString(final Path path) throws IOException {
         Reader reader = Files.newBufferedReader(path);
-        return asString(reader);
+        String value = asString(reader);
+        closeQuietly(reader);
+        return value;
     }
     
     public static String asString(final File file) throws IOException {
         Reader reader = new FileReader(file);
-        return asString(reader);
+        String value = asString(reader);
+        closeQuietly(reader);
+        return value;
     }
     
     public static StringBuffer asStringBuffer(final File file) throws IOException {
         Reader reader = new FileReader(file);
-        return asStringBuffer(reader);
+        StringBuffer value = asStringBuffer(reader);
+        closeQuietly(reader);
+        return value;
     }
     
     public static StringBuilder asStringBuilder(final File file) throws IOException {
         Reader reader = new FileReader(file);
-        return asStringBuilder(reader);
+        StringBuilder value = asStringBuilder(reader);
+        closeQuietly(reader);
+        return value;
     }
     
     public static String asString(final Reader reader) throws IOException {
         final StringWriter writer = new StringWriter();
         cp(reader, writer);
+        closeQuietly(reader);
         return writer.toString();
     }
     
     public static StringBuffer asStringBuffer(final Reader reader) throws IOException {
         final StringWriter writer = new StringWriter();
         cp(reader, writer);
+        closeQuietly(reader);
         return writer.getBuffer();
     }
     
     public static StringBuilder asStringBuilder(final Reader reader) throws IOException {
         final StringWriter writer = new StringWriter();
         cp(reader, writer);
+        closeQuietly(reader);
         return new StringBuilder(writer.toString());
     }
     
@@ -71,21 +87,27 @@ public class IO {
         }
         char[] buffer = new char[bufferSize];
         cp(reader, writer, buffer);
+        closeQuietly(reader);
         return writer.toString();
     }
 
     public static String asString(final InputStream input) throws IOException {
-        return asString(input, Charsets.UTF_8);
+        String value = asString(input, Charsets.UTF_8);
+        closeQuietly(input);
+        return value;
     }
     
     public static String asString(final InputStream input, String encoding) throws IOException {
-        return asString(input, Charsets.toCharset(encoding));
+        String value = asString(input, Charsets.toCharset(encoding));
+        closeQuietly(input);
+        return value;
     }
     
     public static String asString(final InputStream input, final Charset encoding) throws IOException {
         final StringWriter writer = new StringWriter();
         InputStreamReader reader = new InputStreamReader(input, Charsets.toCharset(encoding));
         cp(reader, writer);
+        closeQuietly(reader);
         return writer.toString();
     }
     
@@ -94,7 +116,9 @@ public class IO {
         checkArg(reader);
         
         char[] buffer = new char[DEFAULT_BUFFER_SIZE];
-        return cp(reader, writer, buffer);
+        long value = cp(reader, writer, buffer);
+        closeQuietly(reader);
+        return value;
     }
     
     public static long cp(final Reader reader, final Writer writer, int bufferSize) throws IOException {
@@ -104,7 +128,9 @@ public class IO {
             bufferSize = DEFAULT_BUFFER_SIZE;
         }
         char[] buffer = new char[bufferSize];
-        return cp(reader, writer, buffer);
+        long value = cp(reader, writer, buffer);
+        closeQuietly(reader);
+        return value;
     }
     
     public static long cp(final Reader reader, final Writer writer, final char[] buffer) throws IOException {
@@ -117,6 +143,8 @@ public class IO {
             writer.write(buffer, 0, n);
             checkSum += n;
         }
+        closeQuietly(reader);
+        closeQuietly(writer);
         return checkSum;
     }
 
@@ -164,5 +192,39 @@ public class IO {
         try {
             if(closeable != null) { closeable.close(); }
         } catch (final IOException ignore) { }
+    }
+
+    public static Writer asWriter(final File file) throws IOException {
+        Writer writer = new BufferedWriter(new FileWriter(file));
+        return writer;
+    }
+    
+    public static Writer asWriter(String path) throws IOException {
+        return asWriter(new File(path));
+    }
+
+    public static Reader asReader(final File file) throws IOException {
+        Reader reader = new BufferedReader(new FileReader(file));
+        return reader;
+    }
+    
+    public static BufferedReader asBufferedReader(final File file) throws IOException {
+        return new BufferedReader(new FileReader(file));
+    }
+    
+    public static long countLines(final File file) throws IOException {
+        BufferedReader reader = asBufferedReader(file);
+        long count = reader.lines().count();
+        closeQuietly(reader);
+        return count;
+    }
+
+    public static OutputStream asOutputStream(final File file) throws IOException {
+        OutputStream stream = new FileOutputStream(file);
+        return stream;
+    }
+    
+    public static OutputStream asOutputStream(String path) throws IOException {
+        return asOutputStream(new File(path));
     }
 }

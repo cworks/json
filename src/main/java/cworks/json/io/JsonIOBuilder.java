@@ -6,10 +6,22 @@ import cworks.json.impl.jackson.JacksonIO;
 
 public class JsonIOBuilder {
 
-    private JsonIO io = null;
+    /**
+     * Default Json library we're going to put to use 
+     */
+    private JsonLib impl = JsonLib.JACKSON;
 
-    private JsonIOBuilder(JsonIO io) {
-        this.io = io;
+    /**
+     * Default Json context 
+     */
+    private JsonIO.DefaultJsonContext context = new JsonIO.DefaultJsonContext();
+
+    /**
+     * Use static creation method 
+     * @param impl
+     */
+    private JsonIOBuilder(JsonLib impl) {
+        this.impl = impl;
     }
 
     /**
@@ -27,57 +39,51 @@ public class JsonIOBuilder {
      * @return
      */
     public static JsonIOBuilder io(final JsonLib jsonLib) {
-
-        JsonIO jsonIO;
-        switch(jsonLib) {
-            case JACKSON:
-                jsonIO = new JacksonIO();
-                break;
-            case GSON:
-                jsonIO = new GsonIO();
-                break;
-            default:
-                jsonIO = new JacksonIO();
-        }
-
-        return new JsonIOBuilder(jsonIO);
+        
+        return new JsonIOBuilder(jsonLib);
     }
 
     public JsonIOBuilder pretty() {
-        io.pretty(true);
+        this.context.pretty(true);
         return this;
     }
     
     public JsonIOBuilder pretty(boolean val) {
-        io.pretty(val);
+        this.context.pretty(val);
         return this;
     }
 
     public JsonIOBuilder dateFormat(String format) {
-        io.dateFormat(format);
+        this.context.dateFormat(format);
         return this;
     }
 
     public JsonIOBuilder allowComments() {
-        io.allowComments(true);
+        this.context.allowComments(true);
         return this;
     }
     
     public JsonIOBuilder allowComments(boolean val) {
-        io.allowComments(val);
+        this.context.allowComments(val);
         return this;
     }
 
     public JsonIO build() {
 
-        if(io == null) {
-            throw new NullPointerException(
-                "JsonIOBuilder.io is null, cannot build a JsonIO instance."
-            );
+
+        JsonIO jsonIO;
+        switch(this.impl) {
+            case JACKSON:
+                jsonIO = new JacksonIO(this.context);
+                break;
+            case GSON:
+                jsonIO = new GsonIO(this.context);
+                break;
+            default:
+                jsonIO = new JacksonIO(this.context);
         }
 
-        // TODO consider returning an internal wrapper instead of actual concrete implementations
-        return io;
+        return jsonIO;
     }
 
 }

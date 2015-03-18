@@ -3,7 +3,9 @@ package cworks.json.impl.jackson;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import cworks.json.JsonArray;
+import cworks.json.JsonContext;
 import cworks.json.JsonElement;
 import cworks.json.JsonException;
 import cworks.json.JsonObject;
@@ -32,12 +34,28 @@ public class JacksonIO extends JsonIO {
     private JacksonWriter writer;
 
     public JacksonIO() {
+        super();
         mapper = new ObjectMapper();
+        init();
+    }
+    
+    public JacksonIO(JsonContext context) {
+        super(context);
+        mapper = new ObjectMapper();
+        init();
+    }
+
+    private void init() {
+        mapper.registerModule(new JacksonIOModule());
+        if(context.isPretty()) {
+            mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
+        }
+        if(context.allowComments()) {
+            mapper.configure(com.fasterxml.jackson.core.JsonParser.Feature.ALLOW_COMMENTS, true);
+        }
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         mapper.configure(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES, false);
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        mapper.configure(com.fasterxml.jackson.core.JsonParser.Feature.ALLOW_COMMENTS, true);
-        mapper.registerModule(new JacksonIOModule());
     }
     
     @Override
@@ -50,9 +68,8 @@ public class JacksonIO extends JsonIO {
 
     @Override
     public JsonWriter getWriter() {
-        final boolean isPretty = true;
         if(this.writer == null) {
-            this.writer = new JacksonWriter(mapper, () -> isPretty);
+            this.writer = new JacksonWriter(mapper);
         }
         
         return this.writer;
@@ -420,7 +437,7 @@ public class JacksonIO extends JsonIO {
 
     @Override
     public <T> String asJson(Object object, Class<T> objectType) throws JsonException {
-        return null;
+        return getWriter().asJson(object, objectType);
     }
 
     @Override
@@ -430,7 +447,7 @@ public class JacksonIO extends JsonIO {
 
     @Override
     public <T> String asJson(Object[] objects, Class<T> arrayType) throws JsonException {
-        return null;
+        return getWriter().asJson(objects, arrayType);
     }
 
     @Override
@@ -440,7 +457,7 @@ public class JacksonIO extends JsonIO {
 
     @Override
     public <T> String asJson(List objects, Class<T> listType) throws JsonException {
-        return null;
+        return getWriter().asJson(objects, listType);
     }
 
     @Override
@@ -450,7 +467,7 @@ public class JacksonIO extends JsonIO {
 
     @Override
     public <T> String asJson(Map object, Class<T> mapType) throws JsonException {
-        return null;
+        return getWriter().asJson(object, mapType);
     }
 
     @Override
@@ -460,7 +477,7 @@ public class JacksonIO extends JsonIO {
 
     @Override
     public <T> void asJson(Object object, Class<T> objectType, Writer output) throws JsonException {
-
+        getWriter().asJson(object, objectType, output);
     }
 
     @Override
@@ -470,7 +487,7 @@ public class JacksonIO extends JsonIO {
 
     @Override
     public <T> void asJson(Object[] objects, Class<T> arrayType, Writer output) throws JsonException {
-
+        getWriter().asJson(objects, arrayType, output);
     }
 
     @Override
@@ -480,7 +497,7 @@ public class JacksonIO extends JsonIO {
 
     @Override
     public <T> void asJson(Object object, Class<T> objectType, File output) throws JsonException {
-
+        getWriter().asJson(object, objectType, output);
     }
 
     @Override
@@ -490,7 +507,7 @@ public class JacksonIO extends JsonIO {
 
     @Override
     public <T> void asJson(Object[] objects, Class<T> arrayType, File output) throws JsonException {
-
+        getWriter().asJson(objects, arrayType, output);
     }
 
     @Override
@@ -500,7 +517,7 @@ public class JacksonIO extends JsonIO {
 
     @Override
     public <T> void asJson(Object object, Class<T> objectType, OutputStream output) throws JsonException {
-
+        getWriter().asJson(object, objectType, output);
     }
 
     @Override
@@ -510,7 +527,7 @@ public class JacksonIO extends JsonIO {
 
     @Override
     public <T> void asJson(Object[] objects, Class<T> objectType, OutputStream output) throws JsonException {
-
+        getWriter().asJson(objects, objectType, output);
     }
 
     @Override
@@ -520,7 +537,7 @@ public class JacksonIO extends JsonIO {
 
     @Override
     public <T> void asJson(Object object, Class<T> objectType, Path output) throws JsonException {
-
+        getWriter().asJson(object, objectType, output);
     }
 
     @Override
@@ -530,7 +547,7 @@ public class JacksonIO extends JsonIO {
 
     @Override
     public <T> void asJson(Object[] objects, Class<T> objectType, Path output) throws JsonException {
-
+        getWriter().asJson(objects, objectType, output);
     }
 
     @Override

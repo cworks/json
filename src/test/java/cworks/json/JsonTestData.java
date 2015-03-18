@@ -47,6 +47,7 @@ public final class JsonTestData {
             "    \"last_name\": \"Price\",\n" +
             "    \"birthdate\": \"2014-07-21T13:06:11Z\",\n" +
             "    \"email\": \"aprice0@msn.com\",\n" +
+            "    \"country\": \"China\",\n" +
             "    \"ip_address\": \"224.126.33.225\"\n" +
             "  },\n" +
             "  {\n" +
@@ -55,6 +56,7 @@ public final class JsonTestData {
             "    \"last_name\": \"Robinson\",\n" +
             "    \"birthdate\": \"2015-01-08T07:11:08Z\",\n" +
             "    \"email\": \"trobinson0@networkadvertising.org\",\n" +
+            "    \"country\": \"China\",\n" +
             "    \"ip_address\": \"171.245.174.72\"\n" +
             "  },\n" +
             "  {\n" +
@@ -63,6 +65,7 @@ public final class JsonTestData {
             "    \"last_name\": \"Carter\",\n" +
             "    \"birthdate\": \"2014-09-04T21:00:18Z\",\n" +
             "    \"email\": \"jcarter0@de.vu\",\n" +
+            "    \"country\": \"China\",\n" +
             "    \"ip_address\": \"186.27.166.41\"\n" +
             "  },\n" +
             "  {\n" +
@@ -71,6 +74,7 @@ public final class JsonTestData {
             "    \"last_name\": \"Snyder\",\n" +
             "    \"birthdate\": \"2014-06-24T03:04:07Z\",\n" +
             "    \"email\": \"lsnyder0@bbb.org\",\n" +
+            "    \"country\": \"China\",\n" +
             "    \"ip_address\": \"67.40.160.82\"\n" +
             "  },\n" +
             "  {\n" +
@@ -79,6 +83,7 @@ public final class JsonTestData {
             "    \"last_name\": \"Jordan\",\n" +
             "    \"birthdate\": \"2014-05-07T03:33:44Z\",\n" +
             "    \"email\": \"ajordan0@yelp.com\",\n" +
+            "    \"country\": \"China\",\n" +
             "    \"ip_address\": \"78.14.184.222\"\n" +
             "  },\n" +
             "  {\n" +
@@ -87,6 +92,7 @@ public final class JsonTestData {
             "    \"last_name\": \"Porter\",\n" +
             "    \"birthdate\": \"2014-03-18T04:21:44Z\",\n" +
             "    \"email\": \"mporter0@foxnews.com\",\n" +
+            "    \"country\": \"China\",\n" +
             "    \"ip_address\": \"218.120.66.202\"\n" +
             "  },\n" +
             "  {\n" +
@@ -95,6 +101,7 @@ public final class JsonTestData {
             "    \"last_name\": \"Murphy\",\n" +
             "    \"birthdate\": \"2014-03-02T02:53:26Z\",\n" +
             "    \"email\": \"mmurphy0@tamu.edu\",\n" +
+            "    \"country\": \"China\",\n" +
             "    \"ip_address\": \"134.43.206.199\"\n" +
             "  },\n" +
             "  {\n" +
@@ -103,6 +110,7 @@ public final class JsonTestData {
             "    \"last_name\": \"White\",\n" +
             "    \"birthdate\": \"2014-10-22T09:29:57Z\",\n" +
             "    \"email\": \"swhite0@google.com.au\",\n" +
+            "    \"country\": \"China\",\n" +
             "    \"ip_address\": \"92.209.167.242\"\n" +
             "  },\n" +
             "  {\n" +
@@ -111,6 +119,7 @@ public final class JsonTestData {
             "    \"last_name\": \"Duncan\",\n" +
             "    \"birthdate\": \"2014-12-11T17:32:14Z\",\n" +
             "    \"email\": \"dduncan0@earthlink.net\",\n" +
+            "    \"country\": \"China\",\n" +
             "    \"ip_address\": \"21.24.227.19\"\n" +
             "  },\n" +
             "  {\n" +
@@ -119,6 +128,7 @@ public final class JsonTestData {
             "    \"last_name\": \"Cooper\",\n" +
             "    \"birthdate\": \"2014-06-26T06:37:11Z\",\n" +
             "    \"email\": \"tcooper0@cnbc.com\",\n" +
+            "    \"country\": \"China\",\n" +
             "    \"ip_address\": \"132.15.18.84\"\n" +
             "  }\n" +
             "]";

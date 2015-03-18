@@ -1,6 +1,7 @@
 package cworks.json.impl.gson;
 
 import cworks.json.JsonArray;
+import cworks.json.JsonContext;
 import cworks.json.JsonElement;
 import cworks.json.JsonException;
 import cworks.json.JsonObject;
@@ -21,8 +22,13 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 public class GsonIO extends JsonIO {
-    
+
     public GsonIO() {
+        super();
+    }
+
+    public GsonIO(JsonContext context) {
+        super(context);
     }
     
     @Override

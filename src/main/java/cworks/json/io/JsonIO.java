@@ -1,32 +1,56 @@
 package cworks.json.io;
 
+import cworks.json.JsonContext;
 import cworks.json.spi.JsonReader;
 import cworks.json.spi.JsonWriter;
 
 public abstract class JsonIO implements JsonWriter, JsonReader {
-
+    
     /**
-     * to build json pretty or not
+     * Contextual settings for this JsonIO instance
      */
-    protected Boolean pretty;
-
-    /**
-     * Date format to use by default 
-     */
-    protected String dateFormat;
-
-    /**
-     * to allow comments or not 
-     */
-    protected Boolean allowComments;
+    protected JsonContext context;
+    
+    public static class DefaultJsonContext implements JsonContext {
+        private boolean pretty = false;
+        private boolean allowComments = true;
+        private String dateFormat = "yyyy-MM-dd'T'HH:mm:ssz";
+        @Override
+        public boolean isPretty() {
+            return this.pretty;
+        }
+        public void pretty(boolean value) {
+            this.pretty = value;
+        }
+        @Override
+        public boolean allowComments() {
+            return this.allowComments;
+        }
+        public void allowComments(boolean value) {
+            this.allowComments = value;
+        }
+        @Override
+        public String dateFormat() {
+            return this.dateFormat;
+        }
+        public void dateFormat(String value) {
+            this.dateFormat = value;
+        }
+    }
 
     /**
      * Create a JsonIO instance with default settings 
      */
     protected JsonIO() {
-        pretty(false);
-        dateFormat("yyyy-MM-dd'T'HH:mm:ssz");
-        allowComments(true);
+        this(new DefaultJsonContext());
+    }
+
+    /**
+     * Create a JsonIO instance with the specific JsonContext
+     * @param context
+     */
+    protected JsonIO(JsonContext context) {
+        this.context = context;
     }
 
     /**
@@ -45,27 +69,4 @@ public abstract class JsonIO implements JsonWriter, JsonReader {
      */
     public abstract JsonWriter getWriter();
 
-    /**
-     * Should this JsonIO deal in pretty json or not? 
-     * @param val
-     */
-    protected void pretty(boolean val) {
-        this.pretty = val;
-    }
-
-    /**
-     * Customize the default date format 
-     * @param val
-     */
-    protected void dateFormat(String val) {
-        this.dateFormat = val;
-    }
-
-    /**
-     * Should this JsonIO support comments in json?
-     * @param val
-     */
-    protected void allowComments(boolean val) {
-        this.allowComments = val;
-    }
 }
