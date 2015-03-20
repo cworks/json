@@ -28,9 +28,4 @@ public class JsonTest {
         Assert.assertEquals(5, n);
     }
     
-    @Test
-    public void testPretty() {
-
-    }
-    
 }
