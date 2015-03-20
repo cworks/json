@@ -1443,6 +1443,7 @@ public class Json {
         throwIfNull(output);
         if(pretty) {
             prettyIO().asJson(object, output);
+            return;
         }
         io().asJson(object, output);
     }
@@ -1484,6 +1485,7 @@ public class Json {
         throwIfNull(output);
         if(pretty) {
             prettyIO().asJson(object, objectType, output);
+            return;
         }
         io().asJson(object, objectType, output);
     }
@@ -1522,6 +1524,7 @@ public class Json {
         throwIfNull(output);
         if(pretty) {
             prettyIO().asJson(objects, output);
+            return;
         }
         io().asJson(objects, output);
     }
@@ -1563,6 +1566,7 @@ public class Json {
         throwIfNull(output);
         if(pretty) {
             prettyIO().asJson(objects, arrayType, output);
+            return;
         }
         io().asJson(objects, arrayType, output);
     }
@@ -1601,6 +1605,7 @@ public class Json {
         throwIfNull(output);
         if(pretty) {
             prettyIO().asJson(object, output);
+            return;
         }
         io().asJson(object, output);
     }
@@ -1642,6 +1647,7 @@ public class Json {
         throwIfNull(output);
         if(pretty) {
             prettyIO().asJson(object, objectType, output);
+            return;
         }
         io().asJson(object, objectType, output);
     }
@@ -1680,6 +1686,7 @@ public class Json {
         throwIfNull(output);
         if(pretty) {
             prettyIO().asJson(objects, output);
+            return;
         }
         io().asJson(objects, output);
     }
@@ -1721,6 +1728,7 @@ public class Json {
         throwIfNull(output);
         if(pretty) {
             prettyIO().asJson(objects, objectType, output);
+            return;
         }
         io().asJson(objects, objectType, output);
     }
@@ -1759,6 +1767,7 @@ public class Json {
         throwIfNull(output);
         if(pretty) {
             prettyIO().asJson(object, output);
+            return;
         }
         io().asJson(object, output);
     }
@@ -1799,6 +1808,7 @@ public class Json {
         throwIfNull(output);
         if(pretty) {
             prettyIO().asJson(object, objectType, output);
+            return;
         }
         io().asJson(object, objectType, output);
     }
@@ -1837,6 +1847,7 @@ public class Json {
         throwIfNull(output);
         if(pretty) {
             prettyIO().asJson(objects, output);
+            return;
         }
         io().asJson(objects, output);
     }
@@ -1878,6 +1889,7 @@ public class Json {
         throwIfNull(output);
         if(pretty) {
             prettyIO().asJson(objects, objectType, output);
+            return;
         }
         io().asJson(objects, objectType, output);
     }
@@ -1950,6 +1962,7 @@ public class Json {
         throwIfNull(output);
         if(pretty) {
             prettyIO().asJson(element, output);
+            return;
         }
         io().asJson(element, output);
     }
@@ -1986,6 +1999,7 @@ public class Json {
         throwIfNull(output);
         if(pretty) {
             prettyIO().asJson(element, output);
+            return;
         }
         io().asJson(element, output);
     }
@@ -2021,6 +2035,7 @@ public class Json {
         throwIfNull(output);
         if(pretty) {
             prettyIO().asJson(element, output);
+            return;
         }
         io().asJson(element, output);
     }
@@ -2056,6 +2071,7 @@ public class Json {
         throwIfNull(output);
         if(pretty) {
             prettyIO().asJson(element, output);
+            return;
         }
         io().asJson(element, output);
     }
@@ -2090,7 +2106,7 @@ public class Json {
     public static String asJson(JsonObject object, boolean pretty) throws JsonException {
         throwIfNull(object);
         if(pretty) {
-            prettyIO().asJson(object);
+            return prettyIO().asJson(object);
         }
         return io().asJson(object);
     }
@@ -2127,6 +2143,7 @@ public class Json {
         throwIfNull(output);
         if(pretty) {
             prettyIO().asJson(object, output);
+            return;
         }
         io().asJson(object, output);
     }
@@ -2163,6 +2180,7 @@ public class Json {
         throwIfNull(output);
         if(pretty) {
             prettyIO().asJson(object, output);
+            return;
         }
         io().asJson(object, output);
     }
@@ -2199,6 +2217,7 @@ public class Json {
         throwIfNull(output);
         if(pretty) {
             prettyIO().asJson(object, output);
+            return;
         }
         io().asJson(object, output);
     }
@@ -2235,6 +2254,7 @@ public class Json {
         throwIfNull(output);
         if(pretty) {
             prettyIO().asJson(object, output);
+            return;
         }
         io().asJson(object, output);
     }
@@ -2306,6 +2326,7 @@ public class Json {
         throwIfNull(output);
         if(pretty) {
             prettyIO().asJson(array, output);
+            return;
         }
         io().asJson(array, output);
     }
@@ -2341,6 +2362,7 @@ public class Json {
         throwIfNull(output);
         if(pretty) {
             prettyIO().asJson(array, output);
+            return;
         }
         io().asJson(array, output);
     }
@@ -2377,6 +2399,7 @@ public class Json {
         throwIfNull(output);
         if(pretty) {
             prettyIO().asJson(array, output);
+            return;
         }
         io().asJson(array, output);
     }
@@ -2413,6 +2436,7 @@ public class Json {
         throwIfNull(output);
         if(pretty) {
             prettyIO().asJson(array, output);
+            return;
         }
         io().asJson(array, output);
     }

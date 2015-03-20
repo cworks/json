@@ -28,4 +28,14 @@ public class JsonTest {
         Assert.assertEquals(5, n);
     }
     
+    @Test
+    public void testPrettiness() {
+
+        JsonObject wrapper = Json.object()
+            .string("response", "A text response")
+            .number("status", 200).build();
+
+        System.out.println(Json.asPrettyJson(wrapper));
+    }
+    
 }
