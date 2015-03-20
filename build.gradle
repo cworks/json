@@ -50,7 +50,7 @@ task createPom << {
                 }
             }
         }
-    }.writeTo("$buildDir/libs/pom-${version}.xml")
+    }.writeTo("$buildDir/libs/${project.name}-${version}.pom")
 }
 
 task wrapper(type: Wrapper, description: 'Generates the gradle wrapper.') {
