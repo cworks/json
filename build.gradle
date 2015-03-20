@@ -1,4 +1,4 @@
-description 'A simple JSON utilty library for Java'
+description 'A simple JSON toolkit for Java'
 
 apply plugin: "java"
 apply plugin: "maven"
@@ -36,6 +36,21 @@ dependencies {
     compile("com.google.code.gson:gson:2.2.4")
 
     testCompile("junit:junit:4.11")
+}
+
+task createPom << {
+    pom {
+        project {
+            inceptionYear '2015'
+            licenses {
+                license {
+                    name 'The Apache Software License, Version 2.0'
+                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    distribution 'repo'
+                }
+            }
+        }
+    }.writeTo("$buildDir/libs/pom-${version}.xml")
 }
 
 task wrapper(type: Wrapper, description: 'Generates the gradle wrapper.') {
