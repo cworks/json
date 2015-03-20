@@ -201,14 +201,14 @@ public class JsonExamples {
         try {
             Json.asObject(user);
             Assert.fail("User was an invalid Json object and asObject(json) should of raised exception.");
-        } catch(IllegalArgumentException ex) {
+        } catch(JsonException ex) {
             Assert.assertNotNull(ex);
         }
 
         try {
             Json.asObject(user, TestUser.class);
             Assert.fail("User was an invalid Json object and asObject(json, clazz) should of raised exception.");
-        } catch(IllegalArgumentException ex) {
+        } catch(JsonException ex) {
             Assert.assertNotNull(ex);
         }
     }
@@ -228,14 +228,14 @@ public class JsonExamples {
         try {
             Json.asArray(users);
             Assert.fail("Users was an invalid Json array and asArray(json) should of raised exception.");
-        } catch(IllegalArgumentException ex) {
+        } catch(JsonException ex) {
             Assert.assertNotNull(ex);
         }
 
         try {
             Json.asArray(users, TestUser.class);
             Assert.fail("Users was an invalid Json array and asArray(json, clazz) should of raised exception.");
-        } catch(IllegalArgumentException ex) {
+        } catch(JsonException ex) {
             Assert.assertNotNull(ex);
         }
         

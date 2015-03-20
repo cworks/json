@@ -4,7 +4,7 @@ import cworks.json.JsonContext;
 import cworks.json.spi.JsonReader;
 import cworks.json.spi.JsonWriter;
 
-public abstract class JsonIO implements JsonWriter, JsonReader {
+public abstract class AbstractJsonIO implements JsonWriter, JsonReader {
     
     /**
      * Contextual settings for this JsonIO instance
@@ -41,7 +41,7 @@ public abstract class JsonIO implements JsonWriter, JsonReader {
     /**
      * Create a JsonIO instance with default settings 
      */
-    protected JsonIO() {
+    protected AbstractJsonIO() {
         this(new DefaultJsonContext());
     }
 
@@ -49,7 +49,7 @@ public abstract class JsonIO implements JsonWriter, JsonReader {
      * Create a JsonIO instance with the specific JsonContext
      * @param context
      */
-    protected JsonIO(JsonContext context) {
+    protected AbstractJsonIO(JsonContext context) {
         this.context = context;
     }
 

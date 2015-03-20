@@ -26,7 +26,11 @@ public class JsonTest {
         
         long n = Json.asStream(new File("src/test/resources/batting_averages.json")).count();
         Assert.assertEquals(5, n);
-        
+    }
+    
+    @Test
+    public void testPretty() {
+
     }
     
 }

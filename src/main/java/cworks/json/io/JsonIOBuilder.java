@@ -14,7 +14,7 @@ public class JsonIOBuilder {
     /**
      * Default Json context 
      */
-    private JsonIO.DefaultJsonContext context = new JsonIO.DefaultJsonContext();
+    private AbstractJsonIO.DefaultJsonContext context = new AbstractJsonIO.DefaultJsonContext();
 
     /**
      * Use static creation method 
@@ -68,10 +68,10 @@ public class JsonIOBuilder {
         return this;
     }
 
-    public JsonIO build() {
+    public AbstractJsonIO build() {
 
 
-        JsonIO jsonIO;
+        AbstractJsonIO jsonIO;
         switch(this.impl) {
             case JACKSON:
                 jsonIO = new JacksonIO(this.context);

@@ -1,5 +1,7 @@
 package cworks.json;
 
+import cworks.json.streaming.StreamHandler;
+
 import java.lang.reflect.*;
 
 public final class JsonJavaUtils {
@@ -151,6 +153,21 @@ public final class JsonJavaUtils {
             throw new IllegalArgumentException("Expected a Class, ParameterizedType, or "
                     + "GenericArrayType, but <" + type + "> is of type " + className);
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T> Class<T> getGenericType(final StreamHandler<T> handler) {
+        Class<T> genericType = null;
+        Method[] methods = handler.getClass().getDeclaredMethods();
+
+        for(Method m : methods) {
+            if("handle".equals(m.getName())) {
+                genericType = (Class<T>) m.getParameterTypes()[0];
+                break;
+            }
+        }
+
+        return genericType;
     }
 
 }

@@ -9,7 +9,7 @@ public class JsonIOBuilderTest {
     @Test
     public void testBuilding() {
         
-        JsonIO jsonIO = JsonIOBuilder.io().pretty().build();
+        AbstractJsonIO jsonIO = JsonIOBuilder.io().pretty().build();
         Assert.assertEquals(JacksonIO.class, jsonIO.getClass());
         
     }

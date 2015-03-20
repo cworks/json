@@ -9,7 +9,7 @@ import cworks.json.JsonContext;
 import cworks.json.JsonElement;
 import cworks.json.JsonException;
 import cworks.json.JsonObject;
-import cworks.json.io.JsonIO;
+import cworks.json.io.AbstractJsonIO;
 import cworks.json.spi.JsonReader;
 import cworks.json.spi.JsonWriter;
 import cworks.json.streaming.StreamHandler;
@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-public class JacksonIO extends JsonIO {
+public class JacksonIO extends AbstractJsonIO {
 
     private final ObjectMapper mapper;
     
