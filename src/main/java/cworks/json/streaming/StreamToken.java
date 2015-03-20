@@ -3,33 +3,33 @@ package cworks.json.streaming;
 import cworks.json.JsonObject;
 
 class StreamToken implements Token {
-    private String id;
+    private String name;
     private String stringValue;
     private Integer intValue;
     private Double doubleValue;
     private Boolean booleanValue;
 
-    public StreamToken(String id) {
-        this.id = id;
+    public StreamToken(String name) {
+        this.name = name;
     }
 
-    public StreamToken(String id, String value) {
-        this.id = id;
+    public StreamToken(String name, String value) {
+        this.name = name;
         this.stringValue = value;
     }
 
-    public StreamToken(String id, int value) {
-        this.id = id;
+    public StreamToken(String name, int value) {
+        this.name = name;
         this.intValue = value;
     }
 
-    public StreamToken(String id, double value) {
-        this.id = id;
+    public StreamToken(String name, double value) {
+        this.name = name;
         this.doubleValue = value;
     }
 
-    public StreamToken(String id, boolean value) {
-        this.id = id;
+    public StreamToken(String name, boolean value) {
+        this.name = name;
         this.booleanValue = value;
     }
 
@@ -54,28 +54,32 @@ class StreamToken implements Token {
         
         JsonObject object = new JsonObject();
         if(this.stringValue != null) {
-            return object.setString(id(), this.stringValue).asString();
+            return object.setString(name(), this.stringValue).asString();
         } else if(this.intValue != null) {
-            return object.setNumber(id(), this.intValue).asString();
+            return object.setNumber(name(), this.intValue).asString();
         } else if(this.doubleValue != null) {
-            return object.setNumber(id(), this.doubleValue).asString();
+            return object.setNumber(name(), this.doubleValue).asString();
         } else if(this.booleanValue != null) {
-            return object.setBoolean(id(), this.booleanValue).asString();
+            return object.setBoolean(name(), this.booleanValue).asString();
         } else {
-            return object.setString(id(), null).asString();
+            return object.setString(name(), null).asString();
         }
     }
-    
+
     @Override
-    public String id() {
-        
-        if(this.id.startsWith("root.")) {
-            return this.id.substring(5);
-        } else if(this.id.startsWith("root")) {
-            return this.id.substring(4);
+    public String name() {
+        if(this.name.startsWith("root.")) {
+            return this.name.substring(5);
+        } else if(this.name.startsWith("root")) {
+            return this.name.substring(4);
         }
 
-        return this.id;
+        return this.name;
+    }
+
+    @Override
+    public String type() {
+        return null;
     }
 
     private String valueToString() {
@@ -95,6 +99,6 @@ class StreamToken implements Token {
     @Override
     public String toString() {
         
-        return this.id() + "," + valueToString();
+        return this.name() + "," + valueToString();
     }
 }

@@ -130,7 +130,7 @@ public class JacksonIterator implements Iterator<Token> {
                     return TokenFactory.createToken(parent, parser.getCurrentName(), parser.getIntValue());
                 } else if (valueToken == JsonToken.VALUE_NUMBER_FLOAT) {
                     Node parent = stack.peek();
-                    return TokenFactory.createToken(parent, parser.getCurrentName(), parser.getIntValue());
+                    return TokenFactory.createToken(parent, parser.getCurrentName(), parser.getDoubleValue());
                 } else if (valueToken == JsonToken.VALUE_NULL) {
                     Node parent = stack.peek();
                     return TokenFactory.createToken(parent, parser.getCurrentName(), null);
