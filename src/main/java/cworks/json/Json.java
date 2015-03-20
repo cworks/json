@@ -94,7 +94,7 @@ public final class Json {
     public static JsonArrayBuilder array() {
         return new JsonArrayBuilder();
     }
-
+    
     // Read methods
 
     public static JsonElement asElement(String input) throws JsonException {

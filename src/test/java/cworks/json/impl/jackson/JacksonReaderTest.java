@@ -356,7 +356,7 @@ public class JacksonReaderTest extends JsonTestCore {
         InputStream in = new FileInputStream("src/test/resources/large_object.json");
         JsonReader jackson = new JacksonIO().getReader();
         jackson.asStream(in, token -> {
-            if(token.id().contains("state")) {
+            if(token.name().contains("state")) {
                 Assert.assertTrue("Michigan".equals(token.asString()) ||
                         "Maryland".equals(token.asString()) ||
                         "Virginia".equals(token.asString()) ||
@@ -382,13 +382,13 @@ public class JacksonReaderTest extends JsonTestCore {
         InputStream in = new FileInputStream("src/test/resources/small_object_array.json");
         JsonReader jackson = new JacksonIO().getReader();
         jackson.asStream(in, token -> {
-            if(token.id().startsWith("[13].id")) {
+            if(token.name().startsWith("[13].id")) {
                 Assert.assertEquals(14, token.asInteger());
-            } else if(token.id().startsWith("[13].firstName")) {
+            } else if(token.name().startsWith("[13].firstName")) {
                 Assert.assertEquals("Jacqueline", token.asString());
-            } else if(token.id().startsWith("[13].lastName")) {
+            } else if(token.name().startsWith("[13].lastName")) {
                 Assert.assertEquals("Kim", token.asString());
-            } else if(token.id().startsWith("[13].email")) {
+            } else if(token.name().startsWith("[13].email")) {
                 Assert.assertEquals("jkimd@sogou.com", token.asString());
             }
         });
@@ -401,7 +401,7 @@ public class JacksonReaderTest extends JsonTestCore {
         JsonReader jackson = new JacksonIO().getReader();
         
         List<String> emails = jackson.asStream(input)
-            .filter(token -> token.id().contains("email"))
+            .filter(token -> token.name().contains("email"))
             .map(Token::asString)
             .sorted()
             .collect(Collectors.toList());

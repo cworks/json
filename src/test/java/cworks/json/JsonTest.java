@@ -24,6 +24,9 @@ public class JsonTest {
             System.out.println(token.asJson());
         });
         
+        long n = Json.asStream(new File("src/test/resources/batting_averages.json")).count();
+        Assert.assertEquals(5, n);
+        
     }
     
 }

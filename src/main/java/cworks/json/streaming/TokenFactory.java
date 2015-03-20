@@ -112,49 +112,49 @@ public class TokenFactory {
     public static Token createToken(ArrayNode node, String value) {
 
         String id = String.format("%s[%d]", node.id, node.nextIndex());
-        return new StreamToken(id, value);
+        return new StreamToken(id, value, "string");
     }
 
     public static Token createToken(ArrayNode node, String name, String value) {
 
         String id = String.format("%s[%d].%s", node.id, node.nextIndex(), name);
-        return new StreamToken(id, value);
+        return new StreamToken(id, value, "string");
     }
 
     public static Token createToken(ArrayNode node, int value) {
 
         String id = String.format("%s[%d]", node.id, node.nextIndex());
-        return new StreamToken(id, value);
+        return new StreamToken(id, value, "int");
     }
 
     public static Token createToken(ArrayNode node, String name, int value) {
 
         String id = String.format("%s[%d].%s", node.id, node.nextIndex(), name);
-        return new StreamToken(id, value);
+        return new StreamToken(id, value, "int");
     }
 
     public static Token createToken(ArrayNode node, double value) {
 
         String id = String.format("%s[%d]", node.id, node.nextIndex());
-        return new StreamToken(id, value);
+        return new StreamToken(id, value, "int");
     }
 
     public static Token createToken(ArrayNode node, String name, double value) {
 
         String id = String.format("%s[%d].%s", node.id, node.nextIndex(), name);
-        return new StreamToken(id, value);
+        return new StreamToken(id, value, "double");
     }
 
     public static Token createToken(ArrayNode node, boolean value) {
 
         String id = String.format("%s[%d]", node.id, node.nextIndex());
-        return new StreamToken(id, value);
+        return new StreamToken(id, value, "boolean");
     }
 
     public static Token createToken(ArrayNode node, String name, boolean value) {
 
         String id = String.format("%s[%d].%s", node.id, node.nextIndex(), name);
-        return new StreamToken(id, value);
+        return new StreamToken(id, value, "boolean");
     }
 
     public static Token createToken(ArrayNode node) {
@@ -170,41 +170,41 @@ public class TokenFactory {
 
     public static Token createToken(ObjectNode node, String value) {
 
-        return new StreamToken(node.id, value);
+        return new StreamToken(node.id, value, "string");
     }
 
     public static Token createToken(ObjectNode node, String name, String value) {
         String id = String.format("%s.%s", node.id, name);
-        return new StreamToken(id, value);
+        return new StreamToken(id, value, "string");
     }
 
     public static Token createToken(ObjectNode node, int value) {
 
-        return new StreamToken(node.id, value);
+        return new StreamToken(node.id, value, "int");
     }
 
     public static Token createToken(ObjectNode node, String name, int value) {
         String id = String.format("%s.%s", node.id, name);
-        return new StreamToken(id, value);
+        return new StreamToken(id, value, "int");
     }
 
     public static Token createToken(ObjectNode node, double value) {
 
-        return new StreamToken(node.id, value);
+        return new StreamToken(node.id, value, "double");
     }
 
     public static Token createToken(ObjectNode node, String name, double value) {
         String id = String.format("%s.%s", node.id, name);
-        return new StreamToken(id, value);
+        return new StreamToken(id, value, "double");
     }
 
     public static Token createToken(ObjectNode node, boolean value) {
 
-        return new StreamToken(node.id, value);
+        return new StreamToken(node.id, value, "boolean");
     }
 
     public static Token createToken(ObjectNode node, String name, boolean value) {
         String id = String.format("%s.%s", node.id, name);
-        return new StreamToken(id, value);
+        return new StreamToken(id, value, "boolean");
     }
 }

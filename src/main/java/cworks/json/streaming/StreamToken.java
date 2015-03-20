@@ -3,32 +3,45 @@ package cworks.json.streaming;
 import cworks.json.JsonObject;
 
 class StreamToken implements Token {
+
+    /**
+     * field name in the json document 
+     */
     private String name;
-    private String stringValue;
+
+    /**
+     * type name of value, possible values are: int, double, boolean, string
+     */
+    private String type;
+
+    /**
+     * value of the field in the parsed json document, only one of these will be set 
+     */
+    private String  stringValue;
     private Integer intValue;
-    private Double doubleValue;
+    private Double  doubleValue;
     private Boolean booleanValue;
 
     public StreamToken(String name) {
         this.name = name;
     }
 
-    public StreamToken(String name, String value) {
+    public StreamToken(String name, String value, String type) {
         this.name = name;
         this.stringValue = value;
     }
 
-    public StreamToken(String name, int value) {
+    public StreamToken(String name, int value, String type) {
         this.name = name;
         this.intValue = value;
     }
 
-    public StreamToken(String name, double value) {
+    public StreamToken(String name, double value, String type) {
         this.name = name;
         this.doubleValue = value;
     }
 
-    public StreamToken(String name, boolean value) {
+    public StreamToken(String name, boolean value, String type) {
         this.name = name;
         this.booleanValue = value;
     }
@@ -49,21 +62,29 @@ class StreamToken implements Token {
     public boolean asBoolean() {
         return this.booleanValue;
     }
-    
+
+    /**
+     * This token as a Json string {name: [the name], value: [the value], type: [the type]}
+     * @return
+     */
     public String asJson() {
         
-        JsonObject object = new JsonObject();
+        JsonObject me = new JsonObject();
+        me.setString("name", name());
+        
         if(this.stringValue != null) {
-            return object.setString(name(), this.stringValue).asString();
+            me.setString("value", this.stringValue).setString("type", "string");
         } else if(this.intValue != null) {
-            return object.setNumber(name(), this.intValue).asString();
+            me.setNumber("value", this.intValue).setString("type", "int");
         } else if(this.doubleValue != null) {
-            return object.setNumber(name(), this.doubleValue).asString();
+            me.setNumber("value", this.doubleValue).setString("type", "double");
         } else if(this.booleanValue != null) {
-            return object.setBoolean(name(), this.booleanValue).asString();
+            me.setBoolean("value", this.booleanValue).setString("type", "boolean");
         } else {
-            return object.setString(name(), null).asString();
+            me.setString("value", null).asString();
         }
+        
+        return me.asString();
     }
 
     @Override
@@ -79,7 +100,7 @@ class StreamToken implements Token {
 
     @Override
     public String type() {
-        return null;
+        return this.type;
     }
 
     private String valueToString() {
